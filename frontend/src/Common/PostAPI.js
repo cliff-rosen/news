@@ -1,10 +1,11 @@
-import { config } from "../conf";
-const BASE_API_URL = config.url.API_URL;
+import { BASE_API_URL } from "./APIUtils";
 
 export const getPosts = async () => {
   let data = {};
   try {
-    const res = await fetch(`${BASE_API_URL}/entries`);
+    const res = await fetch(`${BASE_API_URL}/entries`, {
+      headers: { Authorization: "abc" },
+    });
     if (res.status !== 200) throw new Error("getPosts http error");
     data = await res.json();
   } catch (e) {

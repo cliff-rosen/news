@@ -1,9 +1,10 @@
-console.log("starting");
-
+const JWT_SECRET = "thisisthekey";
 const db = require("./db");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
+
 const app = express();
 const port = 4000;
 
@@ -13,6 +14,48 @@ app.use(cors());
 //app.use(express.urlencoded({ limit: 2000000, extended: false }));
 //app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(start);
+
+function start(req, res, next) {
+  console.log("*************************************************");
+  next();
+}
+
+/*
+  success: 200 / user object
+  wrong username/password: 401 / 
+  unexpected error: 500
+*/
+app.post("/login", (req, res) => {
+  console.log("Login");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  userName = req.body.username;
+  password = req.body.password;
+
+  console.log(`Logging in with ${userName} / ${password} `);
+  db.validateUser(userName, password)
+    .then((dbres) => {
+      console.log("User validation success");
+      jwt.sign(dbres.user, JWT_SECRET, (err, token) => {
+        console.log("token = " + token);
+        res.json({ userID: dbres.user.userID, token: token });
+      });
+    })
+    .catch((err) => {
+      if (
+        err.message === "Invalid password" ||
+        err.message === "Invalid username"
+      ) {
+        console.log("Login error", err.message);
+        res.status(401).json({ error: "Login error" });
+      } else {
+        console.log("Unexpected error", err.message);
+        res.status(500).json({ error: "Unexpected error" });
+      }
+    })
+    .finally(() => console.log("Back from validateUser()"));
+});
 
 app.post("/entry", (req, res) => {
   console.log("add entry", req.body.entryText);
@@ -37,18 +80,8 @@ app.delete("/entry/:id", (req, res) => {
 });
 
 app.get("/entries", (req, res) => {
-  console.log("get entries", Math.random());
+  console.log("get entries", req.headers["authorization"]);
   db.getAllEntries().then((rows) => res.json(rows));
-});
-
-app.get("/1", (req, res, next) => {
-  console.log("1 requested");
-  next();
-});
-
-app.get("/1", (req, res, next) => {
-  console.log("1 requested, part 2");
-  res.send("Hello, world!");
 });
 
 app.listen(port, () => {

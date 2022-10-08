@@ -1,14 +1,5 @@
-import {
-  Button,
-  AppBar,
-  Box,
-  Container,
-  styled,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-
-import { Link } from "react-router-dom";
+import { logout } from "../Common/Auth";
+import { Button, Toolbar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const sections = [
@@ -17,8 +8,13 @@ const sections = [
   { name: "Post", link: "/add" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ user, setUser }) => {
   const navigate = useNavigate();
+
+  const lout = () => {
+    logout();
+    setUser({ userID: 0 });
+  };
 
   return (
     <div>
@@ -42,7 +38,16 @@ const Navbar = () => {
             {section.name}
           </Button>
         ))}
-        rsheklin
+        <span>
+          {user?.userID ? (
+            <span>
+              {user.userID}
+              <button onClick={lout}>logout</button>
+            </span>
+          ) : (
+            "login"
+          )}
+        </span>
       </Toolbar>
     </div>
   );

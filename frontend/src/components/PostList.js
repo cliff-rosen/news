@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Container, Link } from "@mui/material";
-import { getPosts as apiGetPosts } from "../api/api.js";
+import { getPosts as apiGetPosts } from "../Common/PostAPI";
 
-function PostList() {
+function PostList({ user }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -20,8 +20,10 @@ function PostList() {
 
   return (
     <Container style={{ height: 400, width: 600 }}>
+      User: {user.userID}
       {posts.map((post) => (
         <div key={post.EntryID}>
+          {user?.userID ? "X" : ""}
           <Link href={post.EntryUrl} underline="hover" target="_blank">
             {post.EntryText}
           </Link>
