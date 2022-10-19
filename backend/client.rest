@@ -8,7 +8,7 @@ content-type: application/json
 authorization: Bearer 12345
 
 {
-    "username": "xjohn",
+    "username": "john",
     "password": "abc"
 }
 
