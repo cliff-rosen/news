@@ -4,10 +4,9 @@ import { BASE_API_URL } from "./APIUtils";
 
     API RESULT      JSON                STATUS  LOGIN RESULT
     success         {userID, token}     200     JSON
-    invalid                                     
-    bad request                                 EXCEPTION
-    fetch error                                 EXCEPTION
-
+    invalid                             401     EXCEPTION INVALID_LOGIN                     
+    fetch error                                 EXCEPTION res.error
+    unknown error                               EXCEPTION UNKNOWN_LOGIN_ERROR
 */
 
 export const login = async (username, password) => {
@@ -20,7 +19,13 @@ export const login = async (username, password) => {
     body,
   });
 
-  if (res.status !== 200 || res?.error) throw new Error("Login api error");
-
-  return res.json();
+  if (res.status === 200) {
+    return res.json();
+  } else if (res.status === 401) {
+    throw new Error("INVALID_LOGIN");
+  } else if (res?.error) {
+    throw new Error(res.error);
+  } else {
+    throw new Error("UNKNOWN_LOGIN_ERROR");
+  }
 };

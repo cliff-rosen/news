@@ -3,7 +3,7 @@ import { TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
 import styled from "@emotion/styled";
 import { addPost as apiAddPost } from "../Common/PostAPI";
-import { login, getUser } from "../Common/Auth";
+import { LoginForm } from "./LoginForm";
 
 const LayoutContainer = styled(Container)(() => ({
   height: "100%",
@@ -14,10 +14,6 @@ const LayoutContainer = styled(Container)(() => ({
 function PostAdd({ user, setUser }) {
   const [url, setUrl] = useState("");
   const [desc, setDesc] = useState("");
-
-  const lin = () => {
-    login().then((res) => setUser(getUser()));
-  };
 
   const formSubmit = async () => {
     const body = JSON.stringify({ entryUrl: url, entryText: desc });
@@ -31,12 +27,7 @@ function PostAdd({ user, setUser }) {
   };
 
   if (!user?.userID) {
-    return (
-      <div>
-        {" "}
-        <button onClick={lin}>login</button>
-      </div>
-    );
+    return <LoginForm user={user} setUser={setUser} />;
   }
 
   return (

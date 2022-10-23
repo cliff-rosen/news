@@ -39,9 +39,9 @@ const Navbar = ({ user, setUser }) => {
           </Button>
         ))}
         <span>
-          {user?.userID ? (
+          {user?.userName ? (
             <span>
-              {user.userID}
+              {user.userName}
               <button onClick={lout}>logout</button>
             </span>
           ) : (

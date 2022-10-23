@@ -10,6 +10,7 @@ const pool = mariadb.createPool({
   database: "dev",
 });
 
+////////////////////// LOGIN / REGISTRATION //////////////////
 function validateUser(UserName, Password) {
   const dbQueryString = `
                     SELECT UserID, Password

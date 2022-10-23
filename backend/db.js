@@ -9,6 +9,43 @@ const pool = mariadb.createPool({
   database: "dev",
 });
 
+function addUser(userName, password) {
+  console.log("AddUser: " + userName + "/" + password);
+  const passwordHash = hasher.hashSync(password, 10);
+  const dbQueryString = `
+                    INSERT
+                    INTO User (UserName, Password)
+                    VALUES ("${userName}", "${passwordHash}")
+                    `;
+  return pool
+    .getConnection()
+    .then((conn) => {
+      return conn
+        .query(dbQueryString)
+        .then((rows) => {
+          console.log("returned", rows);
+          console.log("Rows returned: " + rows.length);
+          return rows;
+        })
+        .catch((err) => {
+          console.log("DB Query Error: " + JSON.stringify(err));
+          if (err.code == "ER_DUP_ENTRY") {
+            throw "DUPLICATE";
+          } else {
+            throw "UNKNOWN";
+          }
+        })
+        .finally(() => {
+          console.log("releasing connection");
+          conn.release();
+        });
+    })
+    .catch((err) => {
+      console.log("DB error", err);
+      throw err;
+    });
+}
+
 /*
   if successful, returns promise that resolves to User object
   all failures throw an exception as follows:
@@ -17,11 +54,11 @@ const pool = mariadb.createPool({
     DB Query Error
     DB Connection error
 */
-function validateUser(UserName, Password) {
+function validateUser(userName, password) {
   const dbQueryString = `
-                    SELECT UserID, Password
+                    SELECT UserID, UserName, Password
                     FROM user
-                    WHERE UserName = "${UserName}"
+                    WHERE UserName = "${userName}"
                     `;
   console.log("Querying database with: " + dbQueryString);
   return pool
@@ -32,8 +69,10 @@ function validateUser(UserName, Password) {
         .then((rows) => {
           console.log("Rows returned: " + rows.length);
           if (rows.length == 1) {
-            if (hasher.compareSync(Password, rows[0].Password)) {
-              return { user: { userID: rows[0].UserID } };
+            if (hasher.compareSync(password, rows[0].Password)) {
+              return {
+                user: { userID: rows[0].UserID, userName: rows[0].UserName },
+              };
             } else {
               throw new Error("Invalid password");
             }
@@ -51,11 +90,12 @@ function validateUser(UserName, Password) {
         });
     })
     .catch((err) => {
-      console.log("DB Connection error", err.message);
+      console.log("DB error", err.message);
       throw err;
     });
 }
 
+//////////////////////////// ENTRIES ////////////////////////
 function addEntry(entryText, entryUrl) {
   console.log("adding", entryText);
   dbQueryString = `
@@ -84,8 +124,8 @@ function addEntry(entryText, entryUrl) {
         });
     })
     .catch((err) => {
-      console.log("DB Connection error", err);
-      return "DB Connection error";
+      console.log("DB error", err);
+      throw err;
     });
 }
 
@@ -146,8 +186,8 @@ function getEntry() {
         });
     })
     .catch((err) => {
-      console.log("DB Connection error", err);
-      return "DB Connection error";
+      console.log("DB error", err);
+      return err;
     });
 }
 
@@ -186,3 +226,4 @@ module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
 module.exports.getAllEntries = getAllEntries;
 module.exports.validateUser = validateUser;
+module.exports.addUser = addUser;

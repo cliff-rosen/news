@@ -5,9 +5,7 @@ export const registerUser = (username, password) => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const login = (username, password) => {
-  username = "john";
-  password = "abc";
+export const login = async (username, password) => {
   return apiLogin(username, password)
     .then((user) => {
       console.log("login success", user);
@@ -15,8 +13,8 @@ export const login = (username, password) => {
       return Promise.resolve("success");
     })
     .catch((e) => {
-      console.log("login error", e);
-      throw new Error("login error");
+      console.log("login error - ", e);
+      return Promise.reject(e);
     });
 };
 

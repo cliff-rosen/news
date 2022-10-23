@@ -21,6 +21,41 @@ function start(req, res, next) {
   next();
 }
 
+/////////////////////// LOGIN/REGISTRATION ////////////////////////////
+app.post("/createuser", (req, res) => {
+  console.log("Create user");
+
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  userName = req.body.username;
+  password = req.body.password;
+
+  console.log(`Reg user with ${userName} / ${password} `);
+
+  db.addUser(userName, password)
+    .then((dbres) => {
+      console.log("User created with UserID " + dbres.insertId);
+      const user = {
+        userID: parseInt(dbres.insertId),
+        userName: userName,
+        token: "",
+      };
+      jwt.sign(user, JWT_SECRET, (err, token) => {
+        user.token = token;
+        res.json(user);
+        res.end();
+      });
+    })
+    .catch((err) => {
+      console.log("error", err);
+      if (err == "DUPLICATE") {
+        res.json({ error: "DUPLICATE" });
+      } else {
+        res.json({ error: "UNKNOWN" });
+      }
+    })
+    .finally(console.log("Back from addUser()"));
+});
+
 /*
   success: 200 / user object
   wrong username/password: 401 / 
@@ -38,8 +73,12 @@ app.post("/login", (req, res) => {
     .then((dbres) => {
       console.log("User validation success");
       jwt.sign(dbres.user, JWT_SECRET, (err, token) => {
-        console.log("token = " + token);
-        res.json({ userID: dbres.user.userID, token: token });
+        const user = {
+          userID: dbres.user.userID,
+          userName: dbres.user.userName,
+          token: token,
+        };
+        res.json(user);
       });
     })
     .catch((err) => {
@@ -57,6 +96,7 @@ app.post("/login", (req, res) => {
     .finally(() => console.log("Back from validateUser()"));
 });
 
+/////////////////////// ENTRY ////////////////////////////
 app.post("/entry", (req, res) => {
   console.log("add entry", req.body.entryText);
   db.addEntry(req.body.entryText, req.body.entryUrl).then((rows) =>
