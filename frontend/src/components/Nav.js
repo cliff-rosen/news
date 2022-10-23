@@ -39,7 +39,7 @@ const Navbar = ({ user, setUser }) => {
           </Button>
         ))}
         <span>
-          {user?.userName ? (
+          {user?.userID ? (
             <span>
               {user.userName}
               <button onClick={lout}>logout</button>

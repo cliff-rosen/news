@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login, getUser } from "../Common/Auth";
+import { login, register, getUser } from "../Common/Auth";
 import { TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
 import styled from "@emotion/styled";
@@ -21,20 +21,25 @@ export function LoginForm({ user, setUser }) {
     e.preventDefault();
     login(username, password)
       .then((res) => setUser(getUser()))
-      .catch((err) => setErrMessage("LoginForm error: ", err));
+      .catch((err) => {
+        console.log("formSubmit: ", err.message);
+        setErrMessage("Login error: " + err.message);
+      });
   };
 
   const formSubmitR = (e) => {
     e.preventDefault();
-    login(username, password)
+    register(usernameR, passwordR)
       .then((res) => setUser(getUser()))
-      .catch((err) => setErrMessage("LoginForm error: ", err));
+      .catch((err) => setErrMessage("Registration error: " + err.message));
   };
 
   return (
     <LayoutContainer>
       <br />
       {errMessage}
+      <br />
+      <br />
       LOGIN
       <form>
         <TextField
@@ -51,7 +56,7 @@ export function LoginForm({ user, setUser }) {
           id="password"
           style={{ width: "400px", margin: "5px" }}
           type="text"
-          label="Pasword"
+          label="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           variant="outlined"
@@ -79,7 +84,7 @@ export function LoginForm({ user, setUser }) {
           id="password"
           style={{ width: "400px", margin: "5px" }}
           type="text"
-          label="Pasword"
+          label="Password"
           value={passwordR}
           onChange={(e) => setPasswordR(e.target.value)}
           variant="outlined"

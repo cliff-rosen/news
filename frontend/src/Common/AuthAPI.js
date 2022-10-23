@@ -1,5 +1,26 @@
 import { BASE_API_URL } from "./APIUtils";
 
+export const register = async (username, password) => {
+  const body = JSON.stringify({ username, password });
+  const res = await fetch(`${BASE_API_URL}/createuser`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+
+  const user = await res.json();
+  console.log("user", user);
+  if (res.status === 200 && !user.error) {
+    return user;
+  } else if (user.error) {
+    throw new Error(user.error);
+  } else {
+    throw new Error("UNKNOWN_REGISTRATION_ERROR");
+  }
+};
+
 /*
 
     API RESULT      JSON                STATUS  LOGIN RESULT
@@ -8,7 +29,6 @@ import { BASE_API_URL } from "./APIUtils";
     fetch error                                 EXCEPTION res.error
     unknown error                               EXCEPTION UNKNOWN_LOGIN_ERROR
 */
-
 export const login = async (username, password) => {
   const body = JSON.stringify({ username, password });
   const res = await fetch(`${BASE_API_URL}/login`, {
@@ -22,6 +42,7 @@ export const login = async (username, password) => {
   if (res.status === 200) {
     return res.json();
   } else if (res.status === 401) {
+    console.log("AuthAPI.login - 401");
     throw new Error("INVALID_LOGIN");
   } else if (res?.error) {
     throw new Error(res.error);

@@ -1,19 +1,27 @@
-import { login as apiLogin } from "../Common/AuthAPI";
+import { login as apiLogin, register as apiRegister } from "../Common/AuthAPI";
 
-export const registerUser = (username, password) => {
-  const user = { userID: 12345 };
-  localStorage.setItem("user", JSON.stringify(user));
+export const register = async (username, password) => {
+  return apiRegister(username, password)
+    .then((user) => {
+      console.log("registration success", user);
+      setUser(user);
+      return Promise.resolve("success");
+    })
+    .catch((e) => {
+      console.log("registration error - ", e.message);
+      return Promise.reject(e);
+    });
 };
 
 export const login = async (username, password) => {
   return apiLogin(username, password)
     .then((user) => {
-      console.log("login success", user);
+      console.log("Auth.login success", user);
       setUser(user);
       return Promise.resolve("success");
     })
     .catch((e) => {
-      console.log("login error - ", e);
+      console.log("Auth.login error - ", e);
       return Promise.reject(e);
     });
 };

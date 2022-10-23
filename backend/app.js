@@ -46,7 +46,7 @@ app.post("/createuser", (req, res) => {
       });
     })
     .catch((err) => {
-      console.log("error", err);
+      console.log("createuser error", err);
       if (err == "DUPLICATE") {
         res.json({ error: "DUPLICATE" });
       } else {
@@ -87,7 +87,7 @@ app.post("/login", (req, res) => {
         err.message === "Invalid username"
       ) {
         console.log("Login error", err.message);
-        res.status(401).json({ error: "Login error" });
+        res.status(401).json({ error: "Invalid username or password" });
       } else {
         console.log("Unexpected error", err.message);
         res.status(500).json({ error: "Unexpected error" });
