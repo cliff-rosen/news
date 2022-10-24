@@ -193,8 +193,9 @@ function getEntry() {
 
 function getAllEntries() {
   dbQueryString = `
-                    SELECT *
-                    FROM entry
+                    SELECT e.*, u.UserName
+                    FROM entry e
+                    JOIN user u ON e.UserID = u.UserID
                     `;
   return pool
     .getConnection()

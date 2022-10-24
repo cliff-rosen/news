@@ -1,9 +1,10 @@
-const JWT_SECRET = "thisisthekey";
 const db = require("./db");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+const fetch = require("node-fetch");
+const { checkForToken, createUser } = require("./authUtil");
 
 const app = express();
 const port = 4000;
@@ -21,6 +22,31 @@ function start(req, res, next) {
   next();
 }
 
+/////////////////// PLAYGROUND /////////////////
+let status = 0;
+
+function abc(req, res, next) {
+  console.log("abc start");
+  fetch("https://google.com").then((res) => {
+    status = res.status;
+    console.log("back from fetch", status);
+    next();
+  });
+  console.log("abc finished");
+}
+
+app.get("/y", abc, function (req, res) {
+  console.log("y start", status);
+  res.json({ status });
+});
+
+////////////////////////////////////////////////
+
+app.get("/x", checkForToken, function (req, res) {
+  console.log("Calling x with user: ", req.user);
+  res.json(req.user);
+});
+
 /////////////////////// LOGIN/REGISTRATION ////////////////////////////
 app.post("/createuser", (req, res) => {
   console.log("Create user");
@@ -34,16 +60,9 @@ app.post("/createuser", (req, res) => {
   db.addUser(userName, password)
     .then((dbres) => {
       console.log("User created with UserID " + dbres.insertId);
-      const user = {
-        userID: parseInt(dbres.insertId),
-        userName: userName,
-        token: "",
-      };
-      jwt.sign(user, JWT_SECRET, (err, token) => {
-        user.token = token;
-        res.json(user);
-        res.end();
-      });
+      const user = createUser(parseInt(dbres.insertId), userName);
+      res.json(user);
+      res.end();
     })
     .catch((err) => {
       console.log("createuser error", err);
@@ -72,14 +91,8 @@ app.post("/login", (req, res) => {
   db.validateUser(userName, password)
     .then((dbres) => {
       console.log("User validation success");
-      jwt.sign(dbres.user, JWT_SECRET, (err, token) => {
-        const user = {
-          userID: dbres.user.userID,
-          userName: dbres.user.userName,
-          token: token,
-        };
-        res.json(user);
-      });
+      const user = createUser(dbres.user.userID, dbres.user.userName);
+      res.json(user);
     })
     .catch((err) => {
       if (

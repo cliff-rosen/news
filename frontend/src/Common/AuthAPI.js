@@ -11,7 +11,6 @@ export const register = async (username, password) => {
   });
 
   const user = await res.json();
-  console.log("user", user);
   if (res.status === 200 && !user.error) {
     return user;
   } else if (user.error) {

@@ -3,12 +3,12 @@ import { login as apiLogin, register as apiRegister } from "../Common/AuthAPI";
 export const register = async (username, password) => {
   return apiRegister(username, password)
     .then((user) => {
-      console.log("registration success", user);
+      console.log("Auth.register success", user);
       setUser(user);
       return Promise.resolve("success");
     })
     .catch((e) => {
-      console.log("registration error - ", e.message);
+      console.log("Auth.register error - ", e.message);
       return Promise.reject(e);
     });
 };
