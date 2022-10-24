@@ -1,4 +1,5 @@
 import { BASE_API_URL } from "./APIUtils";
+import { getUserToken } from "./Auth";
 
 export const getPosts = async () => {
   let data = {};
@@ -20,6 +21,7 @@ export const addPost = async (body) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: getUserToken(),
     },
     body,
   });

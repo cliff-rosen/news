@@ -110,10 +110,10 @@ app.post("/login", (req, res) => {
 });
 
 /////////////////////// ENTRY ////////////////////////////
-app.post("/entry", (req, res) => {
+app.post("/entry", checkForToken, (req, res) => {
   console.log("add entry", req.body.entryText);
-  db.addEntry(req.body.entryText, req.body.entryUrl).then((rows) =>
-    res.json(rows[0])
+  db.addEntry(req.body.entryText, req.body.entryUrl, req.user.userID).then(
+    (rows) => res.json(rows[0])
   );
 });
 

@@ -47,3 +47,14 @@ export const getUser = () => {
 
   return user;
 };
+
+export const getUserToken = () => {
+  var user;
+
+  try {
+    user = JSON.parse(localStorage.getItem("user"));
+  } catch {
+    user = { userID: -1, token: "" };
+  }
+  return "Bearer " + user.token;
+};

@@ -96,12 +96,12 @@ function validateUser(userName, password) {
 }
 
 //////////////////////////// ENTRIES ////////////////////////
-function addEntry(entryText, entryUrl) {
+function addEntry(entryText, entryUrl, userID) {
   console.log("adding", entryText);
   dbQueryString = `
                     INSERT
-                    INTO entry (EntryText, EntryUrl)
-                    VALUES ('${entryText}', '${entryUrl}')
+                    INTO entry (EntryText, EntryUrl, UserID)
+                    VALUES ('${entryText}', '${entryUrl}', '${userID}')
                     `;
   console.log(dbQueryString);
   return pool

@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
-import Typography from "@mui/material/Typography";
 
 function PostList({ user }) {
   const [posts, setPosts] = useState([]);
