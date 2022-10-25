@@ -18,13 +18,12 @@ function createUser(userID, userName) {
 }
 
 function checkForToken(req, res, next) {
-  console.log("*************************************************");
   console.log("Verifying token");
 
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1];
-    console.log("Token found: " + bearerToken);
+    console.log("Token found: " + bearerToken.substring(0, 10));
     req.token = bearerToken;
     jwt.verify(req.token, JWT_SECRET, (err, decoded) => {
       console.log(JSON.stringify(decoded));

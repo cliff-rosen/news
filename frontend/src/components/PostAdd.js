@@ -13,13 +13,19 @@ const LayoutContainer = styled(Container)(() => ({
 
 function PostAdd({ user, setUser }) {
   const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
   const formSubmit = async () => {
-    const body = JSON.stringify({ entryUrl: url, entryText: desc });
+    const body = JSON.stringify({
+      entryUrl: url,
+      entryTitle: title,
+      entryText: desc,
+    });
     try {
       await apiAddPost(body);
       setUrl("");
+      setTitle("");
       setDesc("");
     } catch (e) {
       console.log("error adding post", e);
@@ -44,8 +50,20 @@ function PostAdd({ user, setUser }) {
         />
         <br />
         <TextField
+          id="title"
+          style={{ width: "400px", margin: "5px" }}
+          type="text"
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          variant="outlined"
+        />
+        <br />
+        <TextField
           id="desc"
           style={{ width: "400px", margin: "5px" }}
+          multiline
+          rows={4}
           type="text"
           label="Description"
           value={desc}

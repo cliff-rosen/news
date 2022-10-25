@@ -1,5 +1,6 @@
 const mariadb = require("mariadb");
 const hasher = require("bcrypt");
+const psl = require("psl");
 
 const pool = mariadb.createPool({
   host: "localhost",
@@ -96,12 +97,15 @@ function validateUser(userName, password) {
 }
 
 //////////////////////////// ENTRIES ////////////////////////
-function addEntry(entryText, entryUrl, userID) {
-  console.log("adding", entryText);
+function addEntry(entryTitle, entryText, entryUrl, userID) {
+  console.log("addEntry", entryTitle);
+  entryTitle = entryTitle.replace(/'/g, "\\'");
+  entryText = entryText.replace(/'/g, "\\'");
+  const entryUrlDomain = psl.parse(entryUrl).domain;
   dbQueryString = `
                     INSERT
-                    INTO entry (EntryText, EntryUrl, UserID)
-                    VALUES ('${entryText}', '${entryUrl}', '${userID}')
+                    INTO entry (UserID, EntryTitle, EntryText, EntryUrl, EntryUrlDomain)
+                    VALUES (${userID}, '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain})
                     `;
   console.log(dbQueryString);
   return pool
@@ -110,21 +114,20 @@ function addEntry(entryText, entryUrl, userID) {
       return conn
         .query(dbQueryString)
         .then((rows) => {
-          console.log("returned", rows);
-          console.log("Rows returned: " + rows.length);
+          console.log("addEntry rows returned", rows.length);
           return rows;
         })
         .catch((err) => {
           console.log("DB Query Error: " + err);
-          return "Query did not execute";
+          throw "Query did not execute";
         })
         .finally(() => {
-          console.log("releasing connection");
+          console.log("addEntry releasing connection");
           conn.release();
         });
     })
     .catch((err) => {
-      console.log("DB error", err);
+      console.log("addEntry DB error", err);
       throw err;
     });
 }

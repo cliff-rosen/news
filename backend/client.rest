@@ -1,5 +1,5 @@
 
-GET http://localhost:4000/x  HTTP/1.1
+GET http://localhost:4000/y  HTTP/1.1
 content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
@@ -12,7 +12,6 @@ Authorization: Bearer 12345
 
 POST http://localhost:4000/login  HTTP/1.1
 content-type: application/json
-authorization: Bearer 12345
 
 {
     "username": "john",
@@ -27,5 +26,17 @@ content-type: application/json
 {
     "username": "john3",
     "password": "abc"
+}
+
+###
+
+POST http://localhost:4000/entry  HTTP/1.1
+content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
+
+{
+    "entryTitle": "post with line break in text",
+    "entryText": "my entry text line break",
+    "entryUrl": "abc.com"
 }
 

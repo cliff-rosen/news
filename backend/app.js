@@ -18,33 +18,15 @@ app.use(bodyParser.json());
 app.use(start);
 
 function start(req, res, next) {
-  console.log("*************************************************");
+  console.log("******************************");
   next();
 }
 
 /////////////////// PLAYGROUND /////////////////
 let status = 0;
 
-function abc(req, res, next) {
-  console.log("abc start");
-  fetch("https://google.com").then((res) => {
-    status = res.status;
-    console.log("back from fetch", status);
-    next();
-  });
-  console.log("abc finished");
-}
-
-app.get("/y", abc, function (req, res) {
-  console.log("y start", status);
-  res.json({ status });
-});
-
-////////////////////////////////////////////////
-
-app.get("/x", checkForToken, function (req, res) {
-  console.log("Calling x with user: ", req.user);
-  res.json(req.user);
+app.get("/y", function (req, res) {
+  res.json({ message: "hello" });
 });
 
 /////////////////////// LOGIN/REGISTRATION ////////////////////////////
@@ -112,9 +94,14 @@ app.post("/login", (req, res) => {
 /////////////////////// ENTRY ////////////////////////////
 app.post("/entry", checkForToken, (req, res) => {
   console.log("add entry", req.body.entryText);
-  db.addEntry(req.body.entryText, req.body.entryUrl, req.user.userID).then(
-    (rows) => res.json(rows[0])
-  );
+  db.addEntry(
+    req.body.entryTitle,
+    req.body.entryText,
+    req.body.entryUrl,
+    req.user.userID
+  )
+    .then((rows) => res.json(rows[0]))
+    .catch((e) => res.json({ error: e }));
 });
 
 app.get("/entry", (req, res) => {
