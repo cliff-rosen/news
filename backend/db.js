@@ -97,15 +97,27 @@ function validateUser(userName, password) {
 }
 
 //////////////////////////// ENTRIES ////////////////////////
+function getDomain(url) {
+  try {
+    const host = new URL(url).host;
+    const domain = psl.parse(host).domain;
+    return domain;
+  } catch (e) {
+    console.log("error - invalid URL");
+    return "";
+  }
+}
+
 function addEntry(entryTitle, entryText, entryUrl, userID) {
   console.log("addEntry", entryTitle);
   entryTitle = entryTitle.replace(/'/g, "\\'");
   entryText = entryText.replace(/'/g, "\\'");
-  const entryUrlDomain = psl.parse(entryUrl).domain;
+  const entryUrlDomain = getDomain(entryUrl);
+
   dbQueryString = `
                     INSERT
                     INTO entry (UserID, EntryTitle, EntryText, EntryUrl, EntryUrlDomain)
-                    VALUES (${userID}, '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain})
+                    VALUES (${userID}, '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain}')
                     `;
   console.log(dbQueryString);
   return pool

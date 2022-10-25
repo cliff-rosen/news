@@ -46,7 +46,7 @@ function PostList({ user }) {
                 {post.EntryTitle}
               </Link>{" "}
               <span style={{ fontSize: "12px", color: "gray" }}>
-                (www.sitelink.com)
+                {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
               </span>
             </div>
             {post.EntryText && (
