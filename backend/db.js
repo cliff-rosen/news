@@ -16,7 +16,7 @@ function addUser(userName, password) {
   const passwordHash = hasher.hashSync(password, 10);
   const dbQueryString = `
                     INSERT
-                    INTO User (UserName, Password)
+                    INTO user (UserName, Password)
                     VALUES ("${userName}", "${passwordHash}")
                     `;
   return pool
