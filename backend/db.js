@@ -1,13 +1,14 @@
 const mariadb = require("mariadb");
 const hasher = require("bcrypt");
 const psl = require("psl");
+const { dbSecrets } = require("./secrets.js");
 
 const pool = mariadb.createPool({
-  host: "localhost",
-  user: "nodejs",
-  password: "db",
-  connectionLimit: 5,
-  database: "dev",
+  host: dbSecrets.DB_HOST,
+  database: dbSecrets.DB_NAME,
+  user: dbSecrets.DB_USER,
+  password: dbSecrets.DB_PASSWORD,
+  connectionLimit: dbSecrets.DB_CONNECTION_LIMIT,
 });
 
 function addUser(userName, password) {

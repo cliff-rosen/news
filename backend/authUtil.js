@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "thisisthekey";
+const { JWT_SECRET } = require("./secrets.js");
 
 /*
   user = {
