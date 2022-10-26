@@ -21,6 +21,7 @@ Back End Deployment
 * HeidiSQL to RDS
  - run create.sql
 * SSH to EC2 (Node)
-  - set .env file on production server
+  - update secrets.js
   - git pull
+  - npm i
   - node app

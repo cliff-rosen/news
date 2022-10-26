@@ -11,32 +11,25 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
 -- Dumping structure for table dev.entry
 CREATE TABLE IF NOT EXISTS `entry` (
   `EntryID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) DEFAULT NULL,
-  `EntryDate` datetime DEFAULT NULL,
+  `EntryDateTime` datetime DEFAULT NULL,
   `EntryTitle` tinytext DEFAULT NULL,
   `EntryText` text DEFAULT NULL,
   `EntryUrl` varchar(2048) DEFAULT NULL,
   `EntryUrlDomain` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`EntryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 
--- Dumping data for table dev.entry: ~10 rows (approximately)
+-- Dumping data for table dev.entry: ~4 rows (approximately)
 /*!40000 ALTER TABLE `entry` DISABLE KEYS */;
-INSERT INTO `entry` (`EntryID`, `UserID`, `EntryDate`, `EntryTitle`, `EntryText`, `EntryUrl`, `EntryUrlDomain`) VALUES
-	(1, 47, NULL, 'This is my first entry', 'this is my text', 'https://cnn.com', NULL),
-	(2, 47, NULL, 'This i my second entry', '', 'a', NULL),
-	(3, 90, NULL, 'I\'m excited to roll out this application for Ron to use', '', 'a', NULL),
-	(59, 47, NULL, 'another one here', '', 'a', NULL),
-	(63, 90, NULL, 'great article here', '', 'https://github.com/mui/material-ui/tree/v5.10.2/docs/data/material/getting-started/templates/dashboard', NULL),
-	(76, 102, NULL, 'this is a post from ron', '', 'ronsurl.com', NULL),
-	(77, 47, NULL, 'Research on Psychedelics is Continuing to Ramp Up in the U.S. and Elsewhere', 'This is an example of writing a long text description of the entry.  The pointis to see how it looks in the UI.', 'www.site.com', NULL),
-	(87, 47, NULL, 'my entry text', 'my entry text', 'abc.com', NULL),
-	(88, 47, NULL, 'post with line break in text', 'my entry text line break', 'abc.com', NULL),
-	(89, 47, NULL, 'post with line break in description', 'line 1\nline 2\nline 3', 'abc.com', NULL);
+INSERT INTO `entry` (`EntryID`, `UserID`, `EntryDateTime`, `EntryTitle`, `EntryText`, `EntryUrl`, `EntryUrlDomain`) VALUES
+	(1, 47, '2022-10-25 19:50:51', 'This is my first entry', 'this is my text', '', NULL),
+	(99, 47, '2022-10-25 19:49:55', 'posting again', '', 'https://www.abc.com/axjs', 'abc.com'),
+	(100, 47, '2022-10-25 20:06:20', 'posting again 2', 'post without url', '', ''),
+	(101, 90, '2022-10-25 20:40:57', 'Extract hostname name from string', 'This post has nothing to do with psychedelics', 'https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string', 'stackoverflow.com');
 /*!40000 ALTER TABLE `entry` ENABLE KEYS */;
 
 -- Dumping structure for table dev.user
