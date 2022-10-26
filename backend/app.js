@@ -29,6 +29,19 @@ app.get("/y", checkForToken, function (req, res) {
   res.json({ message: "hello" });
 });
 
+app.post("/access", (req, res) => {
+  console.log("Access");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  password = req.body.password;
+  if (password === "letstrip") {
+    console.log("access granted");
+    res.send("access granted");
+  } else {
+    console.log("access failed");
+    res.status(401).json({ error: "Invalid password" });
+  }
+});
+
 /////////////////////// LOGIN/REGISTRATION ////////////////////////////
 app.post("/createuser", (req, res) => {
   console.log("Create user");

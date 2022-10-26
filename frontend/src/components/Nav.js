@@ -24,10 +24,10 @@ const Navbar = ({ user, setUser }) => {
         sx={{ justifyContent: "space-between", overflowX: "auto" }}
       >
         <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
-          Psychedelic News
+          Tripper's Almanac
         </Typography>
         <Typography variant="h6" sx={{ display: { xs: "block", sm: "none" } }}>
-          PN
+          TA
         </Typography>
         {sections.map((section) => (
           <Button

@@ -55,7 +55,7 @@ export function LoginForm({ user, setUser }) {
         <TextField
           id="password"
           style={{ width: "400px", margin: "5px" }}
-          type="text"
+          type="password"
           label="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -83,7 +83,7 @@ export function LoginForm({ user, setUser }) {
         <TextField
           id="password"
           style={{ width: "400px", margin: "5px" }}
-          type="text"
+          type="password"
           label="Password"
           value={passwordR}
           onChange={(e) => setPasswordR(e.target.value)}
