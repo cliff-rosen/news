@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
+import { getElapsedTime } from "../Common/TimeUtils";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
@@ -58,8 +59,8 @@ function PostList({ user }) {
             )}
             <div>
               <span style={{ fontSize: "12px", color: "gray" }}>
-                Posted by {post.UserName} | {Math.ceil(Math.random() * 100)}{" "}
-                comments
+                Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)}{" "}
+                ago | {Math.ceil(Math.random() * 100)} comments
               </span>
             </div>
           </div>

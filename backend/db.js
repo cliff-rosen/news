@@ -116,8 +116,14 @@ function addEntry(entryTitle, entryText, entryUrl, userID) {
 
   dbQueryString = `
                     INSERT
-                    INTO entry (UserID, EntryTitle, EntryText, EntryUrl, EntryUrlDomain)
-                    VALUES (${userID}, '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain}')
+                    INTO entry (
+                      UserID,
+                      EntryTitle, EntryText, EntryUrl, EntryUrlDomain,
+                      EntryDateTime)
+                    VALUES (
+                      ${userID},
+                      '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain}',
+                      NOW())
                     `;
   console.log(dbQueryString);
   return pool
@@ -211,6 +217,7 @@ function getAllEntries() {
                     SELECT e.*, u.UserName
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
+                    ORDER BY e.EntryDateTime desc
                     `;
   return pool
     .getConnection()
