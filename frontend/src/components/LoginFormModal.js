@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 export default function LoginFormModal({ userManager }) {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameR, setUsernameR] = useState("");
@@ -20,7 +22,10 @@ export default function LoginFormModal({ userManager }) {
     setUsernameR("");
     setPasswordR("");
     setErrMessage("");
-    userManager.showLogin(false);
+    if (userManager.lao.homeOnAbort) {
+      navigate("/");
+    }
+    userManager.hideLogin();
   };
 
   const formSubmit = (e) => {
@@ -31,7 +36,7 @@ export default function LoginFormModal({ userManager }) {
         setUsername("");
         setPassword("");
         setErrMessage("");
-        userManager.showLogin(false);
+        userManager.hideLogin();
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
@@ -47,7 +52,7 @@ export default function LoginFormModal({ userManager }) {
         setUsernameR("");
         setPasswordR("");
         setErrMessage("");
-        userManager.showLogin(false);
+        userManager.hideLogin();
       })
       .catch((err) => setErrMessage("Registration error: " + err.message));
   };

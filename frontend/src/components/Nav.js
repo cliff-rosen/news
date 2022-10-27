@@ -45,7 +45,7 @@ const Navbar = ({ userManager }) => {
             <span
               onClick={() => {
                 console.log("click");
-                userManager.showLogin(true);
+                userManager.showLogin();
               }}
             >
               login

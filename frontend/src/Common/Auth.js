@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { login as apiLogin, register as apiRegister } from "../Common/AuthAPI";
 
-export const setStoredUser = (user) => {
+const setStoredUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
@@ -33,9 +32,7 @@ const p_login = async (username, password) => {
 };
 
 const p_logout = () => {
-  const user = JSON.stringify({ userID: 0 });
-  console.log("user in logout", user);
-  localStorage.setItem("user", user);
+  setStoredUser({ userID: 0 });
 };
 
 export const getUser = () => {
@@ -61,59 +58,60 @@ export const getUserToken = () => {
   return "Bearer " + user.token;
 };
 
-export const getLoginActionObject = () => {
+const makeLoginActionObject = () => {
   return {
     show: false,
     message: "",
     mode: null,
     fn: null,
     params: null,
+    homeOnAbort: false,
   };
 };
 
 export const useUserManager = () => {
   const [user, setUser] = useState(getUser());
-  const setUserX = (u) => {
-    console.log("App.setUserX", u);
-    setStoredUser(u);
-    setUser(u);
-  };
-  const [lao, setLao] = useState(getLoginActionObject(setUserX));
-  const navigate = useNavigate();
+  const [lao, setLao] = useState(makeLoginActionObject());
 
-  const showLogin = (show, message) => {
-    setLao({ ...lao, show: show, message });
-    if (!show) {
-      navigate("/");
-    }
+  const showLogin = (message) => {
+    setLao({ ...lao, show: true, message });
+  };
+
+  const hideLogin = () => {
+    setLao(makeLoginActionObject());
   };
 
   const requireUser = () => {
     if (user.userID === 0 && lao.show === false) {
-      showLogin(true, "Please login or register to use this feature.");
+      showLogin("Please login or register to use this feature.");
+      setLao((curLao) => {
+        return { ...curLao, homeOnAbort: true };
+      });
     }
   };
 
-  const register = (username, password) => {
-    return p_register(username, password).then(() => setUser(getUser()));
+  const register = async (username, password) => {
+    await p_register(username, password);
+    setUser(getUser());
   };
 
-  const login = (username, password) => {
-    return p_login(username, password).then(() => setUser(getUser()));
+  const login = async (username, password) => {
+    await p_login(username, password);
+    setUser(getUser());
   };
 
   const logout = () => {
     p_logout();
-    setUserX({ userID: 0 });
+    setUser(getUser());
   };
 
   return [
     {
       user,
       lao,
-      setUser: setUserX,
       setLao,
       showLogin,
+      hideLogin,
       register,
       login,
       logout,
