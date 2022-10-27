@@ -57,6 +57,12 @@ export default function LoginFormModal({ userManager }) {
       <Dialog open={userManager.lao.show} onClose={handleClose}>
         <DialogTitle>Login / Register</DialogTitle>
         <DialogContent>
+          {userManager.lao.message && (
+            <DialogContentText>
+              {userManager.lao.message}
+              <br /> <br />
+            </DialogContentText>
+          )}
           {errMessage ? (
             <span>
               {errMessage} <br />
