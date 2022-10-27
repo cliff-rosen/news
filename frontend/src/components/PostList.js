@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import IconButton from "@mui/material/IconButton";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 function PostList({ user }) {
   const [posts, setPosts] = useState([]);
@@ -28,17 +29,34 @@ function PostList({ user }) {
           key={post.EntryID}
           style={{
             display: "flex",
-            padding: 7,
+            paddingTop: 15,
+            alignItems: "start",
+            justifyContent: "start",
           }}
         >
-          <div style={{ fontSize: "14px", color: "gray", paddingRight: 5 }}>
+          <div
+            style={{
+              fontSize: "14px",
+              color: "gray",
+              paddingTop: 2,
+              paddingRight: 0,
+              width: 12,
+            }}
+          >
             {i + 1}.
           </div>
 
-          <div style={{ fontSize: "14px", color: "gray", paddingRight: 5 }}>
-            <ThumbUpIcon style={{ fontSize: "small" }} />
-            <br />
-            <ThumbDownIcon style={{ fontSize: "small" }} />
+          <div
+            style={{
+              color: "gray",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "start",
+            }}
+          >
+            <IconButton style={{ height: 10, width: 12 }}>
+              <ArrowDropUpIcon fontSize="medium" />
+            </IconButton>
           </div>
 
           <div>

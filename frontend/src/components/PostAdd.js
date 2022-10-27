@@ -1,26 +1,30 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
 import styled from "@emotion/styled";
 import { addPost as apiAddPost } from "../Common/PostAPI";
 import { useEffect } from "react";
 
 const LayoutContainer = styled(Container)(() => ({
-  height: "100%",
   overflow: "hidden",
-  width: "100%",
 }));
 
 function PostAdd({ userManager }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     userManager.requireUser();
   });
 
   const formSubmit = async () => {
+    if (title === "") {
+      setMessage("Please add a title.");
+      return;
+    }
+
     const body = JSON.stringify({
       entryUrl: url,
       entryTitle: title,
@@ -31,6 +35,7 @@ function PostAdd({ userManager }) {
       setUrl("");
       setTitle("");
       setDesc("");
+      setMessage("The entry has been submitted.");
     } catch (e) {
       console.log("error adding post", e);
     }
@@ -38,6 +43,13 @@ function PostAdd({ userManager }) {
 
   return (
     <LayoutContainer>
+      {message && (
+        <div>
+          {message}
+          <br />
+          <br />
+        </div>
+      )}
       <form>
         <TextField
           id="url"

@@ -109,7 +109,6 @@ export const useUserManager = () => {
     {
       user,
       lao,
-      setLao,
       showLogin,
       hideLogin,
       register,

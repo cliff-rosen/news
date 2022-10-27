@@ -7,6 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { ResetTvRounded } from "@mui/icons-material";
 
 export default function LoginFormModal({ userManager }) {
   const navigate = useNavigate();
@@ -30,6 +31,12 @@ export default function LoginFormModal({ userManager }) {
 
   const formSubmit = (e) => {
     e.preventDefault();
+
+    if (username === "" || password === "") {
+      setErrMessage("Please enter both fields.");
+      return;
+    }
+
     userManager
       .login(username, password)
       .then((res) => {
@@ -46,6 +53,12 @@ export default function LoginFormModal({ userManager }) {
 
   const formSubmitR = (e) => {
     e.preventDefault();
+
+    if (usernameR === "" || passwordR === "") {
+      setErrMessage("Please enter both fields.");
+      return;
+    }
+
     userManager
       .register(usernameR, passwordR)
       .then((res) => {

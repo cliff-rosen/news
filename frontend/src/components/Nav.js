@@ -1,5 +1,5 @@
 import { Button, Toolbar, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const sections = [
   { name: "Trending", link: "/" },
@@ -39,17 +39,26 @@ const Navbar = ({ userManager }) => {
         <span>
           {userManager.user?.userID > 0 ? (
             <span>
-              {userManager.user.userName} | <span onClick={lout}>logout</span>
+              {userManager.user.userName} |{" "}
+              <Link
+                style={{ textDecoration: "none", color: "gray" }}
+                to="#"
+                onClick={lout}
+              >
+                logout
+              </Link>
             </span>
           ) : (
-            <span
+            <Link
+              style={{ textDecoration: "none", color: "gray" }}
+              to="#"
               onClick={() => {
                 console.log("click");
                 userManager.showLogin();
               }}
             >
               login
-            </span>
+            </Link>
           )}
         </span>
       </Toolbar>
