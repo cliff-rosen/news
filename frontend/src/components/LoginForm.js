@@ -71,7 +71,7 @@ export function LoginForm({ user, setUser }) {
       REGISTER
       <form>
         <TextField
-          id="username"
+          id="usernameR"
           style={{ width: "400px", margin: "5px" }}
           type="text"
           label="Username"
@@ -81,7 +81,7 @@ export function LoginForm({ user, setUser }) {
         />
         <br />
         <TextField
-          id="password"
+          id="passwordR"
           style={{ width: "400px", margin: "5px" }}
           type="password"
           label="Password"

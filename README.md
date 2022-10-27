@@ -24,4 +24,23 @@ Back End Deployment
   - update secrets.js
   - git pull
   - npm i
-  - node app
+  - node app OR pm2 start app.js
+
+Running Node with PM2
+	pm2 start app.js --log app.log
+	tail -f /home/ubuntu/.pm2/logs/app-out.log
+	pm2 stop app
+	pm2 reload app
+	pm2 list
+https://pm2.keymetrics.io/docs/usage/quick-start/
+https://app.pm2.io/bucket/63595d62fb25bf525687fe37/backend/overview/servers
+username: crosen
+email: cliff.rosen@gmail.com
+password: cmrpm2
+Successfully created the bucket
+[PM2 I/O] Using: 
+Public key: xl0hmflo95gi2qz | 
+Private key: 812wqp859hc12qm | 
+Machine name: ip-172-31-33-212-ce1c
+
+

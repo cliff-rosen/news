@@ -8,12 +8,12 @@ const sections = [
   { name: "Post", link: "/add" },
 ];
 
-const Navbar = ({ user, setUser }) => {
+const Navbar = ({ user, setUserX }) => {
   const navigate = useNavigate();
 
   const lout = () => {
     logout();
-    setUser({ userID: 0 });
+    setUserX({ userID: 0 });
   };
 
   return (
@@ -39,24 +39,24 @@ const Navbar = ({ user, setUser }) => {
           </Button>
         ))}
         <span>
-          {user?.userID ? (
+          {user?.userID > 0 ? (
             <span>
-              {user.userName}
-              <button onClick={lout}>logout</button>
+              {user.userName} | <span onClick={lout}>logout</span>
             </span>
           ) : (
-            "login"
+            <span
+              onClick={() => {
+                console.log("click");
+                setUserX({ userID: -99 });
+              }}
+            >
+              login
+            </span>
           )}
         </span>
       </Toolbar>
     </div>
   );
 };
-
-{
-  /* <Link key={section.link} to={section.link} sx={{ p: 1, flexShrink: 0 }}>
-  {section.name}
-</Link>; */
-}
 
 export default Navbar;
