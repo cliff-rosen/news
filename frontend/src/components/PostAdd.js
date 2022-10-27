@@ -3,7 +3,7 @@ import { TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
 import styled from "@emotion/styled";
 import { addPost as apiAddPost } from "../Common/PostAPI";
-import LoginFormModal from "./LoginFormModal";
+import { useEffect } from "react";
 
 const LayoutContainer = styled(Container)(() => ({
   height: "100%",
@@ -11,10 +11,14 @@ const LayoutContainer = styled(Container)(() => ({
   width: "100%",
 }));
 
-function PostAdd({ user, setUserX }) {
+function PostAdd({ userManager }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+
+  useEffect(() => {
+    userManager.requireUser();
+  });
 
   const formSubmit = async () => {
     const body = JSON.stringify({
@@ -31,13 +35,6 @@ function PostAdd({ user, setUserX }) {
       console.log("error adding post", e);
     }
   };
-
-  if (!user?.userID || user?.userID === -99) {
-    if (user?.userID !== -99) {
-      setUserX({ userID: -99 });
-    }
-    return <LoginFormModal user={user} setUserX={setUserX} />;
-  }
 
   return (
     <LayoutContainer>

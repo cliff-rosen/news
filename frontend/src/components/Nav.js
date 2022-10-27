@@ -1,4 +1,3 @@
-import { logout } from "../Common/Auth";
 import { Button, Toolbar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -8,12 +7,11 @@ const sections = [
   { name: "Post", link: "/add" },
 ];
 
-const Navbar = ({ user, setUserX }) => {
+const Navbar = ({ userManager }) => {
   const navigate = useNavigate();
 
   const lout = () => {
-    logout();
-    setUserX({ userID: 0 });
+    userManager.logout();
   };
 
   return (
@@ -39,15 +37,15 @@ const Navbar = ({ user, setUserX }) => {
           </Button>
         ))}
         <span>
-          {user?.userID > 0 ? (
+          {userManager.user?.userID > 0 ? (
             <span>
-              {user.userName} | <span onClick={lout}>logout</span>
+              {userManager.user.userName} | <span onClick={lout}>logout</span>
             </span>
           ) : (
             <span
               onClick={() => {
                 console.log("click");
-                setUserX({ userID: -99 });
+                userManager.showLogin(true);
               }}
             >
               login

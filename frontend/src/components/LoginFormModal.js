@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { login, register, getUser } from "../Common/Auth";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,13 +7,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function LoginFormModal({ user, setUserX }) {
+export default function LoginFormModal({ userManager }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameR, setUsernameR] = useState("");
   const [passwordR, setPasswordR] = useState("");
   const [errMessage, setErrMessage] = useState("");
-  //const [open, setOpen] = useState(user?.userID == -99 ? true : false);
 
   const handleClose = () => {
     setUsername("");
@@ -22,17 +20,18 @@ export default function LoginFormModal({ user, setUserX }) {
     setUsernameR("");
     setPasswordR("");
     setErrMessage("");
-    setUserX({ userId: 0 });
+    userManager.showLogin(false);
   };
 
   const formSubmit = (e) => {
     e.preventDefault();
-    login(username, password)
+    userManager
+      .login(username, password)
       .then((res) => {
         setUsername("");
         setPassword("");
         setErrMessage("");
-        setUserX(getUser());
+        userManager.showLogin(false);
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
@@ -42,19 +41,20 @@ export default function LoginFormModal({ user, setUserX }) {
 
   const formSubmitR = (e) => {
     e.preventDefault();
-    register(usernameR, passwordR)
+    userManager
+      .register(usernameR, passwordR)
       .then((res) => {
         setUsernameR("");
         setPasswordR("");
         setErrMessage("");
-        setUserX(getUser());
+        userManager.showLogin(false);
       })
       .catch((err) => setErrMessage("Registration error: " + err.message));
   };
 
   return (
     <div>
-      <Dialog open={user.userID === -99 ? true : false} onClose={handleClose}>
+      <Dialog open={userManager.lao.show} onClose={handleClose}>
         <DialogTitle>Login / Register</DialogTitle>
         <DialogContent>
           {errMessage ? (

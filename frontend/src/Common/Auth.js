@@ -58,3 +58,12 @@ export const getUserToken = () => {
   }
   return "Bearer " + user.token;
 };
+
+export const getLoginActionObject = () => {
+  return {
+    show: false,
+    mode: null,
+    fn: null,
+    params: null,
+  };
+};
