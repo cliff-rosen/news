@@ -18,16 +18,16 @@ function PostList({ userManager, order }) {
   };
 
   useEffect(() => {
-    console.log("PostList getPosts running");
-    const getPosts = async (order) => {
+    console.log("PostList getPosts running: ", order);
+    const getPosts = async (iOrder) => {
       try {
-        const data = await apiGetPosts(order);
+        const data = await apiGetPosts(iOrder);
         setPosts(data);
       } catch (error) {
         console.log("Error while getting list of stories.", error);
       }
     };
-    getPosts();
+    getPosts(order);
   }, [userManager.user.userID, order]);
 
   return (

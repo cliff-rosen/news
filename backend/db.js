@@ -213,15 +213,21 @@ function getEntry() {
     });
 }
 
-function getAllEntries(userID) {
+function getAllEntries(userID, order) {
   dbQueryString = `
                     SELECT e.*, u.UserName, v.Vote
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 
                       ON v.UserID = ${userID} and e.EntryID = v.EntryID
-                    ORDER BY e.EntryDateTime desc
                     `;
+
+  if (order === "trending") {
+    dbQueryString += " ORDER BY e.VoteCount desc";
+  } else {
+    dbQueryString += " ORDER BY e.EntryDateTime desc";
+  }
+
   return pool
     .getConnection()
     .then((conn) => {

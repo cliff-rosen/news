@@ -1,10 +1,10 @@
 import { BASE_API_URL } from "./APIUtils";
 import { getUserToken } from "./Auth";
 
-export const getPosts = async () => {
+export const getPosts = async (order) => {
   let data = {};
   try {
-    const res = await fetch(`${BASE_API_URL}/entries`, {
+    const res = await fetch(`${BASE_API_URL}/entries?order=${order}`, {
       headers: {
         method: "GET",
         "Content-Type": "application/json",
@@ -20,7 +20,13 @@ export const getPosts = async () => {
   return data;
 };
 
-export const addPost = async (body) => {
+export const addPost = async (entryUrl, entryTitle, entryText) => {
+  const body = JSON.stringify({
+    entryUrl,
+    entryTitle,
+    entryText,
+  });
+
   const res = await fetch(`${BASE_API_URL}/entry`, {
     method: "POST",
     headers: {

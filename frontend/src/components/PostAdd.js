@@ -26,13 +26,8 @@ function PostAdd({ userManager }) {
       return;
     }
 
-    const body = JSON.stringify({
-      entryUrl: url,
-      entryTitle: title,
-      entryText: desc,
-    });
     try {
-      await apiAddPost(body);
+      await apiAddPost(url, title, desc);
       setUrl("");
       setTitle("");
       setDesc("");
