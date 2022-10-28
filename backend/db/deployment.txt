@@ -1,0 +1,2 @@
+add user_entry_vote table
+updated entry table with vote count

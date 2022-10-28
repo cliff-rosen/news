@@ -22,7 +22,7 @@ function checkForToken(req, res, next) {
 
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
-    const bearerToken = bearerHeader.split(" ")[1];
+    const bearerToken = bearerHeader.split(" ")[1] || "";
     console.log("Token found: " + bearerToken.substring(0, 10));
     req.token = bearerToken;
     jwt.verify(req.token, JWT_SECRET, (err, decoded) => {

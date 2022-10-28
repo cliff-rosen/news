@@ -47,7 +47,7 @@ content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
 {
-    "entryID": 1111,
+    "entryID": 105,
     "vote": 1
 }
 

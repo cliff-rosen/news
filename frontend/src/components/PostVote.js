@@ -7,30 +7,39 @@ import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-export function PostVote({ userManager, entryID, vote }) {
+export function PostVote({ userManager, entryID, voteCount, vote }) {
   const [myVote, setMyVote] = useState(vote);
+  const [myVoteCount, setMyVoteCount] = useState(voteCount || 0);
 
-  const voteHandler = () => {
+  const voteHandler = (v) => {
+    console.log("voteHandler", v);
     if (myVote == null) {
-      addVote();
+      addVote(v);
+      setMyVoteCount(myVoteCount + v);
     } else {
-      if (myVote == 1) {
+      if (myVote === v) {
         editVote(0);
+        setMyVoteCount(myVoteCount - v);
       } else {
-        editVote(1);
+        editVote(v);
+        if (myVoteCount !== 0) {
+          setMyVoteCount(myVoteCount + 2 * v);
+        } else {
+          setMyVoteCount(myVoteCount + v);
+        }
       }
     }
   };
 
-  const addVote = async () => {
+  const addVote = async (v) => {
     const body = JSON.stringify({
       entryID,
-      vote: 1,
+      vote: v,
     });
 
     try {
       await apiAddPostVote(body);
-      setMyVote(1);
+      setMyVote(v);
       console.log("post vote added");
     } catch (e) {
       console.log("error adding post vote", e);
@@ -40,7 +49,7 @@ export function PostVote({ userManager, entryID, vote }) {
   const editVote = async (v) => {
     const body = JSON.stringify({
       entryID,
-      vote,
+      vote: v,
     });
 
     try {
@@ -53,11 +62,28 @@ export function PostVote({ userManager, entryID, vote }) {
   };
 
   return (
-    <IconButton
-      style={{ height: 10, width: 12, color: myVote ? "green" : "lightGray" }}
-      onClick={voteHandler}
-    >
-      <ArrowDropUpIcon fontSize="medium" />
-    </IconButton>
+    <div>
+      <IconButton
+        style={{
+          height: 10,
+          width: 12,
+          color: myVote === 1 ? "green" : "lightGray",
+        }}
+        onClick={() => voteHandler(1)}
+      >
+        <ArrowDropUpIcon fontSize="medium" />
+      </IconButton>
+      <span style={{ fontSize: 10 }}>{myVoteCount}</span>
+      <IconButton
+        style={{
+          height: 10,
+          width: 12,
+          color: myVote === -1 ? "green" : "lightGray",
+        }}
+        onClick={() => voteHandler(-1)}
+      >
+        <ArrowDropDownIcon fontSize="medium" />
+      </IconButton>
+    </div>
   );
 }

@@ -213,13 +213,13 @@ function getEntry() {
     });
 }
 
-function getAllEntries() {
+function getAllEntries(userID) {
   dbQueryString = `
                     SELECT e.*, u.UserName, v.vote
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 
-                      ON e.UserID = v.UserID and e.EntryID = v.EntryID
+                      ON v.UserID = '${userID}' and e.EntryID = v.EntryID
                     ORDER BY e.EntryDateTime desc
                     `;
   return pool
@@ -286,7 +286,18 @@ function addUserEntryVote(userID, entryID, vote) {
     });
 }
 
-function updateUserEntryVote(userID, entryID, vote) {
+async function updateUserEntryVote(userID, entryID, vote) {
+  try {
+    await updateUserEntryVoteDB(userID, entryID, vote);
+    await updateEntryVoteCountDB(entryID);
+    return "SUCCESS";
+  } catch (e) {
+    console.log("updateUserEntryVote error", e);
+    throw e;
+  }
+}
+
+async function updateUserEntryVoteDB(userID, entryID, vote) {
   console.log("editUserEntryVote", userID);
 
   dbQueryString = `
@@ -303,7 +314,7 @@ function updateUserEntryVote(userID, entryID, vote) {
       return conn
         .query(dbQueryString)
         .then((res) => {
-          console.log("editUserEntryVote returned: ", res.affectedRows);
+          console.log("updateUserEntryVoteDB returned: ", res.affectedRows);
           if (res.affectedRows !== 1) {
             throw "Query did not update correct rowcount of 1";
           }
@@ -314,12 +325,53 @@ function updateUserEntryVote(userID, entryID, vote) {
           throw "Query did not execute";
         })
         .finally(() => {
-          console.log("editUserEntryVote releasing connection");
+          console.log("updateUserEntryVoteDB releasing connection");
           conn.release();
         });
     })
     .catch((err) => {
-      console.log("editUserEntryVote DB error", err);
+      console.log("updateUserEntryVoteDB DB error", err);
+      throw err;
+    });
+}
+
+async function updateEntryVoteCountDB(entryID) {
+  console.log("updateEntryVoteCountDB", entryID);
+
+  dbQueryString = `
+                    UPDATE entry
+                    SET VoteCount = 
+                      (
+                        SELECT sum(Vote)
+                        FROM user_entry_vote
+                        WHERE entryID = ${entryID}
+                      )
+                    WHERE EntryID = ${entryID}
+                    `;
+  console.log(dbQueryString);
+  return pool
+    .getConnection()
+    .then((conn) => {
+      return conn
+        .query(dbQueryString)
+        .then((res) => {
+          console.log("updateEntryVoteCount returned: ", res.affectedRows);
+          if (res.affectedRows !== 1) {
+            throw "Query did not update correct rowcount of 1";
+          }
+          return res;
+        })
+        .catch((err) => {
+          console.log("updateEntryVoteCountDB DB Query Error: " + err);
+          throw "Query did not execute";
+        })
+        .finally(() => {
+          console.log("updateEntryVoteCount releasing connection");
+          conn.release();
+        });
+    })
+    .catch((err) => {
+      console.log("updateEntryVoteCount DB error", err);
       throw err;
     });
 }

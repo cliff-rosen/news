@@ -5,7 +5,11 @@ export const getPosts = async () => {
   let data = {};
   try {
     const res = await fetch(`${BASE_API_URL}/entries`, {
-      headers: { Authorization: "abc" },
+      headers: {
+        method: "GET",
+        "Content-Type": "application/json",
+        Authorization: getUserToken(),
+      },
     });
     if (res.status !== 200) throw new Error("getPosts http error");
     data = await res.json();

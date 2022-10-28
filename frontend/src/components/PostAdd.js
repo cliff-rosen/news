@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
 import styled from "@emotion/styled";
 import { addPost as apiAddPost } from "../Common/PostAPI";

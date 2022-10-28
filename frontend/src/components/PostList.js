@@ -40,7 +40,7 @@ function PostList({ userManager }) {
               width: 12,
             }}
           >
-            {i + 1}.
+            {false && i + 1}
           </div>
 
           <div
@@ -53,6 +53,7 @@ function PostList({ userManager }) {
             <PostVote
               userManager={userManager}
               entryID={post.EntryID}
+              voteCount={post.VoteCount}
               vote={post.vote}
             ></PostVote>
           </div>
