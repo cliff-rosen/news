@@ -6,13 +6,20 @@ import {
 import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useEffect } from "react";
 
 export function PostVote({ userManager, entryID, voteCount, vote }) {
   const [myVote, setMyVote] = useState(vote);
   const [myVoteCount, setMyVoteCount] = useState(voteCount || 0);
 
+  useEffect(() => {
+    setMyVote(vote);
+  }, [vote]);
+
   const voteHandler = (v) => {
-    console.log("voteHandler", v);
+    userManager.requireUser();
+    if (userManager.user.userID == 0) return;
+
     if (myVote == null) {
       addVote(v);
       setMyVoteCount(myVoteCount + v);
@@ -22,7 +29,7 @@ export function PostVote({ userManager, entryID, voteCount, vote }) {
         setMyVoteCount(myVoteCount - v);
       } else {
         editVote(v);
-        if (myVoteCount !== 0) {
+        if (myVote !== 0) {
           setMyVoteCount(myVoteCount + 2 * v);
         } else {
           setMyVoteCount(myVoteCount + v);
@@ -73,7 +80,9 @@ export function PostVote({ userManager, entryID, voteCount, vote }) {
       >
         <ArrowDropUpIcon fontSize="medium" />
       </IconButton>
-      <span style={{ fontSize: 10 }}>{myVoteCount}</span>
+      <span style={{ fontSize: 10 }}>
+        {myVoteCount},{myVote}
+      </span>
       <IconButton
         style={{
           height: 10,

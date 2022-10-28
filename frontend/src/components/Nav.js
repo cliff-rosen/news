@@ -54,7 +54,6 @@ const Navbar = ({ userManager }) => {
               style={{ textDecoration: "none", color: "gray" }}
               to="#"
               onClick={() => {
-                console.log("click");
                 userManager.showLogin();
               }}
             >

@@ -36,12 +36,16 @@ const p_logout = () => {
 };
 
 export const getUser = () => {
-  let user = { userID: 0 };
-
+  let user;
   try {
     user = JSON.parse(localStorage.getItem("user"));
+    if (user == null) {
+      user = { userID: 0 };
+      setStoredUser(user);
+    }
   } catch {
-    user = { userID: -1 };
+    user = { userID: 0 };
+    setStoredUser(user);
   }
 
   return user;
@@ -81,6 +85,8 @@ export const useUserManager = () => {
     setLao(makeLoginActionObject());
   };
 
+  // add to useEffect of component requiring logged in user
+  // must be in useEffect/event handler to avoid running while parent renders
   const requireUser = () => {
     if (user.userID === 0 && lao.show === false) {
       showLogin("Please login or register to use this feature.");

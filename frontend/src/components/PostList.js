@@ -8,6 +8,7 @@ function PostList({ userManager }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    console.log("PostList getPosts running");
     const getPosts = async (type) => {
       try {
         const data = await apiGetPosts();
@@ -17,7 +18,7 @@ function PostList({ userManager }) {
       }
     };
     getPosts();
-  }, []);
+  }, [userManager.user.userID]);
 
   return (
     <Container style={{ height: 400, width: 800 }}>
@@ -54,7 +55,7 @@ function PostList({ userManager }) {
               userManager={userManager}
               entryID={post.EntryID}
               voteCount={post.VoteCount}
-              vote={post.vote}
+              vote={post.Vote}
             ></PostVote>
           </div>
 

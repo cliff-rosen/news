@@ -215,11 +215,11 @@ function getEntry() {
 
 function getAllEntries(userID) {
   dbQueryString = `
-                    SELECT e.*, u.UserName, v.vote
+                    SELECT e.*, u.UserName, v.Vote
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 
-                      ON v.UserID = '${userID}' and e.EntryID = v.EntryID
+                      ON v.UserID = ${userID} and e.EntryID = v.EntryID
                     ORDER BY e.EntryDateTime desc
                     `;
   return pool
@@ -249,7 +249,29 @@ function getAllEntries(userID) {
 
 ////////////////////////////////////////////////////
 
-function addUserEntryVote(userID, entryID, vote) {
+async function addUserEntryVote(userID, entryID, vote) {
+  try {
+    await addUserEntryVoteDB(userID, entryID, vote);
+    await updateEntryVoteCountDB(entryID);
+    return "SUCCESS";
+  } catch (e) {
+    console.log("addUserEntryVote error", e);
+    throw e;
+  }
+}
+
+async function updateUserEntryVote(userID, entryID, vote) {
+  try {
+    await updateUserEntryVoteDB(userID, entryID, vote);
+    await updateEntryVoteCountDB(entryID);
+    return "SUCCESS";
+  } catch (e) {
+    console.log("updateUserEntryVote error", e);
+    throw e;
+  }
+}
+
+function addUserEntryVoteDB(userID, entryID, vote) {
   console.log("addUserEntryVote", userID);
 
   dbQueryString = `
