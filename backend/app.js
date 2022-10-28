@@ -117,11 +117,6 @@ app.post("/entry", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e }));
 });
 
-app.get("/entry", (req, res) => {
-  console.log("get entry");
-  db.getEntry().then((rows) => res.json(rows[0]));
-});
-
 app.delete("/entry/:id", (req, res) => {
   const { id } = req.params;
   console.log("get delete", id);
@@ -136,6 +131,22 @@ app.get("/entries", (req, res) => {
   console.log("get entries", req.headers["authorization"]);
   db.getAllEntries().then((rows) => res.json(rows));
 });
+
+app.post("/user_entry_vote", checkForToken, (req, res) => {
+  console.log("add user_entry_vote", req.user.userID);
+  db.addUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
+    .then((rows) => res.json(rows[0]))
+    .catch((e) => res.json({ error: e }));
+});
+
+app.put("/user_entry_vote", checkForToken, (req, res) => {
+  console.log("update user_entry_vote", req.user.userID);
+  db.updateUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
+    .then((rows) => res.json(rows[0]))
+    .catch((e) => res.json({ error: e }));
+});
+
+//////////////////////////////////////////////////////
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

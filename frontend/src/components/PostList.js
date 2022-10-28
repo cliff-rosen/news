@@ -3,11 +3,9 @@ import { useState, useEffect } from "react";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
-import IconButton from "@mui/material/IconButton";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { PostVote } from "./PostVote";
 
-function PostList({ user }) {
+function PostList({ userManager }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -48,15 +46,16 @@ function PostList({ user }) {
 
           <div
             style={{
-              color: "gray",
               display: "flex",
               flexDirection: "column",
               alignItems: "start",
             }}
           >
-            <IconButton style={{ height: 10, width: 12 }}>
-              <ArrowDropUpIcon fontSize="medium" />
-            </IconButton>
+            <PostVote
+              userManager={userManager}
+              entryID={post.EntryID}
+              vote={post.vote}
+            ></PostVote>
           </div>
 
           <div>

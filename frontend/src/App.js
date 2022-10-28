@@ -20,7 +20,7 @@ function App() {
       <LoginFormModal userManager={userManager} />
       <Nav userManager={userManager} />
       <Routes>
-        <Route path="/" element={<PostList user={userManager.user} />} />
+        <Route path="/" element={<PostList userManager={userManager} />} />
         <Route path="add" element={<PostAdd userManager={userManager} />} />
       </Routes>
     </>

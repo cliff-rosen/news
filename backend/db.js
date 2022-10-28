@@ -215,9 +215,11 @@ function getEntry() {
 
 function getAllEntries() {
   dbQueryString = `
-                    SELECT e.*, u.UserName
+                    SELECT e.*, u.UserName, v.vote
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
+                    LEFT JOIN user_entry_vote v 
+                      ON e.UserID = v.UserID and e.EntryID = v.EntryID
                     ORDER BY e.EntryDateTime desc
                     `;
   return pool
@@ -245,9 +247,85 @@ function getAllEntries() {
     });
 }
 
+////////////////////////////////////////////////////
+
+function addUserEntryVote(userID, entryID, vote) {
+  console.log("addUserEntryVote", userID);
+
+  dbQueryString = `
+                    INSERT
+                    INTO user_entry_vote (
+                      UserID, EntryID, Vote
+                    )
+                    VALUES (
+                      ${userID},'${entryID}','${vote}'
+                    )
+                    `;
+  console.log(dbQueryString);
+  return pool
+    .getConnection()
+    .then((conn) => {
+      return conn
+        .query(dbQueryString)
+        .then((rows) => {
+          console.log("addUserEntryVote rows returned", rows.length);
+          return rows;
+        })
+        .catch((err) => {
+          console.log("DB Query Error: " + err);
+          throw "Query did not execute";
+        })
+        .finally(() => {
+          console.log("addUserEntryVote releasing connection");
+          conn.release();
+        });
+    })
+    .catch((err) => {
+      console.log("addUserEntryVote DB error", err);
+      throw err;
+    });
+}
+
+function updateUserEntryVote(userID, entryID, vote) {
+  console.log("editUserEntryVote", userID);
+
+  dbQueryString = `
+                    UPDATE user_entry_vote 
+                    SET Vote = '${vote}'
+                    WHERE 
+                          UserID = ${userID}
+                      AND EntryID = '${entryID}'
+                    `;
+  console.log(dbQueryString);
+  return pool
+    .getConnection()
+    .then((conn) => {
+      return conn
+        .query(dbQueryString)
+        .then((res) => {
+          console.log("editUserEntryVote returned", res);
+          return res;
+        })
+        .catch((err) => {
+          console.log("DB Query Error: " + err);
+          throw "Query did not execute";
+        })
+        .finally(() => {
+          console.log("editUserEntryVote releasing connection");
+          conn.release();
+        });
+    })
+    .catch((err) => {
+      console.log("editUserEntryVote DB error", err);
+      throw err;
+    });
+}
+
 module.exports.addEntry = addEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
 module.exports.getAllEntries = getAllEntries;
 module.exports.validateUser = validateUser;
 module.exports.addUser = addUser;
+module.exports.addUserEntryVote = addUserEntryVote;
+module.exports.updateUserEntryVote = updateUserEntryVote;

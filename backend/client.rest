@@ -40,4 +40,25 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 GET http://localhost:4000/entries HTTP/1.1
 Authorization: Bearer 12345
 
+###
+
+POST http://localhost:4000/user_entry_vote  HTTP/1.1
+content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
+
+{
+    "entryID": 1111,
+    "vote": 1
+}
+
+###
+
+PUT http://localhost:4000/user_entry_vote  HTTP/1.1
+content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
+
+{
+    "entryID": 1,
+    "vote": 1
+}
 
