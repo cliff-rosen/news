@@ -4,29 +4,40 @@ import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
 import { PostVote } from "./PostVote";
 
-function PostList({ userManager }) {
+function PostList({ userManager, order }) {
   const [posts, setPosts] = useState([]);
+
+  const updateVote = (idx, newVoteCount, newVote) => {
+    var post = posts[idx];
+    post = { ...post, VoteCount: newVoteCount, Vote: newVote };
+    setPosts((curPosts) => {
+      var newPosts = [...curPosts];
+      newPosts[idx] = post;
+      return newPosts;
+    });
+  };
 
   useEffect(() => {
     console.log("PostList getPosts running");
-    const getPosts = async (type) => {
+    const getPosts = async (order) => {
       try {
-        const data = await apiGetPosts();
+        const data = await apiGetPosts(order);
         setPosts(data);
       } catch (error) {
         console.log("Error while getting list of stories.", error);
       }
     };
     getPosts();
-  }, [userManager.user.userID]);
+  }, [userManager.user.userID, order]);
 
   return (
-    <Container style={{ height: 400, width: 800 }}>
+    <Container style={{ height: 800, width: 800 }}>
       {posts.map((post, i) => (
-        <section
+        <div
           key={post.EntryID}
           style={{
             display: "flex",
+            flexDirection: "row",
             paddingTop: 15,
             alignItems: "start",
             justifyContent: "start",
@@ -34,6 +45,7 @@ function PostList({ userManager }) {
         >
           <div
             style={{
+              flex: "0 0 2px",
               fontSize: "14px",
               color: "gray",
               paddingTop: 2,
@@ -46,6 +58,7 @@ function PostList({ userManager }) {
 
           <div
             style={{
+              flex: "0 0 50px",
               display: "flex",
               flexDirection: "column",
               alignItems: "start",
@@ -53,9 +66,11 @@ function PostList({ userManager }) {
           >
             <PostVote
               userManager={userManager}
+              postIdx={i}
               entryID={post.EntryID}
               voteCount={post.VoteCount}
               vote={post.Vote}
+              updateVote={updateVote}
             ></PostVote>
           </div>
 
@@ -82,7 +97,7 @@ function PostList({ userManager }) {
               </span>
             </div>
           </div>
-        </section>
+        </div>
       ))}
     </Container>
   );

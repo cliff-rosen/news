@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   addPostVote as apiAddPostVote,
   editPostVote as apiEditPostVote,
@@ -6,62 +5,47 @@ import {
 import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useEffect } from "react";
 
-export function PostVote({ userManager, entryID, voteCount, vote }) {
-  const [myVote, setMyVote] = useState(vote);
-  const [myVoteCount, setMyVoteCount] = useState(voteCount || 0);
-
-  useEffect(() => {
-    setMyVote(vote);
-  }, [vote]);
-
-  const voteHandler = (v) => {
+export function PostVote({
+  userManager,
+  postIdx,
+  entryID,
+  voteCount,
+  vote,
+  updateVote,
+}) {
+  const voteHandler = (newVote) => {
     userManager.requireUser();
-    if (userManager.user.userID == 0) return;
-
-    if (myVote == null) {
-      addVote(v);
-      setMyVoteCount(myVoteCount + v);
+    if (userManager.user.userID === 0) return;
+    if (vote == null) {
+      addVote(voteCount + newVote, newVote);
     } else {
-      if (myVote === v) {
-        editVote(0);
-        setMyVoteCount(myVoteCount - v);
+      if (newVote === vote) {
+        editVote(voteCount - newVote, 0);
       } else {
-        editVote(v);
-        if (myVote !== 0) {
-          setMyVoteCount(myVoteCount + 2 * v);
+        if (vote !== 0) {
+          editVote(voteCount + 2 * newVote, newVote);
         } else {
-          setMyVoteCount(myVoteCount + v);
+          editVote(voteCount + newVote, newVote);
         }
       }
     }
   };
 
-  const addVote = async (v) => {
-    const body = JSON.stringify({
-      entryID,
-      vote: v,
-    });
-
+  const addVote = async (newVoteCount, newVote) => {
     try {
-      await apiAddPostVote(body);
-      setMyVote(v);
+      await apiAddPostVote(entryID, newVote);
+      updateVote(postIdx, newVoteCount, newVote);
       console.log("post vote added");
     } catch (e) {
       console.log("error adding post vote", e);
     }
   };
 
-  const editVote = async (v) => {
-    const body = JSON.stringify({
-      entryID,
-      vote: v,
-    });
-
+  const editVote = async (newVoteCount, newVote) => {
     try {
-      await apiEditPostVote(body);
-      setMyVote(v);
+      await apiEditPostVote(entryID, newVote);
+      updateVote(postIdx, newVoteCount, newVote);
       console.log("post vote updated");
     } catch (e) {
       console.log("error updating post vote", e);
@@ -74,20 +58,18 @@ export function PostVote({ userManager, entryID, voteCount, vote }) {
         style={{
           height: 10,
           width: 12,
-          color: myVote === 1 ? "green" : "lightGray",
+          color: vote === 1 ? "green" : "lightGray",
         }}
         onClick={() => voteHandler(1)}
       >
         <ArrowDropUpIcon fontSize="medium" />
       </IconButton>
-      <span style={{ fontSize: 10 }}>
-        {myVoteCount},{myVote}
-      </span>
+      <span style={{ fontSize: 10 }}>{voteCount}</span>
       <IconButton
         style={{
           height: 10,
           width: 12,
-          color: myVote === -1 ? "green" : "lightGray",
+          color: vote === -1 ? "green" : "lightGray",
         }}
         onClick={() => voteHandler(-1)}
       >

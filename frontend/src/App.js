@@ -11,7 +11,7 @@ function App() {
   const [userManager, setUserManager] = useUserManager();
   const [okToTrip, setOkToTrip] = useState(false);
 
-  if (!okToTrip) {
+  if (false && !okToTrip) {
     return <Splash setOkToTrip={setOkToTrip} />;
   }
 
@@ -20,7 +20,14 @@ function App() {
       <LoginFormModal userManager={userManager} />
       <Nav userManager={userManager} />
       <Routes>
-        <Route path="/" element={<PostList userManager={userManager} />} />
+        <Route
+          path="/"
+          element={<PostList userManager={userManager} order="TRENDING" />}
+        />
+        <Route
+          path="/new"
+          element={<PostList userManager={userManager} order="NEW" />}
+        />
         <Route path="add" element={<PostAdd userManager={userManager} />} />
       </Routes>
     </>

@@ -7,6 +7,7 @@ import { useEffect } from "react";
 
 const LayoutContainer = styled(Container)(() => ({
   overflow: "hidden",
+  width: "100%",
 }));
 
 function PostAdd({ userManager }) {

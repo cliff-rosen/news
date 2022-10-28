@@ -33,7 +33,12 @@ export const addPost = async (body) => {
   if (res.status !== 200) throw new Error("Add post error");
 };
 
-export const addPostVote = async (body) => {
+export const addPostVote = async (entryID, vote) => {
+  const body = JSON.stringify({
+    entryID,
+    vote,
+  });
+
   const res = await fetch(`${BASE_API_URL}/user_entry_vote`, {
     method: "POST",
     headers: {
@@ -46,7 +51,12 @@ export const addPostVote = async (body) => {
   if (res.status !== 200) throw new Error("Add post vote error");
 };
 
-export const editPostVote = async (body) => {
+export const editPostVote = async (entryID, vote) => {
+  const body = JSON.stringify({
+    entryID,
+    vote,
+  });
+
   const res = await fetch(`${BASE_API_URL}/user_entry_vote`, {
     method: "PUT",
     headers: {

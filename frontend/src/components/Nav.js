@@ -1,15 +1,16 @@
 import React from "react";
 import { Button, Toolbar, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 const sections = [
   { name: "Trending", link: "/" },
-  { name: "New", link: "new" },
+  { name: "New", link: "/new" },
   { name: "Post", link: "/add" },
 ];
 
 const Navbar = ({ userManager }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const lout = () => {
     userManager.logout();
@@ -32,7 +33,11 @@ const Navbar = ({ userManager }) => {
           <Button
             key={section.link}
             onClick={() => navigate(section.link)}
-            sx={{ color: "GrayText" }}
+            sx={{
+              color: location.pathname === section.link ? "#79a" : "GrayText",
+              fontWeight:
+                location.pathname === section.link ? "bold" : "normal",
+            }}
           >
             {section.name}
           </Button>

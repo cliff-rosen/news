@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `entry` (
   `EntryText` text DEFAULT NULL,
   `EntryUrl` varchar(2048) DEFAULT NULL,
   `EntryUrlDomain` varchar(250) DEFAULT NULL,
+  `VoteCount` int(11) DEFAULT NULL,
   PRIMARY KEY (`EntryID`),
   KEY `FK_USER_ID` (`UserID`),
   CONSTRAINT `FK_USER_ID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
@@ -27,15 +28,15 @@ CREATE TABLE IF NOT EXISTS `entry` (
 
 -- Dumping data for table dev.entry: ~8 rows (approximately)
 /*!40000 ALTER TABLE `entry` DISABLE KEYS */;
-INSERT INTO `entry` (`EntryID`, `UserID`, `EntryDateTime`, `EntryTitle`, `EntryText`, `EntryUrl`, `EntryUrlDomain`) VALUES
-	(1, 47, '2022-10-25 19:50:51', 'This is my first entry', 'this is my text', '', NULL),
-	(99, 47, '2022-10-25 19:49:55', 'posting again', '', 'https://www.abc.com/axjs', 'abc.com'),
-	(100, 47, '2022-10-25 20:06:20', 'posting again 2', 'post without url', '', ''),
-	(101, 90, '2022-10-25 20:40:57', 'Extract hostname name from string', 'This post has nothing to do with psychedelics', 'https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string', 'stackoverflow.com'),
-	(102, 90, '2022-10-26 10:21:49', 'psl', '', 'https://www.npmjs.com/package/psl', 'npmjs.com'),
-	(103, 107, '2022-10-26 17:55:49', 'DialogActions API', '', 'https://mui.com/material-ui/api/dialog-actions/', 'mui.com'),
-	(104, 47, '2022-10-27 16:59:15', 'Material UI centering', '', 'https://medium.com/@tsubasakondo_36683/4-ways-to-center-a-component-in-material-ui-a4bcafe6688e', 'medium.com'),
-	(105, 47, '2022-10-27 17:01:59', 'Broken URL', '', 'sdfgsdffg', '');
+INSERT INTO `entry` (`EntryID`, `UserID`, `EntryDateTime`, `EntryTitle`, `EntryText`, `EntryUrl`, `EntryUrlDomain`, `VoteCount`) VALUES
+	(1, 47, '2022-10-25 19:50:51', 'This is my first entry', 'this is my text', '', NULL, 0),
+	(99, 47, '2022-10-25 19:49:55', 'posting again', '', 'https://www.abc.com/axjs', 'abc.com', 0),
+	(100, 47, '2022-10-25 20:06:20', 'posting again 2', 'post without url', '', '', 0),
+	(101, 90, '2022-10-25 20:40:57', 'Extract hostname name from string', 'This post has nothing to do with psychedelics', 'https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string', 'stackoverflow.com', 0),
+	(102, 90, '2022-10-26 10:21:49', 'psl', '', 'https://www.npmjs.com/package/psl', 'npmjs.com', 0),
+	(103, 107, '2022-10-26 17:55:49', 'DialogActions API', '', 'https://mui.com/material-ui/api/dialog-actions/', 'mui.com', 0),
+	(104, 47, '2022-10-27 16:59:15', 'Material UI centering', '', 'https://medium.com/@tsubasakondo_36683/4-ways-to-center-a-component-in-material-ui-a4bcafe6688e', 'medium.com', 0),
+	(105, 47, '2022-10-27 17:01:59', 'Broken URL', '', 'sdfgsdffg', '', 2);
 /*!40000 ALTER TABLE `entry` ENABLE KEYS */;
 
 -- Dumping structure for table dev.user
@@ -45,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `Password` varchar(100) NOT NULL,
   PRIMARY KEY (`UserID`) USING BTREE,
   UNIQUE KEY `UserName` (`UserName`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=latin1;
 
--- Dumping data for table dev.user: ~11 rows (approximately)
+-- Dumping data for table dev.user: ~10 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`UserID`, `UserName`, `Password`) VALUES
 	(47, 'john', '$2b$10$YR6eoJrumFJPBPDJoQ8Yee2K7hzkLcKnbUTbVkCUQsYpIm7Exl7zq'),
@@ -60,7 +61,8 @@ INSERT INTO `user` (`UserID`, `UserName`, `Password`) VALUES
 	(111, 'mike', '$2b$10$VzLpypFc1FtaoThig9O0Oe79Q1pJbZEFfGWYSFl4Eh8LD/SS33v7u'),
 	(113, 'mike2', '$2b$10$qcXwDgPcsZkniid68FOFIOcFnZpSupLEFzXn9xiNitfozoG/X.e9i'),
 	(115, 'sam2', '$2b$10$I2LXNgjnCtQi3KNZreLtZuxgk.4LPtrGBcNifPjczPQGlFtxzvbsm'),
-	(118, 'mike3', '$2b$10$uZWmJr4Se3TbhuIO5kC/mO6atzLFr2EVaheCsGhwUGCk.Iaqp.oZu');
+	(118, 'mike3', '$2b$10$uZWmJr4Se3TbhuIO5kC/mO6atzLFr2EVaheCsGhwUGCk.Iaqp.oZu'),
+	(120, 'sam23', '$2b$10$aEYDmvPViaijnTgj7HsYde9P6RaCUO1D1kgq.UQ1GGtxfvRzsizVC');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- Dumping structure for table dev.user_entry_vote
@@ -68,11 +70,32 @@ CREATE TABLE IF NOT EXISTS `user_entry_vote` (
   `UserID` int(11) NOT NULL,
   `EntryID` int(11) NOT NULL,
   `Vote` int(11) NOT NULL,
-  KEY `UserID_EntryID` (`UserID`,`EntryID`) USING BTREE
+  UNIQUE KEY `UserID_EntryID` (`UserID`,`EntryID`) USING BTREE,
+  KEY `FK_user_entry_vote_entry_2` (`EntryID`),
+  CONSTRAINT `FK_user_entry_vote_entry_2` FOREIGN KEY (`EntryID`) REFERENCES `entry` (`EntryID`),
+  CONSTRAINT `FK_user_entry_vote_user` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table dev.user_entry_vote: ~0 rows (approximately)
+-- Dumping data for table dev.user_entry_vote: ~8 rows (approximately)
 /*!40000 ALTER TABLE `user_entry_vote` DISABLE KEYS */;
+INSERT INTO `user_entry_vote` (`UserID`, `EntryID`, `Vote`) VALUES
+	(47, 1, -1),
+	(47, 99, -1),
+	(47, 100, -1),
+	(47, 101, -1),
+	(47, 102, -1),
+	(47, 103, -1),
+	(47, 104, -1),
+	(47, 105, 0),
+	(90, 1, 1),
+	(90, 99, 1),
+	(90, 100, 1),
+	(90, 101, 1),
+	(90, 102, 1),
+	(90, 103, 1),
+	(90, 104, 1),
+	(90, 105, 1),
+	(120, 105, 1);
 /*!40000 ALTER TABLE `user_entry_vote` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
