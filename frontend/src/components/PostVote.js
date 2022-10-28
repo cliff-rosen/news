@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { addPostVote as apiAddPostVote } from "../Common/PostAPI";
+import React, { useState } from "react";
+import {
+  addPostVote as apiAddPostVote,
+  editPostVote as apiEditPostVote,
+} from "../Common/PostAPI";
 import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import e from "express";
 
 export function PostVote({ userManager, entryID, vote }) {
   const [myVote, setMyVote] = useState(vote);
@@ -35,7 +37,20 @@ export function PostVote({ userManager, entryID, vote }) {
     }
   };
 
-  const editVote = (v) => {};
+  const editVote = async (v) => {
+    const body = JSON.stringify({
+      entryID,
+      vote,
+    });
+
+    try {
+      await apiEditPostVote(body);
+      setMyVote(v);
+      console.log("post vote updated");
+    } catch (e) {
+      console.log("error updating post vote", e);
+    }
+  };
 
   return (
     <IconButton

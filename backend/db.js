@@ -303,7 +303,10 @@ function updateUserEntryVote(userID, entryID, vote) {
       return conn
         .query(dbQueryString)
         .then((res) => {
-          console.log("editUserEntryVote returned", res);
+          console.log("editUserEntryVote returned: ", res.affectedRows);
+          if (res.affectedRows !== 1) {
+            throw "Query did not update correct rowcount of 1";
+          }
           return res;
         })
         .catch((err) => {

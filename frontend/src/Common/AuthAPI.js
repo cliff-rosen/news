@@ -15,7 +15,7 @@ export const getAccess = async (password) => {
   } else if (res.status === 401) {
     console.log("AuthAPI.login - 401");
     throw new Error("INVALID_LOGIN");
-  } else if (res?.error) {
+  } else if (res.error) {
     throw new Error(res.error);
   } else {
     throw new Error("UNKNOWN_LOGIN_ERROR");
@@ -65,7 +65,7 @@ export const login = async (username, password) => {
   } else if (res.status === 401) {
     console.log("AuthAPI.login - 401");
     throw new Error("INVALID_LOGIN");
-  } else if (res?.error) {
+  } else if (res.error) {
     throw new Error(res.error);
   } else {
     throw new Error("UNKNOWN_LOGIN_ERROR");

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { getAccess } from "../Common/AuthAPI";
 
 export function Splash({ setOkToTrip }) {

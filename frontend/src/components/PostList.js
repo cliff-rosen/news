@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
