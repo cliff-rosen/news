@@ -1,7 +1,4 @@
-import {
-  addPostVote as apiAddPostVote,
-  editPostVote as apiEditPostVote,
-} from "../Common/PostAPI";
+import { setPostVote as apiSetPostVote } from "../Common/PostAPI";
 import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -14,45 +11,31 @@ export function PostVote({
   vote,
   updateVote,
 }) {
-  const voteHandler = (newVote) => {
+  const voteHandler = async (iVote) => {
     //userManager.requireUser();
     if (userManager.user.userID === 0) {
       console.log("voteHandler called with userID === 0");
       //return;
     }
-    if (vote == null) {
-      addVote(voteCount + newVote, newVote);
+    var newVote;
+    var newVoteCount;
+
+    if (!vote) {
+      // no vote or 0 vote, so straight processing
+      newVote = iVote;
+      newVoteCount = voteCount + iVote;
+    } else if (vote === iVote) {
+      // undoing whatever the existing vote is
+      newVote = 0;
+      newVoteCount = voteCount - iVote;
     } else {
-      if (newVote === vote) {
-        editVote(voteCount - newVote, 0);
-      } else {
-        if (vote !== 0) {
-          editVote(voteCount + 2 * newVote, newVote);
-        } else {
-          editVote(voteCount + newVote, newVote);
-        }
-      }
+      // switching from 1 to -1 or -1 to 1;
+      newVote = iVote;
+      newVoteCount = voteCount + 2 * iVote;
     }
-  };
 
-  const addVote = async (newVoteCount, newVote) => {
-    try {
-      await apiAddPostVote(entryID, newVote);
-      updateVote(postIdx, newVoteCount, newVote);
-      console.log("post vote added");
-    } catch (e) {
-      console.log("error adding post vote", e);
-    }
-  };
-
-  const editVote = async (newVoteCount, newVote) => {
-    try {
-      await apiEditPostVote(entryID, newVote);
-      updateVote(postIdx, newVoteCount, newVote);
-      console.log("post vote updated");
-    } catch (e) {
-      console.log("error updating post vote", e);
-    }
+    await apiSetPostVote(entryID, newVote);
+    updateVote(postIdx, newVoteCount, newVote);
   };
 
   return (
@@ -63,7 +46,7 @@ export function PostVote({
           width: 12,
           color: vote === 1 ? "green" : "lightGray",
         }}
-        onClick={() => userManager.loginThen(voteHandler, [1])}
+        onClick={() => voteHandler(1)}
       >
         <ArrowDropUpIcon fontSize="medium" />
       </IconButton>

@@ -4,7 +4,7 @@ const d1 = [];
 const d2 = [];
 for (let i = 0; i < 40; i++) {
   d1.push([i, i]);
-  d2.push([i, i * i]);
+  d2.push([i + 100, i * i]);
 }
 
 export function Trial() {

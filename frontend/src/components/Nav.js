@@ -6,7 +6,7 @@ const sections = [
   { name: "Trending", link: "/" },
   { name: "New", link: "/new" },
   { name: "Post", link: "/add" },
-  { name: "Trial", link: "/trial" },
+  //{ name: "Trial", link: "/trial" },
 ];
 
 const Navbar = ({ userManager }) => {
