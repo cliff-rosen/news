@@ -135,25 +135,12 @@ app.get("/entries", checkForToken, (req, res) => {
   db.getAllEntries(req.user.userID, order).then((rows) => res.json(rows));
 });
 
-app.post("/entries/:entrid/vote/:value", checkForToken, (req, res) => {
-  console.log("vote", req.user.userID);
-  db.addUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
-    .then((rows) => res.json(rows[0]))
-    .catch((e) => res.json({ error: e }));
-});
-
-app.post("/user_entry_vote", checkForToken, (req, res) => {
-  console.log("add user_entry_vote", req.user.userID);
-  db.addUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
-    .then((rows) => res.json(rows[0]))
-    .catch((e) => res.json({ error: e }));
-});
-
-app.put("/user_entry_vote", checkForToken, (req, res) => {
-  console.log("update user_entry_vote", req.user.userID);
-  db.updateUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
+app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {
+  console.log("vote from: ", req.user.userID);
+  const { entryid, value } = req.params;
+  db.addOrUpdateUserEntryVote(req.user.userID, entryid, value)
     .then((dbres) => res.json(dbres))
-    .catch((e) => res.json({ error: e }));
+    .catch((e) => res.json({ error: e.message }));
 });
 
 //////////////////////////////////////////////////////

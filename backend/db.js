@@ -165,21 +165,31 @@ async function getAllEntries(userID, order) {
 ////////////////////////////////////////////////////
 
 async function addOrUpdateUserEntryVote(userID, entryID, vote) {
-  var status = 0;
+  var status = "READY";
 
   try {
     await addUserEntryVoteDB(userID, entryID, vote);
-    status = 1;
+    status = "ADD";
   } catch (e) {
-    console.log("addOrUpdateUserEntryVote error", e);
-    status = -1;
+    if (e.code === "ER_DUP_ENTRY") {
+      status = "UPDATE";
+    } else {
+      console.log("addOrUpdateUserEntryVote error", e);
+      throw new Error(e);
+    }
   }
-  //await updateEntryVoteCountDB(entryID);
+
+  if (status === "UPDATE") {
+    console.log("addOrUpdateUserEntryVote now updating");
+    await updateUserEntryVoteDB(userID, entryID, vote);
+  }
+
+  await updateEntryVoteCountDB(entryID);
   return { result: "DONE", status };
 }
 
 async function addUserEntryVoteDB(userID, entryID, vote) {
-  console.log("addUserEntryVote", userID);
+  console.log("addUserEntryVoteDB", userID);
 
   dbQueryString = `
                     INSERT
@@ -191,8 +201,8 @@ async function addUserEntryVoteDB(userID, entryID, vote) {
                     )
                     `;
   console.log(dbQueryString);
-  const res = pool.query(dbQueryString);
-  console.log("addUserEntryVote returned", res);
+  const res = await pool.query(dbQueryString);
+  console.log("addUserEntryVoteDB returned", res);
   return res;
 }
 
@@ -201,13 +211,13 @@ async function updateUserEntryVoteDB(userID, entryID, vote) {
 
   dbQueryString = `
                     UPDATE user_entry_vote 
-                    SET Vote = '${vote}'
+                    SET Vote = ${vote}
                     WHERE 
                           UserID = ${userID}
-                      AND EntryID = '${entryID}'
+                      AND EntryID = ${entryID}
                     `;
   console.log(dbQueryString);
-  const res = pool.query(dbQueryString);
+  const res = await pool.query(dbQueryString);
   console.log("updateUserEntryVote returned", res);
   return res;
 }
@@ -225,10 +235,9 @@ async function updateEntryVoteCountDB(entryID) {
                       )
                     WHERE EntryID = ${entryID}
                     `;
-  console.log(dbQueryString);
 
   console.log(dbQueryString);
-  const res = pool.query(dbQueryString);
+  const res = await pool.query(dbQueryString);
   if (res.affectedRows !== 1) {
     throw "Query did not update correct rowcount of 1";
   }
