@@ -1,6 +1,22 @@
 import { BASE_API_URL } from "./APIUtils";
 import { getUserToken } from "./Auth";
 
+export const getPost = async (entryID) => {
+  const res = await fetch(`${BASE_API_URL}/entries/${entryID}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: getUserToken(),
+    },
+  });
+
+  console.log("api getPost result", res.status);
+  if (res.status !== 200) throw new Error("Post not found");
+
+  const data = await res.json();
+  return data;
+};
+
 export const getPosts = async (order) => {
   let data = {};
   try {
@@ -40,11 +56,6 @@ export const addPost = async (entryUrl, entryTitle, entryText) => {
 };
 
 export const setPostVote = async (entryID, vote) => {
-  const body = JSON.stringify({
-    entryID,
-    vote,
-  });
-
   const res = await fetch(`${BASE_API_URL}/entries/${entryID}/vote/${vote}`, {
     method: "POST",
     headers: {

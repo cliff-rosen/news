@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
@@ -31,7 +32,7 @@ function PostList({ userManager, order }) {
   }, [userManager.user.userID, order]);
 
   return (
-    <Container style={{ height: 800, width: 800 }}>
+    <Container>
       {posts.map((post, i) => (
         <div
           key={post.EntryID}
@@ -90,11 +91,15 @@ function PostList({ userManager, order }) {
                 </span>
               </div>
             )}
-            <div>
-              <span style={{ fontSize: "12px", color: "gray" }}>
-                Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)}{" "}
-                ago | {Math.ceil(Math.random() * 100)} comments
-              </span>
+            <div style={{ fontSize: "12px", color: "gray" }}>
+              Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)} ago
+              |{" "}
+              <RouterLink
+                style={{ textDecoration: "none", color: "gray" }}
+                to={`/post/${post.EntryID}`}
+              >
+                {post.CommentCount} comments
+              </RouterLink>
             </div>
           </div>
         </div>

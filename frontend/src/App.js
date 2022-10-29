@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useUserManager } from "./Common/Auth";
+import Splash from "./components/Splash";
 import Nav from "./components/Nav.js";
+import LoginFormModal from "./components/LoginFormModal";
 import PostList from "./components/PostList";
 import PostAdd from "./components/PostAdd";
-import { Splash } from "./components/Splash";
-import LoginFormModal from "./components/LoginFormModal";
-import { Trial } from "./components/Trial";
+import Post from "./components/Post";
+import Trial from "./components/Trial";
 
 function App() {
   const [userManager, setUserManager] = useUserManager();
@@ -30,6 +31,10 @@ function App() {
           element={<PostList userManager={userManager} order={"new"} />}
         />
         <Route path="add" element={<PostAdd userManager={userManager} />} />
+        <Route
+          path="post/:postid"
+          element={<Post userManager={userManager} />}
+        />
         <Route path="trial" element={<Trial />} />
       </Routes>
     </>

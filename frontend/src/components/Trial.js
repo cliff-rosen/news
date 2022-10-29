@@ -7,7 +7,7 @@ for (let i = 0; i < 40; i++) {
   d2.push([i + 100, i * i]);
 }
 
-export function Trial() {
+export default function Trial() {
   const [d, setD] = useState(d1);
 
   return (

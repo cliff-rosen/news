@@ -135,13 +135,28 @@ async function deleteEntry(entryID) {
   return res;
 }
 
-async function getEntry() {
-  /* TBD */
+async function getEntry(userID, entryID) {
+  dbQueryString = `
+                      SELECT e.*, u.UserName, v.Vote, 0 as CommentCount
+                      FROM entry e
+                      JOIN user u ON e.UserID = u.UserID
+                      LEFT JOIN user_entry_vote v 
+                      ON v.UserID = ${userID} and e.EntryID = v.EntryID                      
+                      WHERE e.EntryID = ${entryID}
+                      `;
+
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    return "Query did not execute";
+  }
 }
 
 async function getAllEntries(userID, order) {
   dbQueryString = `
-                    SELECT e.*, u.UserName, v.Vote
+                    SELECT e.*, u.UserName, v.Vote, 0 as CommentCount
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 

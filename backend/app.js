@@ -104,6 +104,21 @@ app.post("/login", (req, res) => {
 });
 
 /////////////////////// ENTRY ////////////////////////////
+
+app.get("/entries/:entryid", checkForToken, (req, res) => {
+  const { entryid } = req.params;
+  console.log("getting entry: ", entryid);
+  db.getEntry(req.user.userID, entryid).then((rows) => {
+    if (rows.length === 1) {
+      res.json(rows[0]);
+    } else if (rows.length === 0) {
+      res.status(404).json({ error: "Entry not found" });
+    } else {
+      res.status(500);
+    }
+  });
+});
+
 app.post("/entries", checkForToken, (req, res) => {
   console.log("add entry: ", req.body.entryText);
   db.addEntry(
