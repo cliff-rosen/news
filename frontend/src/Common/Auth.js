@@ -77,19 +77,6 @@ export const useUserManager = () => {
   const [user, setUser] = useState(getUser());
   const [lao, setLao] = useState(makeLoginActionObject());
 
-  const loginThen = (fn, params) => {
-    if (user.userID > 0) {
-      console.log("applying fn");
-      fn.apply(null, params);
-    } else {
-      // fn will be called with params by LoginFormModal
-      // via call to hideLoginAndThen
-      setLao((curLao) => {
-        return { ...curLao, show: true, fn, params };
-      });
-    }
-  };
-
   const showLogin = (message) => {
     setLao({ ...lao, show: true, message });
   };
@@ -98,9 +85,20 @@ export const useUserManager = () => {
     setLao(makeLoginActionObject());
   };
 
-  const hideLoginAndThen = (u) => {
+  const showLoginThen = (fn, params) => {
+    if (user.userID > 0) {
+      console.log("applying fn");
+      fn.apply(null, params);
+    } else {
+      setLao((curLao) => {
+        return { ...curLao, show: true, fn, params };
+      });
+    }
+  };
+
+  const hideLoginThen = (u) => {
     if (lao.fn) {
-      console.log("hideLoginAndThen: ", u);
+      console.log("hideLoginThen: ", u);
       lao.fn.apply(null, lao.params);
     }
     setLao(makeLoginActionObject());
@@ -141,9 +139,9 @@ export const useUserManager = () => {
       user,
       lao,
       showLogin,
+      showLoginThen,
       hideLogin,
-      loginThen,
-      hideLoginAndThen,
+      hideLoginThen,
       register,
       login,
       logout,

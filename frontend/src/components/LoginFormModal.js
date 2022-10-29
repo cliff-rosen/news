@@ -42,7 +42,7 @@ export default function LoginFormModal({ userManager }) {
         setUsername("");
         setPassword("");
         setErrMessage("");
-        userManager.hideLoginAndThen(u);
+        userManager.hideLoginThen(u);
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
@@ -60,11 +60,11 @@ export default function LoginFormModal({ userManager }) {
 
     userManager
       .register(usernameR, passwordR)
-      .then((res) => {
+      .then((u) => {
         setUsernameR("");
         setPasswordR("");
         setErrMessage("");
-        userManager.hideLoginAndThen();
+        userManager.hideLoginThen(u);
       })
       .catch((err) => setErrMessage("Registration error: " + err.message));
   };
