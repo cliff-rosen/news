@@ -3,6 +3,29 @@ const hasher = require("bcrypt");
 const psl = require("psl");
 const { dbSecrets } = require("./secrets.js");
 
+/*
+JSON RESULTS
+------------
+
+Queries return two different kinds of results, 
+depending on the type of query you execute. 
+
+For SELECT:
+Returns an array. 
+Each value in the array is a returned row as a JSON object.
+
+For INSERT, DELETE and UPDATE:
+Returns a JSON object with the following properties:
+  affectedRows: An integer listing the number of affected rows.
+  insertId: An integer noting the auto-increment ID of the last row written to the table.
+  warningStatus: An integer indicating whether the query ended with a warning.
+
+ERRORS:
+------
+check .code property
+
+*/
+
 const pool = mariadb.createPool({
   host: dbSecrets.DB_HOST,
   database: dbSecrets.DB_NAME,
@@ -11,7 +34,7 @@ const pool = mariadb.createPool({
   connectionLimit: dbSecrets.DB_CONNECTION_LIMIT,
 });
 
-function addUser(userName, password) {
+async function addUser(userName, password) {
   console.log("AddUser: " + userName + "/" + password);
   const passwordHash = hasher.hashSync(password, 10);
   const dbQueryString = `
@@ -19,33 +42,19 @@ function addUser(userName, password) {
                     INTO user (UserName, Password)
                     VALUES ("${userName}", "${passwordHash}")
                     `;
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((rows) => {
-          console.log("returned", rows);
-          console.log("Rows returned: " + rows.length);
-          return rows;
-        })
-        .catch((err) => {
-          console.log("DB Query Error: " + JSON.stringify(err));
-          if (err.code == "ER_DUP_ENTRY") {
-            throw "DUPLICATE";
-          } else {
-            throw "UNKNOWN";
-          }
-        })
-        .finally(() => {
-          console.log("releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("DB error", err);
-      throw err;
-    });
+
+  try {
+    const res = await pool.query(dbQueryString);
+    console.log("addUser returned: ", res);
+    return res;
+  } catch (err) {
+    console.log("DB Query Error: " + JSON.stringify(err));
+    if (err.code == "ER_DUP_ENTRY") {
+      throw "DUPLICATE";
+    } else {
+      throw "UNKNOWN";
+    }
+  }
 }
 
 /*
@@ -104,13 +113,13 @@ function getDomain(url) {
     const domain = psl.parse(host).domain;
     return domain;
   } catch (e) {
-    console.log("error - invalid URL");
+    console.log("getDomain: invalid URL");
     return "";
   }
 }
 
-function addEntry(entryTitle, entryText, entryUrl, userID) {
-  console.log("addEntry", entryTitle);
+async function addEntry(entryTitle, entryText, entryUrl, userID) {
+  console.log("addEntry: ", entryTitle);
   entryTitle = entryTitle.replace(/'/g, "\\'");
   entryText = entryText.replace(/'/g, "\\'");
   const entryUrlDomain = getDomain(entryUrl);
@@ -126,94 +135,29 @@ function addEntry(entryTitle, entryText, entryUrl, userID) {
                       '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain}',
                       NOW())
                     `;
-  console.log(dbQueryString);
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((rows) => {
-          console.log("addEntry rows returned", rows.length);
-          return rows;
-        })
-        .catch((err) => {
-          console.log("DB Query Error: " + err);
-          throw "Query did not execute";
-        })
-        .finally(() => {
-          console.log("addEntry releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("addEntry DB error", err);
-      throw err;
-    });
+
+  const res = await pool.query(dbQueryString);
+  console.log("addEntry returned", res);
+  return res;
 }
 
-function deleteEntry(entryID) {
+async function deleteEntry(entryID) {
   dbQueryString = `
-  DELETE
-  FROM entry
-  WHERE entryID = ${entryID}
-  `;
+          DELETE
+          FROM entry
+          WHERE entryID = ${entryID}
+          `;
 
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((res) => {
-          console.log("returned", res, res.affectedRows);
-          return res;
-        })
-        .catch((err) => {
-          console.log("DB Query Error: " + err);
-          return "Query did not execute";
-        })
-        .finally(() => {
-          console.log("releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("DB Connection error", err);
-      return "DB Connection error";
-    });
+  const res = await pool.query(dbQueryString);
+  console.log("returned: ", res);
+  return res;
 }
 
-function getEntry() {
-  dbQueryString = `
-  SELECT *
-  FROM entry
-  WHERE EntryID = 1
-  `;
-  //console.log(dbQueryString);
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((rows) => {
-          console.log("Rows returned: " + rows.length);
-          return rows;
-        })
-        .catch((err) => {
-          console.log("DB Query Error: " + err);
-          return "Query did not execute";
-        })
-        .finally(() => {
-          console.log("releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("DB error", err);
-      return err;
-    });
+async function getEntry() {
+  /* TBD */
 }
 
-function getAllEntries(userID, order) {
+async function getAllEntries(userID, order) {
   dbQueryString = `
                     SELECT e.*, u.UserName, v.Vote
                     FROM entry e
@@ -221,36 +165,19 @@ function getAllEntries(userID, order) {
                     LEFT JOIN user_entry_vote v 
                       ON v.UserID = ${userID} and e.EntryID = v.EntryID
                     `;
-
   if (order === "trending") {
     dbQueryString += " ORDER BY e.VoteCount desc";
   } else {
     dbQueryString += " ORDER BY e.EntryDateTime desc";
   }
 
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((rows) => {
-          //console.log("result", rows);
-          console.log("getAllEntries rows returned: " + rows.length);
-          return rows;
-        })
-        .catch((err) => {
-          console.log("*** Query did not execute: " + err);
-          return "Query did not execute";
-        })
-        .finally(() => {
-          console.log("releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("DB Connection error");
-      return "DB Connection error";
-    });
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    return "Query did not execute";
+  }
 }
 
 ////////////////////////////////////////////////////
@@ -295,16 +222,16 @@ function addUserEntryVoteDB(userID, entryID, vote) {
     .then((conn) => {
       return conn
         .query(dbQueryString)
-        .then((rows) => {
-          console.log("addUserEntryVote rows returned", rows.length);
+        .then((res) => {
+          console.log("addUserEntryVote returned", res);
           return rows;
         })
         .catch((err) => {
-          console.log("DB Query Error: " + err);
+          console.log("addUserEntryVoteDB Query Error: " + err);
           throw "Query did not execute";
         })
         .finally(() => {
-          console.log("addUserEntryVote releasing connection");
+          console.log("addUserEntryVoteDB releasing connection");
           conn.release();
         });
     })
@@ -342,7 +269,7 @@ async function updateUserEntryVoteDB(userID, entryID, vote) {
       return conn
         .query(dbQueryString)
         .then((res) => {
-          console.log("updateUserEntryVoteDB returned: ", res.affectedRows);
+          console.log("updateUserEntryVoteDB returned: ", res);
           if (res.affectedRows !== 1) {
             throw "Query did not update correct rowcount of 1";
           }

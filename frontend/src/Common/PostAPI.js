@@ -27,7 +27,7 @@ export const addPost = async (entryUrl, entryTitle, entryText) => {
     entryText,
   });
 
-  const res = await fetch(`${BASE_API_URL}/entry`, {
+  const res = await fetch(`${BASE_API_URL}/entries`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

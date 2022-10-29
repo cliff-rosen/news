@@ -57,7 +57,6 @@ app.post("/createuser", (req, res) => {
       console.log("User created with UserID " + dbres.insertId);
       const user = createUser(parseInt(dbres.insertId), userName);
       res.json(user);
-      res.end();
     })
     .catch((err) => {
       console.log("createuser error", err);
@@ -106,15 +105,18 @@ app.post("/login", (req, res) => {
 
 /////////////////////// ENTRY ////////////////////////////
 app.post("/entries", checkForToken, (req, res) => {
-  console.log("add entry", req.body.entryText);
+  console.log("add entry: ", req.body.entryText);
   db.addEntry(
     req.body.entryTitle,
     req.body.entryText,
     req.body.entryUrl,
     req.user.userID
   )
-    .then((rows) => res.json(rows[0]))
-    .catch((e) => res.json({ error: e }));
+    .then((dbres) => res.json({ entryID: Number(dbres.insertId) }))
+    .catch((e) => {
+      console.log("error", e);
+      res.json({ error: e });
+    });
 });
 
 app.delete("/entries/:id", (req, res) => {
@@ -133,6 +135,13 @@ app.get("/entries", checkForToken, (req, res) => {
   db.getAllEntries(req.user.userID, order).then((rows) => res.json(rows));
 });
 
+app.post("/entries/:entrid/vote/:value", checkForToken, (req, res) => {
+  console.log("vote", req.user.userID);
+  db.addUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
+    .then((rows) => res.json(rows[0]))
+    .catch((e) => res.json({ error: e }));
+});
+
 app.post("/user_entry_vote", checkForToken, (req, res) => {
   console.log("add user_entry_vote", req.user.userID);
   db.addUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
@@ -143,7 +152,7 @@ app.post("/user_entry_vote", checkForToken, (req, res) => {
 app.put("/user_entry_vote", checkForToken, (req, res) => {
   console.log("update user_entry_vote", req.user.userID);
   db.updateUserEntryVote(req.user.userID, req.body.entryID, req.body.vote)
-    .then((rows) => res.json(rows[0]))
+    .then((dbres) => res.json(dbres))
     .catch((e) => res.json({ error: e }));
 });
 
