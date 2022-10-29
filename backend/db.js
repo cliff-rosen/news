@@ -65,45 +65,27 @@ async function addUser(userName, password) {
     DB Query Error
     DB Connection error
 */
-function validateUser(userName, password) {
+async function validateUser(userName, password) {
   const dbQueryString = `
                     SELECT UserID, UserName, Password
                     FROM user
                     WHERE UserName = "${userName}"
                     `;
   console.log("Querying database with: " + dbQueryString);
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((rows) => {
-          console.log("Rows returned: " + rows.length);
-          if (rows.length == 1) {
-            if (hasher.compareSync(password, rows[0].Password)) {
-              return {
-                user: { userID: rows[0].UserID, userName: rows[0].UserName },
-              };
-            } else {
-              throw new Error("Invalid password");
-            }
-          } else {
-            throw new Error("Invalid username");
-          }
-        })
-        .catch((err) => {
-          console.log("DB Query Error: " + err.message);
-          throw err;
-        })
-        .finally(() => {
-          console.log("releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("DB error", err.message);
-      throw err;
-    });
+
+  const rows = await pool.query(dbQueryString);
+  console.log("Rows returned: " + rows);
+  if (rows.length == 1) {
+    if (hasher.compareSync(password, rows[0].Password)) {
+      return {
+        user: { userID: rows[0].UserID, userName: rows[0].UserName },
+      };
+    } else {
+      throw new Error("Invalid password");
+    }
+  } else {
+    throw new Error("Invalid username");
+  }
 }
 
 //////////////////////////// ENTRIES ////////////////////////
@@ -182,29 +164,21 @@ async function getAllEntries(userID, order) {
 
 ////////////////////////////////////////////////////
 
-async function addUserEntryVote(userID, entryID, vote) {
+async function addOrUpdateUserEntryVote(userID, entryID, vote) {
+  var status = 0;
+
   try {
     await addUserEntryVoteDB(userID, entryID, vote);
-    await updateEntryVoteCountDB(entryID);
-    return "SUCCESS";
+    status = 1;
   } catch (e) {
-    console.log("addUserEntryVote error", e);
-    throw e;
+    console.log("addOrUpdateUserEntryVote error", e);
+    status = -1;
   }
+  //await updateEntryVoteCountDB(entryID);
+  return { result: "DONE", status };
 }
 
-async function updateUserEntryVote(userID, entryID, vote) {
-  try {
-    await updateUserEntryVoteDB(userID, entryID, vote);
-    await updateEntryVoteCountDB(entryID);
-    return "SUCCESS";
-  } catch (e) {
-    console.log("updateUserEntryVote error", e);
-    throw e;
-  }
-}
-
-function addUserEntryVoteDB(userID, entryID, vote) {
+async function addUserEntryVoteDB(userID, entryID, vote) {
   console.log("addUserEntryVote", userID);
 
   dbQueryString = `
@@ -213,47 +187,17 @@ function addUserEntryVoteDB(userID, entryID, vote) {
                       UserID, EntryID, Vote
                     )
                     VALUES (
-                      ${userID},'${entryID}','${vote}'
+                      ${userID},${entryID},${vote}
                     )
                     `;
   console.log(dbQueryString);
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((res) => {
-          console.log("addUserEntryVote returned", res);
-          return rows;
-        })
-        .catch((err) => {
-          console.log("addUserEntryVoteDB Query Error: " + err);
-          throw "Query did not execute";
-        })
-        .finally(() => {
-          console.log("addUserEntryVoteDB releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("addUserEntryVote DB error", err);
-      throw err;
-    });
-}
-
-async function updateUserEntryVote(userID, entryID, vote) {
-  try {
-    await updateUserEntryVoteDB(userID, entryID, vote);
-    await updateEntryVoteCountDB(entryID);
-    return "SUCCESS";
-  } catch (e) {
-    console.log("updateUserEntryVote error", e);
-    throw e;
-  }
+  const res = pool.query(dbQueryString);
+  console.log("addUserEntryVote returned", res);
+  return res;
 }
 
 async function updateUserEntryVoteDB(userID, entryID, vote) {
-  console.log("editUserEntryVote", userID);
+  console.log("updateUserEntryVote", userID);
 
   dbQueryString = `
                     UPDATE user_entry_vote 
@@ -263,31 +207,9 @@ async function updateUserEntryVoteDB(userID, entryID, vote) {
                       AND EntryID = '${entryID}'
                     `;
   console.log(dbQueryString);
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((res) => {
-          console.log("updateUserEntryVoteDB returned: ", res);
-          if (res.affectedRows !== 1) {
-            throw "Query did not update correct rowcount of 1";
-          }
-          return res;
-        })
-        .catch((err) => {
-          console.log("DB Query Error: " + err);
-          throw "Query did not execute";
-        })
-        .finally(() => {
-          console.log("updateUserEntryVoteDB releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("updateUserEntryVoteDB DB error", err);
-      throw err;
-    });
+  const res = pool.query(dbQueryString);
+  console.log("updateUserEntryVote returned", res);
+  return res;
 }
 
 async function updateEntryVoteCountDB(entryID) {
@@ -304,31 +226,14 @@ async function updateEntryVoteCountDB(entryID) {
                     WHERE EntryID = ${entryID}
                     `;
   console.log(dbQueryString);
-  return pool
-    .getConnection()
-    .then((conn) => {
-      return conn
-        .query(dbQueryString)
-        .then((res) => {
-          console.log("updateEntryVoteCount returned: ", res.affectedRows);
-          if (res.affectedRows !== 1) {
-            throw "Query did not update correct rowcount of 1";
-          }
-          return res;
-        })
-        .catch((err) => {
-          console.log("updateEntryVoteCountDB DB Query Error: " + err);
-          throw "Query did not execute";
-        })
-        .finally(() => {
-          console.log("updateEntryVoteCount releasing connection");
-          conn.release();
-        });
-    })
-    .catch((err) => {
-      console.log("updateEntryVoteCount DB error", err);
-      throw err;
-    });
+
+  console.log(dbQueryString);
+  const res = pool.query(dbQueryString);
+  if (res.affectedRows !== 1) {
+    throw "Query did not update correct rowcount of 1";
+  }
+  console.log("updateUserEntryVote returned", res);
+  return res;
 }
 
 module.exports.addEntry = addEntry;
@@ -337,5 +242,4 @@ module.exports.getEntry = getEntry;
 module.exports.getAllEntries = getAllEntries;
 module.exports.validateUser = validateUser;
 module.exports.addUser = addUser;
-module.exports.addUserEntryVote = addUserEntryVote;
-module.exports.updateUserEntryVote = updateUserEntryVote;
+module.exports.addOrUpdateUserEntryVote = addOrUpdateUserEntryVote;

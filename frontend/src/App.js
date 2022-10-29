@@ -6,6 +6,7 @@ import PostList from "./components/PostList";
 import PostAdd from "./components/PostAdd";
 import { Splash } from "./components/Splash";
 import LoginFormModal from "./components/LoginFormModal";
+import { Trial } from "./components/Trial";
 
 function App() {
   const [userManager, setUserManager] = useUserManager();
@@ -29,6 +30,7 @@ function App() {
           element={<PostList userManager={userManager} order={"new"} />}
         />
         <Route path="add" element={<PostAdd userManager={userManager} />} />
+        <Route path="trial" element={<Trial />} />
       </Routes>
     </>
   );
