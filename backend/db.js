@@ -235,7 +235,7 @@ function getAllEntries(userID, order) {
         .query(dbQueryString)
         .then((rows) => {
           //console.log("result", rows);
-          console.log("Rows returned: " + rows.length);
+          console.log("getAllEntries rows returned: " + rows.length);
           return rows;
         })
         .catch((err) => {

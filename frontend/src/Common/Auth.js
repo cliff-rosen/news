@@ -77,6 +77,19 @@ export const useUserManager = () => {
   const [user, setUser] = useState(getUser());
   const [lao, setLao] = useState(makeLoginActionObject());
 
+  const loginThen = (fn, params) => {
+    if (user.userID > 0) {
+      console.log("applying fn");
+      fn.apply(null, params);
+    } else {
+      // fn will be called with params by LoginFormModal
+      // via call to hideLoginAndThen
+      setLao((curLao) => {
+        return { ...curLao, show: true, fn, params };
+      });
+    }
+  };
+
   const showLogin = (message) => {
     setLao({ ...lao, show: true, message });
   };
@@ -85,7 +98,15 @@ export const useUserManager = () => {
     setLao(makeLoginActionObject());
   };
 
-  // add to useEffect of component requiring logged in user
+  const hideLoginAndThen = (u) => {
+    if (lao.fn) {
+      console.log("hideLoginAndThen: ", u);
+      lao.fn.apply(null, lao.params);
+    }
+    setLao(makeLoginActionObject());
+  };
+
+  // add to component requiring logged in user
   // must be in useEffect/event handler to avoid running while parent renders
   const requireUser = () => {
     if (user.userID === 0 && lao.show === false) {
@@ -98,12 +119,16 @@ export const useUserManager = () => {
 
   const register = async (username, password) => {
     await p_register(username, password);
-    setUser(getUser());
+    const u = getUser();
+    setUser(u);
+    return u;
   };
 
   const login = async (username, password) => {
     await p_login(username, password);
-    setUser(getUser());
+    const u = getUser();
+    setUser(u);
+    return u;
   };
 
   const logout = () => {
@@ -117,6 +142,8 @@ export const useUserManager = () => {
       lao,
       showLogin,
       hideLogin,
+      loginThen,
+      hideLoginAndThen,
       register,
       login,
       logout,

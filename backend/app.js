@@ -105,7 +105,7 @@ app.post("/login", (req, res) => {
 });
 
 /////////////////////// ENTRY ////////////////////////////
-app.post("/entry", checkForToken, (req, res) => {
+app.post("/entries", checkForToken, (req, res) => {
   console.log("add entry", req.body.entryText);
   db.addEntry(
     req.body.entryTitle,
@@ -117,7 +117,7 @@ app.post("/entry", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e }));
 });
 
-app.delete("/entry/:id", (req, res) => {
+app.delete("/entries/:id", (req, res) => {
   const { id } = req.params;
   console.log("get delete", id);
   db.deleteEntry(id).then((result) => {

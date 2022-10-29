@@ -15,8 +15,11 @@ export function PostVote({
   updateVote,
 }) {
   const voteHandler = (newVote) => {
-    userManager.requireUser();
-    if (userManager.user.userID === 0) return;
+    //userManager.requireUser();
+    if (userManager.user.userID === 0) {
+      console.log("voteHandler called with userID === 0");
+      //return;
+    }
     if (vote == null) {
       addVote(voteCount + newVote, newVote);
     } else {
@@ -60,7 +63,7 @@ export function PostVote({
           width: 12,
           color: vote === 1 ? "green" : "lightGray",
         }}
-        onClick={() => voteHandler(1)}
+        onClick={() => userManager.loginThen(voteHandler, [1])}
       >
         <ArrowDropUpIcon fontSize="medium" />
       </IconButton>
