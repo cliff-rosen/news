@@ -15,7 +15,8 @@ export function PostVote({
     //userManager.requireUser();
     if (userManager.user.userID === 0) {
       console.log("voteHandler called with userID === 0");
-      //return;
+      userManager.loginThen(apiSetPostVote, [entryID, iVote]);
+      return;
     }
     var newVote;
     var newVoteCount;
