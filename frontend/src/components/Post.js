@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPost } from "../Common/PostAPI";
-import { getComments } from "../Common/CommentAPI";
+import { getComments, addComment } from "../Common/CommentAPI";
 import PostVote from "./PostVote";
 import CommentsTree from "./CommentsTree";
 import { Link as RouterLink } from "react-router-dom";
@@ -11,15 +11,16 @@ import { getElapsedTime } from "../Common/TimeUtils";
 
 export default function Post({ userManager }) {
   const [post, setPost] = useState();
-  const [comment, setComment] = useState();
   const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
+  const [message, setMessage] = useState("");
   const { postid: entryID } = useParams();
 
   useEffect(() => {
     console.log("useEffect getPost for ", entryID);
     getPost(entryID)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setPost(res);
       })
       .catch((e) => console.log("getPost error: ", e));
@@ -27,9 +28,23 @@ export default function Post({ userManager }) {
     getComments(entryID).then((rows) => setComments(rows));
   }, [entryID]);
 
-  const submitComment = (e) => {
+  const submitComment = async (e) => {
     e.preventDefault();
+    if (comment === "") {
+      setMessage("Please enter a comment and resubmit.");
+      return;
+    }
+
+    try {
+      await addComment(entryID, null, comment);
+      getComments(entryID).then((rows) => setComments(rows));
+      setComment("");
+    } catch (e) {
+      console.log("submitComment error: ", e.message);
+      setMessage("Error adding comment: " + e.message);
+    }
   };
+
   const updateVote = (idx, newVoteCount, newVote) => {
     setPost((curPost) => {
       return { ...curPost, VoteCount: newVoteCount, Vote: newVote };
@@ -97,10 +112,10 @@ export default function Post({ userManager }) {
         <div style={{ marginTop: "20px" }}></div>
         <div>
           {" "}
+          {message}
           <form onSubmit={submitComment}>
             <TextField
               id="comment"
-              autoFocus
               style={{ width: "400px", margin: "5px" }}
               multiline
               rows={4}

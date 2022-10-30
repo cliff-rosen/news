@@ -19,7 +19,6 @@ function PostList({ userManager, order }) {
   };
 
   useEffect(() => {
-    console.log("PostList getPosts running: ", order);
     const getPosts = async (iOrder) => {
       try {
         const data = await apiGetPosts(iOrder);
@@ -28,6 +27,7 @@ function PostList({ userManager, order }) {
         console.log("Error while getting list of stories.", error);
       }
     };
+    console.log("PostList getPost about to run: ", order);
     getPosts(order);
   }, [userManager.user.userID, order]);
 

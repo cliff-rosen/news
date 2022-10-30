@@ -147,7 +147,9 @@ app.delete("/entries/:id", (req, res) => {
 app.get("/entries", checkForToken, (req, res) => {
   const order = req.query.order;
   console.log("get entries", req.headers["authorization"]);
-  db.getAllEntries(req.user.userID, order).then((rows) => res.json(rows));
+  db.getAllEntries(req.user.userID, order)
+    .then((rows) => res.json(rows))
+    .catch((e) => res.json({ error: e.message }));
 });
 
 app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {

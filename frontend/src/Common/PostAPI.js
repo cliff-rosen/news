@@ -27,10 +27,12 @@ export const getPosts = async (order) => {
         Authorization: getUserToken(),
       },
     });
-    if (res.status !== 200) throw new Error("getPosts http error");
+    const status = res.status;
     data = await res.json();
+    if (res.status !== 200 || data.error)
+      throw new Error("getPosts http error");
   } catch (e) {
-    console.log("getPostsError", e);
+    console.log("API ERROR in getPosts:", e.message);
     throw e;
   }
   return data;
