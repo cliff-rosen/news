@@ -89,10 +89,11 @@ export default function LoginFormModal({ userManager }) {
             ""
           )}
           <DialogContentText>LOGIN </DialogContentText>
-          <form>
+          <form onSubmit={formSubmit}>
             <TextField
               id="username"
               style={{ width: "400px", margin: "5px" }}
+              autoFocus
               type="text"
               label="Username"
               value={username}
@@ -112,13 +113,13 @@ export default function LoginFormModal({ userManager }) {
             <br />
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button variant="contained" color="primary" onClick={formSubmit}>
+              <Button type="submit" variant="contained" color="primary">
                 login
               </Button>
             </DialogActions>
           </form>{" "}
           <DialogContentText>REGISTER</DialogContentText>
-          <form>
+          <form onSubmit={formSubmitR}>
             <TextField
               id="usernameR"
               style={{ width: "400px", margin: "5px" }}
@@ -141,7 +142,7 @@ export default function LoginFormModal({ userManager }) {
             <br />
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button variant="contained" color="primary" onClick={formSubmitR}>
+              <Button type="submit" variant="contained" color="primary">
                 register
               </Button>
             </DialogActions>

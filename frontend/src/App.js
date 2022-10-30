@@ -13,7 +13,7 @@ function App() {
   const [userManager, setUserManager] = useUserManager();
   const [okToTrip, setOkToTrip] = useState(false);
 
-  if (false && !okToTrip) {
+  if (!okToTrip) {
     return <Splash setOkToTrip={setOkToTrip} />;
   }
 

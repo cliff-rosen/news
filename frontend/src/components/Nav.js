@@ -23,8 +23,7 @@ const Navbar = ({ userManager }) => {
       variant="dense"
       sx={{
         justifyContent: "space-between",
-        overflow: "auto",
-        backgroundColor: "#ddd",
+        backgroundColor: "#e0e0e0",
       }}
     >
       <Typography
@@ -37,7 +36,7 @@ const Navbar = ({ userManager }) => {
         Tripper's Almanac
       </Typography>
       <Typography variant="h6" sx={{ display: { xs: "block", sm: "none" } }}>
-        TA
+        TAx
       </Typography>
 
       <div
@@ -45,7 +44,6 @@ const Navbar = ({ userManager }) => {
           display: "flex",
           justifyContent: "space-between",
           flex: "0 0 300px",
-          border: "none",
         }}
       >
         {sections.map((section) => (

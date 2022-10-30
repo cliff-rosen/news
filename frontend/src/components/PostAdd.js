@@ -20,7 +20,9 @@ function PostAdd({ userManager }) {
     userManager.requireUser();
   });
 
-  const formSubmit = async () => {
+  const formSubmit = async (e) => {
+    e.preventDefault();
+
     if (title === "") {
       setMessage("Please add a title.");
       return;
@@ -39,16 +41,20 @@ function PostAdd({ userManager }) {
 
   return (
     <LayoutContainer>
-      {message && (
-        <div>
-          {message}
-          <br />
-          <br />
-        </div>
-      )}
-      <form>
+      <div style={{ margin: "20px", height: "40px" }}>
+        {message && (
+          <div>
+            {message}
+            <br />
+            <br />
+          </div>
+        )}
+      </div>
+      <div style={{ margin: "20px" }}></div>
+      <form onSubmit={formSubmit}>
         <TextField
           id="url"
+          autoFocus
           style={{ width: "400px", margin: "5px" }}
           type="text"
           label="URL"
@@ -79,7 +85,7 @@ function PostAdd({ userManager }) {
           variant="outlined"
         />
         <br />
-        <Button variant="contained" color="primary" onClick={formSubmit}>
+        <Button type="submit" variant="contained" color="primary">
           post
         </Button>
       </form>
