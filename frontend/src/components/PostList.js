@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { getPosts as apiGetPosts } from "../Common/PostAPI";
 import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
-import { PostVote } from "./PostVote";
+import PostVote from "./PostVote";
 
 function PostList({ userManager, order }) {
   const [posts, setPosts] = useState([]);

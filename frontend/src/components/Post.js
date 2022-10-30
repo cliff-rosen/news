@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPost } from "../Common/PostAPI";
-import { PostVote } from "./PostVote";
+import { getComments } from "../Common/CommentAPI";
+import PostVote from "./PostVote";
+import CommentsTree from "./CommentsTree";
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Link } from "@mui/material";
 import { TextField, Button } from "@mui/material";
@@ -10,6 +12,7 @@ import { getElapsedTime } from "../Common/TimeUtils";
 export default function Post({ userManager }) {
   const [post, setPost] = useState();
   const [comment, setComment] = useState();
+  const [comments, setComments] = useState([]);
   const { postid: entryID } = useParams();
 
   useEffect(() => {
@@ -20,6 +23,8 @@ export default function Post({ userManager }) {
         setPost(res);
       })
       .catch((e) => console.log("getPost error: ", e));
+
+    getComments(entryID).then((rows) => setComments(rows));
   }, [entryID]);
 
   const updateVote = (idx, newVoteCount, newVote) => {
@@ -107,6 +112,10 @@ export default function Post({ userManager }) {
           >
             add comment
           </Button>
+        </div>
+        <div style={{ marginTop: "20px" }}></div>
+        <div>
+          <CommentsTree comments={comments} />
         </div>
       </div>
     </div>

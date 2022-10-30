@@ -35,6 +35,7 @@ const pool = mariadb.createPool({
 });
 
 async function addUser(userName, password) {
+  userName = userName.toLowerCase();
   console.log("AddUser: " + userName + "/" + password);
   const passwordHash = hasher.hashSync(password, 10);
   const dbQueryString = `
@@ -285,9 +286,11 @@ async function addComment(userID, parentCommentID, entryID, commentText) {
 
 async function getEntryComments(userID, entryID) {
   dbQueryString = `
-                    SELECT *
-                    FROM comment
-                    WHERE EntryID = ${entryID}
+                    SELECT c.*, u.UserName as CommentUserName
+                    FROM comment c
+                    JOIN user u
+                      ON c.CommentUserID = u.UserID
+                    WHERE c.EntryID = ${entryID}
                     `;
   try {
     const res = await pool.query(dbQueryString);
