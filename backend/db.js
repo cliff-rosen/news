@@ -260,6 +260,44 @@ async function updateEntryVoteCountDB(entryID) {
   return res;
 }
 
+async function addComment(userID, parentCommentID, entryID, commentText) {
+  console.log("addComment: ", userID);
+  entryText = commentText.replace(/'/g, "\\'");
+
+  dbQueryString = `
+                    INSERT
+                    INTO comment (
+                      CommentUserID, ParentCommentID, EntryID,
+                      CommentText,
+                      DateTimeAdded
+                      )
+                    VALUES (
+                      ${userID}, ${parentCommentID}, ${entryID},
+                      '${commentText}',
+                      NOW()
+                      )
+                    `;
+
+  const res = await pool.query(dbQueryString);
+  console.log("addComment returned", res);
+  return res;
+}
+
+async function getEntryComments(userID, entryID) {
+  dbQueryString = `
+                    SELECT *
+                    FROM comment
+                    WHERE EntryID = ${entryID}
+                    `;
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    return "Query did not execute";
+  }
+}
+
 module.exports.addEntry = addEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
@@ -267,3 +305,5 @@ module.exports.getAllEntries = getAllEntries;
 module.exports.validateUser = validateUser;
 module.exports.addUser = addUser;
 module.exports.addOrUpdateUserEntryVote = addOrUpdateUserEntryVote;
+module.exports.addComment = addComment;
+module.exports.getEntryComments = getEntryComments;

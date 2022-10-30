@@ -158,6 +158,27 @@ app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e.message }));
 });
 
+app.post("/comments", checkForToken, (req, res) => {
+  console.log("add comment");
+  db.addComment(
+    req.user.userID,
+    req.body.parentCommentID,
+    req.body.entryID,
+    req.body.commentText
+  )
+    .then((dbres) => res.json({ commentID: Number(dbres.insertId) }))
+    .catch((e) => {
+      console.log("error", e);
+      res.json({ error: e });
+    });
+});
+
+app.get("/comments/:entryid", checkForToken, (req, res) => {
+  const { entryid } = req.params;
+  console.log("get comments", entryid, req.headers["authorization"]);
+  db.getEntryComments(req.user.userID, entryid).then((rows) => res.json(rows));
+});
+
 //////////////////////////////////////////////////////
 
 app.listen(port, () => {

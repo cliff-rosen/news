@@ -4,10 +4,12 @@ import { getPost } from "../Common/PostAPI";
 import { PostVote } from "./PostVote";
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Link } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { getElapsedTime } from "../Common/TimeUtils";
 
 export default function Post({ userManager }) {
   const [post, setPost] = useState();
+  const [comment, setComment] = useState();
   const { postid: entryID } = useParams();
 
   useEffect(() => {
@@ -83,6 +85,28 @@ export default function Post({ userManager }) {
           >
             {post.CommentCount} comments
           </RouterLink>
+        </div>
+        <div style={{ marginTop: "20px" }}></div>
+        <div>
+          {" "}
+          <TextField
+            id="comment"
+            style={{ width: "400px", margin: "5px" }}
+            multiline
+            rows={4}
+            type="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            variant="outlined"
+          />
+          <br />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setComment("")}
+          >
+            add comment
+          </Button>
         </div>
       </div>
     </div>
