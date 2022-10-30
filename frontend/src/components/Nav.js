@@ -33,10 +33,14 @@ const Navbar = ({ userManager }) => {
           display: { xs: "none", sm: "block" },
         }}
       >
-        Tripper's Almanac
+        <Link to="/" style={{ textDecoration: "none" }}>
+          Tripper's Almanac
+        </Link>
       </Typography>
       <Typography variant="h6" sx={{ display: { xs: "block", sm: "none" } }}>
-        TAx
+        <Link to="/" style={{ textDecoration: "none" }}>
+          TA
+        </Link>
       </Typography>
 
       <div

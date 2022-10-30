@@ -263,8 +263,14 @@ async function updateEntryVoteCountDB(entryID) {
 
 async function addComment(userID, parentCommentID, entryID, commentText) {
   console.log("addComment: ", userID);
-  entryText = commentText.replace(/'/g, "\\'");
+  commentText = commentText.replace(/'/g, "\\'");
 
+  const res = await addCommentDB(userID, parentCommentID, entryID, commentText);
+  await updateEntryCommentCountDB(entryID);
+  return res;
+}
+
+async function addCommentDB(userID, parentCommentID, entryID, commentText) {
   dbQueryString = `
                     INSERT
                     INTO comment (
@@ -280,7 +286,27 @@ async function addComment(userID, parentCommentID, entryID, commentText) {
                     `;
 
   const res = await pool.query(dbQueryString);
-  console.log("addComment returned", res);
+  console.log("addCommentDB returned", res);
+  return res;
+}
+
+async function updateEntryCommentCountDB(entryID) {
+  console.log("updateEntryCommentCount", entryID);
+
+  dbQueryString = `
+                    UPDATE entry
+                    SET CommentCount = 
+                      (
+                        SELECT count(EntryID)
+                        FROM comment
+                        WHERE entryID = ${entryID}
+                      )
+                    WHERE EntryID = ${entryID}
+                    `;
+
+  console.log(dbQueryString);
+  const res = await pool.query(dbQueryString);
+  console.log("updateEntryCommentCount returned", res);
   return res;
 }
 

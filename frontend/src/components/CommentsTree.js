@@ -1,3 +1,5 @@
+import Comment from "./Comment";
+
 export default function CommentsTree({ comments }) {
   return (
     <div>
@@ -5,7 +7,9 @@ export default function CommentsTree({ comments }) {
       <br />
       <br />
       {comments.map((comment) => (
-        <div key={comment.CommentID}>{comment.CommentText}</div>
+        <div key={comment.CommentID}>
+          <Comment comment={comment} />
+        </div>
       ))}
     </div>
   );

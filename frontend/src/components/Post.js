@@ -17,14 +17,12 @@ export default function Post({ userManager }) {
   const { postid: entryID } = useParams();
 
   useEffect(() => {
-    console.log("useEffect getPost for ", entryID);
+    console.log("Post data retrieval useEffect for ", entryID);
     getPost(entryID)
       .then((res) => {
-        //console.log(res);
         setPost(res);
       })
       .catch((e) => console.log("getPost error: ", e));
-
     getComments(entryID).then((rows) => setComments(rows));
   }, [entryID]);
 
@@ -37,8 +35,12 @@ export default function Post({ userManager }) {
 
     try {
       await addComment(entryID, null, comment);
-      getComments(entryID).then((rows) => setComments(rows));
+      const updatedPost = await getPost(entryID);
+      const updatedComments = await getComments(entryID);
+      setPost(updatedPost);
+      setComments(updatedComments);
       setComment("");
+      setMessage("");
     } catch (e) {
       console.log("submitComment error: ", e.message);
       setMessage("Error adding comment: " + e.message);
@@ -93,13 +95,6 @@ export default function Post({ userManager }) {
             {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
           </span>
         </div>
-        {post.EntryText && (
-          <div>
-            <span style={{ fontSize: "13px", color: "black" }}>
-              {post.EntryText}
-            </span>
-          </div>
-        )}
         <div style={{ fontSize: "12px", color: "gray" }}>
           Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)} ago |{" "}
           <RouterLink
@@ -108,7 +103,14 @@ export default function Post({ userManager }) {
           >
             {post.CommentCount} comments
           </RouterLink>
-        </div>
+        </div>{" "}
+        {post.EntryText && (
+          <div>
+            <span style={{ fontSize: "14px", color: "black" }}>
+              {post.EntryText}
+            </span>
+          </div>
+        )}
         <div style={{ marginTop: "20px" }}></div>
         <div>
           {" "}

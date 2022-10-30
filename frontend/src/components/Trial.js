@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const d1 = [];
 const d2 = [];
@@ -9,6 +9,11 @@ for (let i = 0; i < 40; i++) {
 
 export default function Trial() {
   const [d, setD] = useState(d1);
+  console.log("Trial");
+
+  useEffect(() => {
+    console.log("Trial useEffect");
+  }, [d]);
 
   return (
     <div>
