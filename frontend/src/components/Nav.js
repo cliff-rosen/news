@@ -18,24 +18,44 @@ const Navbar = ({ userManager }) => {
   };
 
   return (
-    <div>
-      <Toolbar
-        component="nav"
-        variant="dense"
-        sx={{ justifyContent: "space-between", overflowX: "auto" }}
+    <Toolbar
+      component="nav"
+      variant="dense"
+      sx={{
+        justifyContent: "space-between",
+        overflow: "auto",
+        backgroundColor: "#ddd",
+      }}
+    >
+      <Typography
+        variant="h6"
+        sx={{
+          border: "none",
+          display: { xs: "none", sm: "block" },
+        }}
       >
-        <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
-          Tripper's Almanac
-        </Typography>
-        <Typography variant="h6" sx={{ display: { xs: "block", sm: "none" } }}>
-          TA
-        </Typography>
+        Tripper's Almanac
+      </Typography>
+      <Typography variant="h6" sx={{ display: { xs: "block", sm: "none" } }}>
+        TA
+      </Typography>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          flex: "0 0 300px",
+          border: "none",
+        }}
+      >
         {sections.map((section) => (
           <Button
             key={section.link}
             onClick={() => navigate(section.link)}
             sx={{
-              color: location.pathname === section.link ? "#79a" : "GrayText",
+              border: "none",
+              color:
+                location.pathname === section.link ? "#0057b7a" : "GrayText",
               fontWeight:
                 location.pathname === section.link ? "bold" : "normal",
             }}
@@ -43,32 +63,33 @@ const Navbar = ({ userManager }) => {
             {section.name}
           </Button>
         ))}
-        <span>
-          {userManager.user?.userID > 0 ? (
-            <span>
-              {userManager.user.userName} |{" "}
-              <Link
-                style={{ textDecoration: "none", color: "gray" }}
-                to="#"
-                onClick={lout}
-              >
-                logout
-              </Link>
-            </span>
-          ) : (
+      </div>
+
+      <div style={{ border: "none" }}>
+        {userManager.user?.userID > 0 ? (
+          <span>
+            {userManager.user.userName} |{" "}
             <Link
               style={{ textDecoration: "none", color: "gray" }}
               to="#"
-              onClick={() => {
-                userManager.showLogin();
-              }}
+              onClick={lout}
             >
-              login
+              logout
             </Link>
-          )}
-        </span>
-      </Toolbar>
-    </div>
+          </span>
+        ) : (
+          <Link
+            style={{ textDecoration: "none", color: "gray" }}
+            to="#"
+            onClick={() => {
+              userManager.showLogin();
+            }}
+          >
+            login
+          </Link>
+        )}
+      </div>
+    </Toolbar>
   );
 };
 

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_comment_user` FOREIGN KEY (`CommentUserID`) REFERENCES `user` (`UserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table dev.comment: ~1 rows (approximately)
+-- Dumping data for table dev.comment: ~2 rows (approximately)
 /*!40000 ALTER TABLE `comment` DISABLE KEYS */;
 INSERT INTO `comment` (`CommentID`, `CommentUserID`, `ParentCommentID`, `EntryID`, `DateTimeAdded`, `CommentText`, `VoteCount`) VALUES
 	(2, 47, NULL, 1, '2022-10-29 21:12:47', 'this is a comment', 0),
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `entry` (
 INSERT INTO `entry` (`EntryID`, `UserID`, `EntryDateTime`, `EntryTitle`, `EntryText`, `EntryUrl`, `EntryUrlDomain`, `VoteCount`) VALUES
 	(1, 47, '2022-10-25 19:50:51', 'This is my first entry', 'this is my text', '', NULL, 1),
 	(99, 47, '2022-10-25 19:49:55', 'posting again', '', 'https://www.abc.com/axjs', 'abc.com', 1),
-	(100, 47, '2022-10-25 20:06:20', 'posting again 2', 'post without url', '', '', -1),
-	(101, 90, '2022-10-25 20:40:57', 'Extract hostname name from string', 'This post has nothing to do with psychedelics', 'https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string', 'stackoverflow.com', 0),
+	(100, 47, '2022-10-25 20:06:20', 'posting again 2', 'post without url', '', '', 0),
+	(101, 90, '2022-10-25 20:40:57', 'Extract hostname name from string', 'This post has nothing to do with psychedelics', 'https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string', 'stackoverflow.com', 1),
 	(102, 90, '2022-10-26 10:21:49', 'psl', '', 'https://www.npmjs.com/package/psl', 'npmjs.com', 0),
 	(103, 107, '2022-10-26 17:55:49', 'DialogActions API', '', 'https://mui.com/material-ui/api/dialog-actions/', 'mui.com', 0),
 	(104, 47, '2022-10-27 16:59:15', 'Material UI centering', '', 'https://medium.com/@tsubasakondo_36683/4-ways-to-center-a-component-in-material-ui-a4bcafe6688e', 'medium.com', 0),
@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`UserID`, `UserName`, `Password`) VALUES
 	(47, 'john', '$2b$10$YR6eoJrumFJPBPDJoQ8Yee2K7hzkLcKnbUTbVkCUQsYpIm7Exl7zq'),
 	(90, 'cliff', '$2b$10$rppAP3qOSs1i0FIyKemrTuDiYXYUcpM7D2IupFoO1Euz0TTaEK6PW'),
-	(107, 'sam', '$2b$10$puyBx1wsOnxKyuG/wsE6oe2LXU37KFYnYlbsI0Ki5VMGXSlDY9NcO');
+	(107, 'sam', '$2b$10$puyBx1wsOnxKyuG/wsE6oe2LXU37KFYnYlbsI0Ki5VMGXSlDY9NcO'),
+	(127, 'jeff', '$2b$10$p2WgDYIcAuUtTLzyaMRbVOjTwUC9oEUQ0Zfncy6FweTL/3XVjM5Ci');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- Dumping structure for table dev.user_entry_vote
@@ -99,7 +100,8 @@ CREATE TABLE IF NOT EXISTS `user_entry_vote` (
 INSERT INTO `user_entry_vote` (`UserID`, `EntryID`, `Vote`) VALUES
 	(47, 1, 1),
 	(47, 99, 1),
-	(47, 100, -1),
+	(47, 100, 0),
+	(47, 101, 1),
 	(47, 106, 0),
 	(47, 107, 0);
 /*!40000 ALTER TABLE `user_entry_vote` ENABLE KEYS */;
