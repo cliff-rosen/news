@@ -27,6 +27,9 @@ export default function Post({ userManager }) {
     getComments(entryID).then((rows) => setComments(rows));
   }, [entryID]);
 
+  const submitComment = (e) => {
+    e.preventDefault();
+  };
   const updateVote = (idx, newVoteCount, newVote) => {
     setPost((curPost) => {
       return { ...curPost, VoteCount: newVoteCount, Vote: newVote };
@@ -94,24 +97,23 @@ export default function Post({ userManager }) {
         <div style={{ marginTop: "20px" }}></div>
         <div>
           {" "}
-          <TextField
-            id="comment"
-            style={{ width: "400px", margin: "5px" }}
-            multiline
-            rows={4}
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            variant="outlined"
-          />
-          <br />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setComment("")}
-          >
-            add comment
-          </Button>
+          <form onSubmit={submitComment}>
+            <TextField
+              id="comment"
+              autoFocus
+              style={{ width: "400px", margin: "5px" }}
+              multiline
+              rows={4}
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              variant="outlined"
+            />
+            <br />
+            <Button type="submit" variant="contained" color="primary">
+              add comment
+            </Button>
+          </form>
         </div>
         <div style={{ marginTop: "20px" }}></div>
         <div>

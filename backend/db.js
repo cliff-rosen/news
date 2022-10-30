@@ -157,7 +157,7 @@ async function getEntry(userID, entryID) {
 
 async function getAllEntries(userID, order) {
   dbQueryString = `
-                    SELECT e.*, u.UserName, v.Vote, 0 as CommentCount
+                    SELECT e.*, u.UserName, v.Vote
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 
