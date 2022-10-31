@@ -363,6 +363,7 @@ async function getEntryComments(entryID) {
                     JOIN user u
                       ON c.CommentUserID = u.UserID
                     WHERE c.EntryID = ${entryID}
+                    ORDER BY FullPath
                     `;
   try {
     const res = await pool.query(dbQueryString);
