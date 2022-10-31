@@ -18,26 +18,28 @@ function App() {
   }
 
   return (
-    <>
-      <LoginFormModal userManager={userManager} />
-      <Nav userManager={userManager} />
-      <Routes>
-        <Route
-          path="/"
-          element={<PostList userManager={userManager} order={"trending"} />}
-        />
-        <Route
-          path="/new"
-          element={<PostList userManager={userManager} order={"new"} />}
-        />
-        <Route path="add" element={<PostAdd userManager={userManager} />} />
-        <Route
-          path="post/:postid"
-          element={<Post userManager={userManager} />}
-        />
-        <Route path="trial" element={<Trial />} />
-      </Routes>
-    </>
+    <div style={{ display: "flex", justifyContent: "space-around" }}>
+      <div style={{ flexGrow: 1, border: "none", maxWidth: 800 }}>
+        <LoginFormModal userManager={userManager} />
+        <Nav userManager={userManager} />
+        <Routes>
+          <Route
+            path="/"
+            element={<PostList userManager={userManager} order={"trending"} />}
+          />
+          <Route
+            path="/new"
+            element={<PostList userManager={userManager} order={"new"} />}
+          />
+          <Route path="add" element={<PostAdd userManager={userManager} />} />
+          <Route
+            path="post/:postid"
+            element={<Post userManager={userManager} />}
+          />
+          <Route path="trial" element={<Trial />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
 
