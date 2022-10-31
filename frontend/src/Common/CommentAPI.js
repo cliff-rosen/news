@@ -2,7 +2,7 @@ import { BASE_API_URL } from "./APIUtils";
 import { getUserToken } from "./Auth";
 
 export const getComments = async (entryID) => {
-  const res = await fetch(`${BASE_API_URL}/comments/${entryID}`, {
+  const res = await fetch(`${BASE_API_URL}/entries/${entryID}/comments`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -18,12 +18,11 @@ export const getComments = async (entryID) => {
 
 export const addComment = async (entryID, parentCommentID, commentText) => {
   const body = JSON.stringify({
-    entryID,
     parentCommentID,
     commentText,
   });
 
-  const res = await fetch(`${BASE_API_URL}/comments`, {
+  const res = await fetch(`${BASE_API_URL}/entries/${entryID}/comments`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -156,7 +156,7 @@ export default function Post({ userManager }) {
         </div>
         <div style={{ marginTop: "20px" }}></div>
         <div>
-          <CommentsTree comments={comments} />
+          <CommentsTree comments={comments} updatePostPage={updatePostPage} />
         </div>
       </div>
     </div>

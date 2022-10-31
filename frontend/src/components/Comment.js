@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import PostVote from "./PostVote";
+import { addComment } from "../common/CommentAPI";
 import { getElapsedTime } from "../common/TimeUtils";
+import { TextField, Button } from "@mui/material";
 
-export default function Comment({ comment }) {
+export default function Comment({ comment, updatePostPage }) {
+  const [reply, setReply] = useState("");
   return (
     <div
       style={{
@@ -51,7 +54,24 @@ export default function Comment({ comment }) {
               vote={0}
               updateVote={(x) => x}
             ></PostVote>
-            <div style={{ alignSelf: "flex-end", fontSize: "11px" }}>reply</div>
+            <div style={{ alignSelf: "flex-end", fontSize: "11px" }}>
+              <TextField
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                size="small"
+                InputProps={{ style: { fontSize: 10 } }}
+              />
+              <Button
+                style={{ textTransform: "unset", fontSize: 10 }}
+                onClick={async (e) => {
+                  await addComment(comment.EntryID, comment.CommentID, reply);
+                  setReply("");
+                  updatePostPage();
+                }}
+              >
+                reply
+              </Button>
+            </div>
           </div>
         </div>
       </div>

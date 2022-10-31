@@ -160,12 +160,13 @@ app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e.message }));
 });
 
-app.post("/comments", checkForToken, (req, res) => {
-  console.log("add comment");
+app.post("/entries/:entryid/comments", checkForToken, (req, res) => {
+  const { entryid } = req.params;
+  console.log("/comments running");
   db.addComment(
     req.user.userID,
     req.body.parentCommentID,
-    req.body.entryID,
+    entryid,
     req.body.commentText
   )
     .then((dbres) => res.json({ commentID: Number(dbres.insertId) }))
@@ -175,10 +176,10 @@ app.post("/comments", checkForToken, (req, res) => {
     });
 });
 
-app.get("/comments/:entryid", checkForToken, (req, res) => {
+app.get("/entries/:entryid/comments", checkForToken, (req, res) => {
   const { entryid } = req.params;
   console.log("get comments", entryid, req.headers["authorization"]);
-  db.getEntryComments(req.user.userID, entryid).then((rows) => res.json(rows));
+  db.getEntryComments(entryid).then((rows) => res.json(rows));
 });
 
 //////////////////////////////////////////////////////

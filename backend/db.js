@@ -265,22 +265,51 @@ async function addComment(userID, parentCommentID, entryID, commentText) {
   console.log("addComment: ", userID);
   commentText = commentText.replace(/'/g, "\\'");
 
-  const res = await addCommentDB(userID, parentCommentID, entryID, commentText);
+  var path;
+  var level;
+
+  if (!parentCommentID) {
+    path = "0";
+    level = 0;
+  } else {
+    const parent = await getEntryComment(parentCommentID);
+    path = parent[0].Path + ":" + parentCommentID;
+    level = parent[0].Level + 1;
+  }
+
+  const res = await addCommentDB(
+    userID,
+    parentCommentID,
+    entryID,
+    commentText,
+    path,
+    level
+  );
   await updateEntryCommentCountDB(entryID);
   return res;
 }
 
-async function addCommentDB(userID, parentCommentID, entryID, commentText) {
+async function addCommentDB(
+  userID,
+  parentCommentID,
+  entryID,
+  commentText,
+  path,
+  level
+) {
+  console.log("addCommentDB with parent", parentCommentID);
   dbQueryString = `
                     INSERT
                     INTO comment (
                       CommentUserID, ParentCommentID, EntryID,
                       CommentText,
+                      Path, Level,
                       DateTimeAdded
                       )
                     VALUES (
                       ${userID}, ${parentCommentID}, ${entryID},
                       '${commentText}',
+                      '${path}', ${level},
                       NOW()
                       )
                     `;
@@ -310,9 +339,26 @@ async function updateEntryCommentCountDB(entryID) {
   return res;
 }
 
-async function getEntryComments(userID, entryID) {
+async function getEntryComment(commentID) {
+  console.log("getEntryComment", commentID);
   dbQueryString = `
-                    SELECT c.*, u.UserName as CommentUserName
+                    SELECT *, CONCAT_WS(':', path, CommentID) AS FullPath
+                    FROM comment
+                    WHERE CommentID = ${commentID}
+                    `;
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    return "Query did not execute";
+  }
+}
+
+async function getEntryComments(entryID) {
+  console.log("getEntryComments", entryID);
+  dbQueryString = `
+                    SELECT c.*, CONCAT_WS(':', path, CommentID) AS FullPath, u.UserName as CommentUserName
                     FROM comment c
                     JOIN user u
                       ON c.CommentUserID = u.UserID
