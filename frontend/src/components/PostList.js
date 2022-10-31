@@ -77,7 +77,12 @@ function PostList({ userManager, order }) {
 
           <div>
             <div>
-              <Link href={post.EntryUrl} underline="hover" target="_blank">
+              <Link
+                style={{ fontSize: "14px" }}
+                href={post.EntryUrl}
+                underline="hover"
+                target="_blank"
+              >
                 {post.EntryTitle}
               </Link>{" "}
               <span style={{ fontSize: "12px", color: "gray" }}>
@@ -86,7 +91,7 @@ function PostList({ userManager, order }) {
             </div>
             {post.EntryText && (
               <div>
-                <span style={{ fontSize: "13px", color: "black" }}>
+                <span style={{ fontSize: "12px", color: "black" }}>
                   {post.EntryText}
                 </span>
               </div>

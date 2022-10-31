@@ -63,7 +63,6 @@ export default function Post({ userManager }) {
         paddingTop: 15,
         alignItems: "start",
         justifyContent: "start",
-        maxWidth: 800,
       }}
     >
       <div
@@ -104,7 +103,13 @@ export default function Post({ userManager }) {
         </div>{" "}
         {post.EntryText && (
           <div>
-            <span style={{ fontSize: "14px", color: "black" }}>
+            <span
+              style={{
+                whiteSpace: "pre-wrap",
+                fontSize: "14px",
+                color: "black",
+              }}
+            >
               {post.EntryText}
             </span>
           </div>
@@ -116,7 +121,7 @@ export default function Post({ userManager }) {
           <form onSubmit={submitComment}>
             <TextField
               id="comment"
-              style={{ width: "400px", margin: "5px" }}
+              style={{ width: "600px", margin: "5px" }}
               multiline
               rows={4}
               type="text"

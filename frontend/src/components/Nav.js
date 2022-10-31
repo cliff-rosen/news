@@ -1,12 +1,17 @@
 import React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { Button, Toolbar, Typography } from "@mui/material";
+import {
+  Button,
+  Toolbar,
+  Typography,
+  unstable_useEnhancedEffect,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 
 const sections = [
-  { name: "Trending", link: "/" },
-  { name: "New", link: "/new" },
-  { name: "Post", link: "/add" },
+  { name: "trending", link: "/" },
+  { name: "new", link: "/new" },
+  { name: "post", link: "/add" },
   //{ name: "Trial", link: "/trial" },
 ];
 
@@ -23,7 +28,6 @@ const Navbar = ({ userManager }) => {
       style={{
         display: "flex",
         alignItems: "center",
-        maxWidth: 800,
         paddingBottom: 10,
         border: "none",
       }}
@@ -57,6 +61,7 @@ const Navbar = ({ userManager }) => {
             onClick={() => navigate(section.link)}
             sx={{
               border: "none",
+              textTransform: "unset",
               height: 20,
               color:
                 location.pathname === section.link ? "#0057b7a" : "GrayText",
