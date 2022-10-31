@@ -5,11 +5,6 @@ import styled from "@emotion/styled";
 import { addPost as apiAddPost } from "../Common/PostAPI";
 import { useEffect } from "react";
 
-const LayoutContainer = styled(Container)(() => ({
-  overflow: "hidden",
-  width: "100%",
-}));
-
 function PostAdd({ userManager }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
@@ -40,12 +35,11 @@ function PostAdd({ userManager }) {
   };
 
   return (
-    <LayoutContainer>
-      <div style={{ margin: "20px", height: "40px" }}>
+    <div>
+      <div>
         {message && (
           <div>
             {message}
-            <br />
             <br />
           </div>
         )}
@@ -55,7 +49,7 @@ function PostAdd({ userManager }) {
         <TextField
           id="url"
           autoFocus
-          style={{ width: "400px", margin: "5px" }}
+          style={{ width: "600px", margin: "5px" }}
           type="text"
           label="URL"
           value={url}
@@ -65,7 +59,7 @@ function PostAdd({ userManager }) {
         <br />
         <TextField
           id="title"
-          style={{ width: "400px", margin: "5px" }}
+          style={{ width: "600px", margin: "5px" }}
           type="text"
           label="Title"
           value={title}
@@ -75,7 +69,7 @@ function PostAdd({ userManager }) {
         <br />
         <TextField
           id="desc"
-          style={{ width: "400px", margin: "5px" }}
+          style={{ width: "600px", margin: "5px" }}
           multiline
           rows={4}
           type="text"
@@ -89,7 +83,7 @@ function PostAdd({ userManager }) {
           post
         </Button>
       </form>
-    </LayoutContainer>
+    </div>
   );
 }
 

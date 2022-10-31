@@ -1,7 +1,6 @@
 import React from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Button, Toolbar, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 const sections = [
   { name: "Trending", link: "/" },
@@ -19,13 +18,12 @@ const Navbar = ({ userManager }) => {
   };
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        alignItems: "center",
-        maxWidth: 800,
-        paddingBottom: 10,
-        border: "none",
+    <Toolbar
+      component="nav"
+      variant="dense"
+      sx={{
+        justifyContent: "space-between",
+        backgroundColor: "#e0e0e0",
       }}
     >
       <Typography
@@ -44,11 +42,12 @@ const Navbar = ({ userManager }) => {
           TA
         </Link>
       </Typography>
-      <div style={{ minWidth: 30 }}></div>
-      <Box
-        sx={{
-          flexGrow: 1,
-          border: "none",
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          flex: "0 0 300px",
         }}
       >
         {sections.map((section) => (
@@ -57,7 +56,6 @@ const Navbar = ({ userManager }) => {
             onClick={() => navigate(section.link)}
             sx={{
               border: "none",
-              height: 20,
               color:
                 location.pathname === section.link ? "#0057b7a" : "GrayText",
               fontWeight:
@@ -67,9 +65,9 @@ const Navbar = ({ userManager }) => {
             {section.name}
           </Button>
         ))}
-      </Box>
+      </div>
 
-      <Box sx={{ flexGrow: 0 }}>
+      <div style={{ border: "none" }}>
         {userManager.user?.userID > 0 ? (
           <span>
             {userManager.user.userName} |{" "}
@@ -92,8 +90,8 @@ const Navbar = ({ userManager }) => {
             login
           </Link>
         )}
-      </Box>
-    </nav>
+      </div>
+    </Toolbar>
   );
 };
 

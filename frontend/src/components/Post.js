@@ -18,13 +18,15 @@ export default function Post({ userManager }) {
 
   useEffect(() => {
     console.log("Post data retrieval useEffect for ", entryID);
-    getPost(entryID)
-      .then((res) => {
-        setPost(res);
-      })
-      .catch((e) => console.log("getPost error: ", e));
-    getComments(entryID).then((rows) => setComments(rows));
+    updatePostPage();
   }, [entryID]);
+
+  const updatePostPage = async () => {
+    const updatedPost = await getPost(entryID);
+    const updatedComments = await getComments(entryID);
+    setPost(updatedPost);
+    setComments(updatedComments);
+  };
 
   const submitComment = async (e) => {
     e.preventDefault();
@@ -35,10 +37,7 @@ export default function Post({ userManager }) {
 
     try {
       await addComment(entryID, null, comment);
-      const updatedPost = await getPost(entryID);
-      const updatedComments = await getComments(entryID);
-      setPost(updatedPost);
-      setComments(updatedComments);
+      await updatePostPage();
       setComment("");
       setMessage("");
     } catch (e) {
@@ -61,11 +60,10 @@ export default function Post({ userManager }) {
       style={{
         display: "flex",
         flexDirection: "row",
-        paddingLeft: 20,
         paddingTop: 15,
         alignItems: "start",
         justifyContent: "start",
-        width: "70%",
+        maxWidth: 800,
       }}
     >
       <div

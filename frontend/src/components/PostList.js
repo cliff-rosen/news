@@ -32,14 +32,14 @@ function PostList({ userManager, order }) {
   }, [userManager.user.userID, order]);
 
   return (
-    <Container>
+    <div style={{ maxWidth: 800, border: "none" }}>
       {posts.map((post, i) => (
         <div
           key={post.EntryID}
           style={{
             display: "flex",
             flexDirection: "row",
-            paddingTop: 15,
+            paddingBottom: 10,
             alignItems: "start",
             justifyContent: "start",
           }}
@@ -104,7 +104,7 @@ function PostList({ userManager, order }) {
           </div>
         </div>
       ))}
-    </Container>
+    </div>
   );
 }
 
