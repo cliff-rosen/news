@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login as apiLogin, register as apiRegister } from "../Common/AuthAPI";
+import { login as apiLogin, register as apiRegister } from "./AuthAPI";
 
 const setStoredUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));

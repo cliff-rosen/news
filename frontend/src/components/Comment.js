@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PostVote from "./PostVote";
-import { getElapsedTime } from "../Common/TimeUtils";
+import { getElapsedTime } from "../common/TimeUtils";
 
 export default function Comment({ comment }) {
   return (

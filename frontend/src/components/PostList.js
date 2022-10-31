@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { getPosts as apiGetPosts } from "../Common/PostAPI";
+import { getPosts as apiGetPosts } from "../common/PostAPI";
 import { Container, Link } from "@mui/material";
-import { getElapsedTime } from "../Common/TimeUtils";
+import { getElapsedTime } from "../common/TimeUtils";
 import PostVote from "./PostVote";
 
 function PostList({ userManager, order }) {
@@ -77,19 +77,33 @@ function PostList({ userManager, order }) {
 
           <div>
             <div>
-              <Link
-                style={{ fontSize: "14px" }}
-                href={post.EntryUrl}
-                underline="hover"
-                target="_blank"
-              >
-                {post.EntryTitle}
-              </Link>{" "}
+              {post.EntryUrl ? (
+                <Link
+                  style={{ fontSize: "14px" }}
+                  color="primary"
+                  href={post.EntryUrl}
+                  target="_blank"
+                  underline="hover"
+                >
+                  {post.EntryTitle}
+                </Link>
+              ) : (
+                <RouterLink
+                  style={{
+                    fontSize: "14px",
+                    textDecoration: "none",
+                    color: "#1976D2",
+                  }}
+                  to={`/post/${post.EntryID}`}
+                >
+                  {post.EntryTitle}
+                </RouterLink>
+              )}{" "}
               <span style={{ fontSize: "12px", color: "gray" }}>
                 {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
               </span>
             </div>
-            {post.EntryText && (
+            {false && post.EntryText && (
               <div>
                 <span style={{ fontSize: "12px", color: "black" }}>
                   {post.EntryText}

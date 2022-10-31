@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { getAccess } from "../Common/AuthAPI";
+import { useState } from "react";
+import { getAccess } from "../common/AuthAPI";
 
 export default function Splash({ setOkToTrip }) {
   const [password, setPassword] = useState("");

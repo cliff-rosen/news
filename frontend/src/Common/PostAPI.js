@@ -53,8 +53,11 @@ export const addPost = async (entryUrl, entryTitle, entryText) => {
     },
     body,
   });
+
   console.log("api add result", res.status);
-  if (res.status !== 200) throw new Error("Add post error");
+  const data = await res.json();
+
+  if (res.status !== 200 || data.error) throw new Error("Add post error");
 };
 
 export const setPostVote = async (entryID, vote) => {

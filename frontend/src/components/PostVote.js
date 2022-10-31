@@ -1,4 +1,4 @@
-import { setPostVote as apiSetPostVote } from "../Common/PostAPI";
+import { setPostVote as apiSetPostVote } from "../common/PostAPI";
 import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";

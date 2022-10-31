@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPost } from "../Common/PostAPI";
-import { getComments, addComment } from "../Common/CommentAPI";
+import { getPost } from "../common/PostAPI";
+import { getComments, addComment } from "../common/CommentAPI";
 import PostVote from "./PostVote";
 import CommentsTree from "./CommentsTree";
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Link } from "@mui/material";
 import { TextField, Button } from "@mui/material";
-import { getElapsedTime } from "../Common/TimeUtils";
+import { getElapsedTime } from "../common/TimeUtils";
 
 export default function Post({ userManager }) {
   const [post, setPost] = useState();
@@ -85,9 +85,28 @@ export default function Post({ userManager }) {
 
       <div>
         <div>
-          <Link href={post.EntryUrl} underline="hover" target="_blank">
-            {post.EntryTitle}
-          </Link>{" "}
+          {post.EntryUrl ? (
+            <Link
+              style={{ fontSize: "14px" }}
+              color="primary"
+              href={post.EntryUrl}
+              target="_blank"
+              underline="hover"
+            >
+              {post.EntryTitle}
+            </Link>
+          ) : (
+            <RouterLink
+              style={{
+                fontSize: "14px",
+                textDecoration: "none",
+                color: "#1976D2",
+              }}
+              to={`/post/${post.EntryID}`}
+            >
+              {post.EntryTitle}
+            </RouterLink>
+          )}{" "}
           <span style={{ fontSize: "12px", color: "gray" }}>
             {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
           </span>
@@ -121,7 +140,7 @@ export default function Post({ userManager }) {
           <form onSubmit={submitComment}>
             <TextField
               id="comment"
-              style={{ width: "600px", margin: "5px" }}
+              style={{ width: "400px", margin: "5px" }}
               multiline
               rows={4}
               type="text"

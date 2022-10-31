@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TextField, Button } from "@mui/material";
-import { Container } from "@mui/system";
-import styled from "@emotion/styled";
-import { addPost as apiAddPost } from "../Common/PostAPI";
+import { addPost as apiAddPost } from "../common/PostAPI";
 import { useEffect } from "react";
 
 function PostAdd({ userManager }) {
@@ -31,6 +29,7 @@ function PostAdd({ userManager }) {
       setMessage("The entry has been submitted.");
     } catch (e) {
       console.log("error adding post", e);
+      setMessage("OOPS - " + e.message);
     }
   };
 
@@ -49,7 +48,7 @@ function PostAdd({ userManager }) {
         <TextField
           id="url"
           autoFocus
-          style={{ width: "600px", margin: "5px" }}
+          style={{ width: "400px", margin: "5px" }}
           type="text"
           label="URL"
           value={url}
@@ -59,7 +58,7 @@ function PostAdd({ userManager }) {
         <br />
         <TextField
           id="title"
-          style={{ width: "600px", margin: "5px" }}
+          style={{ width: "400px", margin: "5px" }}
           type="text"
           label="Title"
           value={title}
@@ -69,7 +68,7 @@ function PostAdd({ userManager }) {
         <br />
         <TextField
           id="desc"
-          style={{ width: "600px", margin: "5px" }}
+          style={{ width: "400px", margin: "5px" }}
           multiline
           rows={4}
           type="text"

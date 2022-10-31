@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useUserManager } from "./Common/Auth";
+import { useUserManager } from "./common/Auth";
 import Splash from "./components/Splash";
 import Nav from "./components/Nav.js";
 import LoginFormModal from "./components/LoginFormModal";
