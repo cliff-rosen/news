@@ -3,12 +3,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 export default function Trial(props) {
   const [count, setCount] = useState();
 
-  const submitForm = (e) => {
-    console.log("submitForm start");
-    e.preventDefault();
-    if (e.x) e.x();
-    console.log("submitForm finish");
-  };
+  const submitForm = (e) => {};
   return (
     <div>
       <form onSubmit={submitForm}>

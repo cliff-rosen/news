@@ -1,13 +1,30 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import PostVote from "./PostVote";
 import { addComment } from "../common/CommentAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 import { TextField, Button } from "@mui/material";
 
-export default function Comment({ comment, updatePostPage }) {
+export default function Comment({ userManager, comment, updatePostPage }) {
   const [reply, setReply] = useState("");
+  const [showReply, setShowReply] = useState(false);
+
+  const submitComment = async () => {
+    if (userManager.getUserFromStorage().userID === 0) {
+      console.log("addComment called with userID === 0", userManager.user);
+      userManager.showLoginThen(submitComment, []);
+      return;
+    }
+
+    await addComment(comment.EntryID, comment.CommentID, reply);
+    setReply("");
+    setShowReply(false);
+    updatePostPage();
+  };
+
   return (
     <div
+      className={"CommentContainer"}
       style={{
         display: "flex",
         flexDirection: "row",
@@ -18,6 +35,7 @@ export default function Comment({ comment, updatePostPage }) {
       }}
     >
       <div
+        className="CommentOffset"
         style={{
           flex: "0 0 12px",
           fontSize: "12px",
@@ -28,10 +46,10 @@ export default function Comment({ comment, updatePostPage }) {
           alignSelf: "flex-start",
         }}
       >
-        •
+        |
       </div>
 
-      <div style={{ border: "none" }}>
+      <div className={"CommentContent"} style={{ border: "none" }}>
         <div style={{ fontSize: "12px", color: "gray" }}>
           {comment.CommentUserName} {getElapsedTime(comment.DateTimeAdded)} ago
         </div>
@@ -55,26 +73,51 @@ export default function Comment({ comment, updatePostPage }) {
               vote={0}
               updateVote={(x) => x}
             ></PostVote>
-            <div style={{ alignSelf: "flex-end", fontSize: "11px" }}>
-              <TextField
-                value={reply}
-                onChange={(e) => setReply(e.target.value)}
-                size="small"
-                InputProps={{ style: { fontSize: 10 } }}
-              />
-              <Button
-                style={{ textTransform: "unset", fontSize: 10 }}
-                onClick={async (e) => {
-                  await addComment(comment.EntryID, comment.CommentID, reply);
-                  setReply("");
-                  updatePostPage();
-                }}
-              >
-                reply
-              </Button>
+            <div style={{ alignSelf: "center", fontSize: "11px" }}>
+              {!showReply && (
+                <Link
+                  style={{
+                    textDecoration: "none",
+                    color: "gray",
+                    marginLeft: 10,
+                  }}
+                  to="#"
+                  onClick={() => setShowReply(true)}
+                >
+                  reply
+                </Link>
+              )}
             </div>
           </div>
         </div>
+
+        {showReply && (
+          <div style={{ border: "none" }}>
+            <TextField
+              autoFocus
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              multiline
+              rows={4}
+              size="small"
+              InputProps={{ style: { fontSize: 10, width: "400px" } }}
+            />
+            <br />
+            <Button
+              style={{ textTransform: "unset", fontSize: 10 }}
+              disabled={!reply}
+              onClick={submitComment}
+            >
+              reply
+            </Button>
+            <Button
+              style={{ textTransform: "unset", fontSize: 10 }}
+              onClick={() => setShowReply(false)}
+            >
+              cancel
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

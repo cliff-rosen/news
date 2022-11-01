@@ -145,6 +145,7 @@ export const useUserManager = () => {
     {
       user,
       lao,
+      getUserFromStorage,
       showLogin,
       showLoginThen,
       hideLogin,

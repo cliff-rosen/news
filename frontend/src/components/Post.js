@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getUserFromStorage } from "../common/Auth";
 import { getPost } from "../common/PostAPI";
 import { getComments, addComment } from "../common/CommentAPI";
 import PostVote from "./PostVote";
@@ -31,7 +30,7 @@ export default function Post({ userManager }) {
 
   const submitComment = async (e) => {
     //if (userManager.user.userID === 0) {
-    if (getUserFromStorage().userID === 0) {
+    if (userManager.getUserFromStorage().userID === 0) {
       console.log("submitComment called with userID === 0", userManager.user);
       userManager.showLoginThen(submitComment, []);
       e.preventDefault();
@@ -161,14 +160,23 @@ export default function Post({ userManager }) {
               variant="outlined"
             />
             <br />
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              style={{ textTransform: "unset" }}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
               add comment
             </Button>
           </form>
         </div>
         <div style={{ marginTop: "20px" }}></div>
         <div>
-          <CommentsTree comments={comments} updatePostPage={updatePostPage} />
+          <CommentsTree
+            userManager={userManager}
+            comments={comments}
+            updatePostPage={updatePostPage}
+          />
         </div>
       </div>
     </div>

@@ -1,13 +1,19 @@
 import Comment from "./Comment";
 
-export default function CommentsTree({ comments, updatePostPage }) {
+export default function CommentsTree({
+  userManager,
+  comments,
+  updatePostPage,
+}) {
   return (
     <div>
-      COMMENTS:
-      <br />
       {comments.map((comment) => (
         <div key={comment.CommentID}>
-          <Comment comment={comment} updatePostPage={updatePostPage} />
+          <Comment
+            userManager={userManager}
+            comment={comment}
+            updatePostPage={updatePostPage}
+          />
         </div>
       ))}
     </div>
