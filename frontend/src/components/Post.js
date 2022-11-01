@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getUserFromStorage } from "../common/Auth";
 import { getPost } from "../common/PostAPI";
 import { getComments, addComment } from "../common/CommentAPI";
 import PostVote from "./PostVote";
@@ -17,7 +18,7 @@ export default function Post({ userManager }) {
   const { postid: entryID } = useParams();
 
   useEffect(() => {
-    console.log("Post data retrieval useEffect for ", entryID);
+    console.log("Post - data retrieval useEffect for ", entryID);
     updatePostPage();
   }, [entryID]);
 
@@ -29,7 +30,16 @@ export default function Post({ userManager }) {
   };
 
   const submitComment = async (e) => {
-    e.preventDefault();
+    //if (userManager.user.userID === 0) {
+    if (getUserFromStorage().userID === 0) {
+      console.log("submitComment called with userID === 0", userManager.user);
+      userManager.showLoginThen(submitComment, []);
+      e.preventDefault();
+      return;
+    }
+
+    if (e) e.preventDefault();
+
     if (comment === "") {
       setMessage("Please enter a comment and resubmit.");
       return;
@@ -51,6 +61,8 @@ export default function Post({ userManager }) {
       return { ...curPost, VoteCount: newVoteCount, Vote: newVote };
     });
   };
+
+  console.log("Post", userManager.user);
 
   if (!post) return <div></div>;
 

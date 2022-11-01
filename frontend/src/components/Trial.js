@@ -1,26 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
-const d1 = [];
-const d2 = [];
-for (let i = 0; i < 40; i++) {
-  d1.push([i, i]);
-  d2.push([i + 100, i * i]);
-}
+export default function Trial(props) {
+  const [count, setCount] = useState();
 
-export default function Trial() {
-  const [d, setD] = useState(d1);
-  console.log("Trial");
-
-  useEffect(() => {
-    console.log("Trial useEffect");
-  }, [d]);
-
+  const submitForm = (e) => {
+    console.log("submitForm start");
+    e.preventDefault();
+    if (e.x) e.x();
+    console.log("submitForm finish");
+  };
   return (
     <div>
-      {d.map((e) => (
-        <div key={e[0]}>{e[0] + ":" + e[1]}</div>
-      ))}
-      <button onClick={() => setD(d2)}>now</button>
+      <form onSubmit={submitForm}>
+        <button type="submit">go</button>
+      </form>
     </div>
   );
 }

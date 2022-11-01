@@ -51,6 +51,17 @@ export const getUser = () => {
   return user;
 };
 
+export const getUserFromStorage = () => {
+  var userFromStorage;
+
+  try {
+    userFromStorage = JSON.parse(localStorage.getItem("user"));
+  } catch {
+    userFromStorage = { userID: 0, token: "" };
+  }
+  return userFromStorage;
+};
+
 export const getUserToken = () => {
   var user;
 
@@ -86,14 +97,10 @@ export const useUserManager = () => {
   };
 
   const showLoginThen = (fn, params) => {
-    if (user.userID > 0) {
-      console.log("applying fn");
-      fn.apply(null, params);
-    } else {
-      setLao((curLao) => {
-        return { ...curLao, show: true, fn, params };
-      });
-    }
+    const message = "Please login to use this function.";
+    setLao((curLao) => {
+      return { ...curLao, show: true, fn, params, message };
+    });
   };
 
   const hideLoginThen = (u) => {

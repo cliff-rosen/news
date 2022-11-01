@@ -4,7 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const fetch = require("node-fetch");
-const { checkForToken, createUser } = require("./authUtil");
+const { checkForToken, authenticateToken, createUser } = require("./authUtil");
 
 const app = express();
 const port = 4000;
@@ -160,7 +160,7 @@ app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e.message }));
 });
 
-app.post("/entries/:entryid/comments", checkForToken, (req, res) => {
+app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
   const { entryid } = req.params;
   console.log("/comments running");
   db.addComment(

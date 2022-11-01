@@ -11,7 +11,7 @@ export default function Comment({ comment, updatePostPage }) {
       style={{
         display: "flex",
         flexDirection: "row",
-        paddingLeft: comment.Level * 35,
+        paddingLeft: comment.Level * 25,
         paddingTop: 15,
         alignItems: "start",
         justifyContent: "start",

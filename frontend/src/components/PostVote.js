@@ -12,7 +12,7 @@ export default function PostVote({
   updateVote,
 }) {
   const voteHandler = async (iVote) => {
-    //userManager.requireUser();
+    console.log("voteHandler", userManager.user);
     if (userManager.user.userID === 0) {
       console.log("voteHandler called with userID === 0");
       userManager.showLoginThen(apiSetPostVote, [entryID, iVote]);
