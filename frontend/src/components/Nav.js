@@ -94,7 +94,7 @@ const Navbar = ({ userManager }) => {
               userManager.showLogin();
             }}
           >
-            login
+            login (register)
           </Link>
         )}
       </Box>

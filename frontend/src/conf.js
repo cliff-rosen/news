@@ -1,6 +1,6 @@
 const prod = {
   url: {
-    API_URL: "http://ec2-54-208-253-109.compute-1.amazonaws.com:4000",
+    API_URL: "https://api.trippersalmanac.com",
   },
 };
 
