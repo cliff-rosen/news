@@ -4,7 +4,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export default function PostVote({
-  userManager,
+  sessionManager,
   postIdx,
   entryID,
   voteCount,
@@ -12,10 +12,10 @@ export default function PostVote({
   updateVote,
 }) {
   const voteHandler = async (iVote) => {
-    console.log("voteHandler", userManager.user);
-    if (userManager.user.userID === 0) {
+    console.log("voteHandler", sessionManager.user);
+    if (sessionManager.user.userID === 0) {
       console.log("voteHandler called with userID === 0");
-      userManager.showLoginThen(apiSetPostVote, [entryID, iVote]);
+      sessionManager.showLoginThen(apiSetPostVote, [entryID, iVote]);
       return;
     }
     var newVote;

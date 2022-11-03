@@ -15,12 +15,12 @@ const sections = [
   //{ name: "Trial", link: "/trial" },
 ];
 
-const Navbar = ({ userManager }) => {
+const Navbar = ({ sessionManager }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const lout = () => {
-    userManager.logout();
+    sessionManager.logout();
   };
 
   return (
@@ -74,10 +74,10 @@ const Navbar = ({ userManager }) => {
         ))}
       </Box>
 
-      <Box sx={{ flexGrow: 0 }}>
-        {userManager.user?.userID > 0 ? (
+      <Box sx={{ flexGrow: 0, fontSize: ".8em" }}>
+        {sessionManager.user?.userID > 0 ? (
           <span>
-            {userManager.user.userName} |{" "}
+            {sessionManager.user.userName} |{" "}
             <Link
               style={{ textDecoration: "none", color: "gray" }}
               to="#"
@@ -91,7 +91,7 @@ const Navbar = ({ userManager }) => {
             style={{ textDecoration: "none", color: "gray" }}
             to="#"
             onClick={() => {
-              userManager.showLogin();
+              sessionManager.showLogin();
             }}
           >
             login (register)

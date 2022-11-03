@@ -3,14 +3,14 @@ import { TextField, Button } from "@mui/material";
 import { addPost as apiAddPost } from "../common/PostAPI";
 import { useEffect } from "react";
 
-function PostAdd({ userManager }) {
+function PostAdd({ sessionManager }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    userManager.requireUser();
+    sessionManager.requireUser();
   });
 
   const formSubmit = async (e) => {

@@ -84,7 +84,7 @@ const makeLoginActionObject = () => {
   };
 };
 
-export const useUserManager = () => {
+export const useSessionManager = () => {
   const [user, setUser] = useState(getUser());
   const [lao, setLao] = useState(makeLoginActionObject());
 
@@ -141,20 +141,17 @@ export const useUserManager = () => {
     setUser(getUser());
   };
 
-  return [
-    {
-      user,
-      lao,
-      getUserFromStorage,
-      showLogin,
-      showLoginThen,
-      hideLogin,
-      hideLoginThen,
-      register,
-      login,
-      logout,
-      requireUser,
-    },
-    (x) => x,
-  ];
+  return {
+    user,
+    lao,
+    getUserFromStorage,
+    showLogin,
+    showLoginThen,
+    hideLogin,
+    hideLoginThen,
+    register,
+    login,
+    logout,
+    requireUser,
+  };
 };

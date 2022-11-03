@@ -52,20 +52,19 @@ function authenticateToken(req, res, next) {
     console.log("Token found: " + bearerToken.substring(0, 10));
     req.token = bearerToken;
     jwt.verify(req.token, JWT_SECRET, (err, decoded) => {
-      console.log(JSON.stringify(decoded));
+      console.log("token: ", JSON.stringify(decoded));
       if (err) {
         console.log("Invalid JWT");
         res.status(401).json({ error: "invalid authorization" });
       } else {
         req.user = decoded;
         console.log("Valid JWT", req.user);
+        next();
       }
-      next();
     });
   } else {
     console.log("No JWT");
     res.status(401).json({ error: "unauthorized" });
-    next();
   }
 }
 

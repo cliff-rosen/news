@@ -1,7 +1,7 @@
 import Comment from "./Comment";
 
 export default function CommentsTree({
-  userManager,
+  sessionManager,
   comments,
   updatePostPage,
 }) {
@@ -10,7 +10,7 @@ export default function CommentsTree({
       {comments.map((comment) => (
         <div key={comment.CommentID}>
           <Comment
-            userManager={userManager}
+            sessionManager={sessionManager}
             comment={comment}
             updatePostPage={updatePostPage}
           />

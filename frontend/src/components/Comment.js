@@ -5,14 +5,14 @@ import { addComment } from "../common/CommentAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 import { TextField, Button } from "@mui/material";
 
-export default function Comment({ userManager, comment, updatePostPage }) {
+export default function Comment({ sessionManager, comment, updatePostPage }) {
   const [reply, setReply] = useState("");
   const [showReply, setShowReply] = useState(false);
 
   const submitComment = async () => {
-    if (userManager.getUserFromStorage().userID === 0) {
-      console.log("addComment called with userID === 0", userManager.user);
-      userManager.showLoginThen(submitComment, []);
+    if (sessionManager.getUserFromStorage().userID === 0) {
+      console.log("addComment called with userID === 0", sessionManager.user);
+      sessionManager.showLoginThen(submitComment, []);
       return;
     }
 
@@ -66,7 +66,7 @@ export default function Comment({ userManager, comment, updatePostPage }) {
         >
           <div style={{ display: "flex" }}>
             <PostVote
-              userManager={{ x: 1 }}
+              sessionManager={{ x: 1 }}
               postIdx={0}
               entryID={comment.EntryID}
               voteCount={0}

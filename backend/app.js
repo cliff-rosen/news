@@ -117,7 +117,7 @@ app.get("/entries/:entryid", checkForToken, (req, res) => {
   });
 });
 
-app.post("/entries", checkForToken, (req, res) => {
+app.post("/entries", authenticateToken, (req, res) => {
   console.log("add entry: ", req.body.entryText);
   db.addEntry(
     req.body.entryTitle,
@@ -150,7 +150,7 @@ app.get("/entries", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e.message }));
 });
 
-app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {
+app.post("/entries/:entryid/vote/:value", authenticateToken, (req, res) => {
   console.log("vote from: ", req.user.userID);
   const { entryid, value } = req.params;
   db.addOrUpdateUserEntryVote(req.user.userID, entryid, value)
@@ -158,7 +158,7 @@ app.post("/entries/:entryid/vote/:value", checkForToken, (req, res) => {
     .catch((e) => res.json({ error: e.message }));
 });
 
-app.post("/entries/:entryid/comments", checkForToken, (req, res) => {
+app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
   const { entryid } = req.params;
   console.log("/comments running");
   db.addComment(
@@ -183,7 +183,7 @@ app.get("/entries/:entryid/comments", checkForToken, (req, res) => {
 //////////////////////////////////////////////////////
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`App listening on port ${port}`);
 });
 
 console.log("init complete");

@@ -8,7 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function LoginFormModal({ userManager }) {
+export default function LoginFormModal({ sessionManager }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,10 +22,10 @@ export default function LoginFormModal({ userManager }) {
     setUsernameR("");
     setPasswordR("");
     setErrMessage("");
-    if (userManager.lao.homeOnAbort) {
+    if (sessionManager.lao.homeOnAbort) {
       navigate("/");
     }
-    userManager.hideLogin();
+    sessionManager.hideLogin();
   };
 
   const formSubmit = (e) => {
@@ -36,13 +36,13 @@ export default function LoginFormModal({ userManager }) {
       return;
     }
 
-    userManager
+    sessionManager
       .login(username, password)
       .then((u) => {
         setUsername("");
         setPassword("");
         setErrMessage("");
-        userManager.hideLoginThen(u);
+        sessionManager.hideLoginThen(u);
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
@@ -58,25 +58,25 @@ export default function LoginFormModal({ userManager }) {
       return;
     }
 
-    userManager
+    sessionManager
       .register(usernameR, passwordR)
       .then((u) => {
         setUsernameR("");
         setPasswordR("");
         setErrMessage("");
-        userManager.hideLoginThen(u);
+        sessionManager.hideLoginThen(u);
       })
       .catch((err) => setErrMessage("Registration error: " + err.message));
   };
 
   return (
     <div>
-      <Dialog open={userManager.lao.show} onClose={handleClose}>
+      <Dialog open={sessionManager.lao.show} onClose={handleClose}>
         <DialogTitle>Login / Register</DialogTitle>
         <DialogContent>
-          {userManager.lao.message && (
+          {sessionManager.lao.message && (
             <DialogContentText>
-              {userManager.lao.message}
+              {sessionManager.lao.message}
               <br /> <br />
             </DialogContentText>
           )}

@@ -5,7 +5,7 @@ import { Container, Link } from "@mui/material";
 import { getElapsedTime } from "../common/TimeUtils";
 import PostVote from "./PostVote";
 
-function PostList({ userManager, order }) {
+function PostList({ sessionManager, order }) {
   const [posts, setPosts] = useState([]);
 
   const updateVote = (idx, newVoteCount, newVote) => {
@@ -29,7 +29,7 @@ function PostList({ userManager, order }) {
     };
     console.log("PostList getPost about to run: ", order);
     getPosts(order);
-  }, [userManager.user.userID, order]);
+  }, [sessionManager.user.userID, order]);
 
   return (
     <div style={{ maxWidth: 800, border: "none" }}>
@@ -66,7 +66,7 @@ function PostList({ userManager, order }) {
             }}
           >
             <PostVote
-              userManager={userManager}
+              sessionManager={sessionManager}
               postIdx={i}
               entryID={post.EntryID}
               voteCount={post.VoteCount}
@@ -79,7 +79,9 @@ function PostList({ userManager, order }) {
             <div>
               {post.EntryUrl ? (
                 <Link
-                  style={{ fontSize: "14px" }}
+                  style={{
+                    fontSize: "14px",
+                  }}
                   color="primary"
                   href={post.EntryUrl}
                   target="_blank"
@@ -99,7 +101,12 @@ function PostList({ userManager, order }) {
                   {post.EntryTitle}
                 </RouterLink>
               )}{" "}
-              <span style={{ fontSize: "12px", color: "gray" }}>
+              <span
+                style={{
+                  fontSize: "12px",
+                  color: "gray",
+                }}
+              >
                 {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
               </span>
             </div>

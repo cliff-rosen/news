@@ -9,7 +9,7 @@ import { Container, Link } from "@mui/material";
 import { TextField, Button } from "@mui/material";
 import { getElapsedTime } from "../common/TimeUtils";
 
-export default function Post({ userManager }) {
+export default function Post({ sessionManager }) {
   const [post, setPost] = useState();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -29,10 +29,13 @@ export default function Post({ userManager }) {
   };
 
   const submitComment = async (e) => {
-    //if (userManager.user.userID === 0) {
-    if (userManager.getUserFromStorage().userID === 0) {
-      console.log("submitComment called with userID === 0", userManager.user);
-      userManager.showLoginThen(submitComment, []);
+    //if (sessionManager.user.userID === 0) {
+    if (sessionManager.getUserFromStorage().userID === 0) {
+      console.log(
+        "submitComment called with userID === 0",
+        sessionManager.user
+      );
+      sessionManager.showLoginThen(submitComment, []);
       e.preventDefault();
       return;
     }
@@ -61,7 +64,7 @@ export default function Post({ userManager }) {
     });
   };
 
-  console.log("Post", userManager.user);
+  console.log("Post", sessionManager.user);
 
   if (!post) return <div></div>;
 
@@ -85,7 +88,7 @@ export default function Post({ userManager }) {
         }}
       >
         <PostVote
-          userManager={userManager}
+          sessionManager={sessionManager}
           postIdx={0}
           entryID={post.EntryID}
           voteCount={post.VoteCount}
@@ -173,7 +176,7 @@ export default function Post({ userManager }) {
         <div style={{ marginTop: "20px" }}></div>
         <div>
           <CommentsTree
-            userManager={userManager}
+            sessionManager={sessionManager}
             comments={comments}
             updatePostPage={updatePostPage}
           />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useUserManager } from "./common/Auth";
+import { useSessionManager } from "./common/Auth";
 import Splash from "./components/Splash";
 import Nav from "./components/Nav.js";
 import LoginFormModal from "./components/LoginFormModal";
@@ -10,7 +10,7 @@ import Post from "./components/Post";
 import Trial from "./components/Trial";
 
 function App() {
-  const [userManager, setUserManager] = useUserManager();
+  const sessionManager = useSessionManager();
   const [okToTrip, setOkToTrip] = useState(false);
 
   if (false && !okToTrip) {
@@ -18,23 +18,33 @@ function App() {
   }
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-around" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+      }}
+    >
       <div style={{ flexGrow: 1, border: "none", maxWidth: 800 }}>
-        <LoginFormModal userManager={userManager} />
-        <Nav userManager={userManager} />
+        <LoginFormModal sessionManager={sessionManager} />
+        <Nav sessionManager={sessionManager} />
         <Routes>
           <Route
             path="/"
-            element={<PostList userManager={userManager} order={"trending"} />}
+            element={
+              <PostList sessionManager={sessionManager} order={"trending"} />
+            }
           />
           <Route
             path="/new"
-            element={<PostList userManager={userManager} order={"new"} />}
+            element={<PostList sessionManager={sessionManager} order={"new"} />}
           />
-          <Route path="add" element={<PostAdd userManager={userManager} />} />
+          <Route
+            path="add"
+            element={<PostAdd sessionManager={sessionManager} />}
+          />
           <Route
             path="post/:postid"
-            element={<Post userManager={userManager} />}
+            element={<Post sessionManager={sessionManager} />}
           />
           <Route path="trial" element={<Trial />} />
         </Routes>
