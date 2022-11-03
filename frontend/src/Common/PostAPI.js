@@ -17,12 +17,12 @@ export const getPost = async (entryID) => {
   return data;
 };
 
-export const getPosts = async (order, start) => {
+export const getPosts = async (order, start, limit) => {
   start = start || 0;
   let data = {};
   try {
     const res = await fetch(
-      `${BASE_API_URL}/entries?order=${order}&start=${start}`,
+      `${BASE_API_URL}/entries?order=${order}&start=${start}&limit=${limit}`,
       {
         headers: {
           method: "GET",

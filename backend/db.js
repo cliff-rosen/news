@@ -155,7 +155,7 @@ async function getEntry(userID, entryID) {
   }
 }
 
-async function getAllEntries(userID, order) {
+async function getAllEntries(userID, order, start, limit) {
   dbQueryString = `
                     SELECT e.*, u.UserName, v.Vote
                     FROM entry e
@@ -168,6 +168,8 @@ async function getAllEntries(userID, order) {
   } else {
     dbQueryString += " ORDER BY e.EntryDateTime desc";
   }
+
+  dbQueryString += ` LIMIT ${limit} OFFSET ${start}`;
 
   try {
     const res = await pool.query(dbQueryString);

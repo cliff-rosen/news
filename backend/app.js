@@ -143,20 +143,28 @@ app.delete("/entries/:id", (req, res) => {
 });
 
 app.get("/entries", checkForToken, (req, res) => {
-  const PAGE_COUNT = 10;
+  const LIMIT = 20;
   const order = req.query.order;
-  const start = req.query.start || 0;
-  const end = Number(start) + PAGE_COUNT - 1;
-  console.log("get entries", req.query, start, end);
-  db.getAllEntries(req.user.userID, order)
-    .then((rows) =>
+  const start = Number(req.query.start) || 0;
+  const limit = Number(req.query.limit) || LIMIT;
+  console.log("get entries", req.query, start, limit);
+
+  db.getAllEntries(req.user.userID, order, start, limit + 1)
+    .then((rows) => {
+      console.log("rows: ", rows.length);
+      var more = false;
+      if (rows.length > limit) {
+        rows.splice(-1);
+        more = true;
+      }
+
       res.json({
-        rows: rows.filter((r, i) => i >= start && i <= end),
+        rows: rows,
         start,
-        end,
-        last: rows.length - 1,
-      })
-    )
+        limit,
+        more,
+      });
+    })
     .catch((e) => res.json({ error: e.message }));
 });
 

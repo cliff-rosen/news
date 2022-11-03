@@ -42,7 +42,7 @@ authorization: Bearer XeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1
 
 ###
 
-GET http://localhost:4000/entries?start=18 HTTP/1.1
+GET http://localhost:4000/entries?start=0&limit=100 HTTP/1.1
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
 ###
