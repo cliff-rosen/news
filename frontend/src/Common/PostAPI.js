@@ -17,20 +17,23 @@ export const getPost = async (entryID) => {
   return data;
 };
 
-export const getPosts = async (order) => {
+export const getPosts = async (order, start) => {
+  start = start || 0;
   let data = {};
   try {
-    const res = await fetch(`${BASE_API_URL}/entries?order=${order}`, {
-      headers: {
-        method: "GET",
-        "Content-Type": "application/json",
-        Authorization: getUserToken(),
-      },
-    });
+    const res = await fetch(
+      `${BASE_API_URL}/entries?order=${order}&start=${start}`,
+      {
+        headers: {
+          method: "GET",
+          "Content-Type": "application/json",
+          Authorization: getUserToken(),
+        },
+      }
+    );
     const status = res.status;
     data = await res.json();
-    if (res.status !== 200 || data.error)
-      throw new Error("getPosts http error");
+    if (status !== 200 || data.error) throw new Error("getPosts http error");
   } catch (e) {
     console.log("API ERROR in getPosts:", e.message);
     throw e;

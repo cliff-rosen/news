@@ -1,16 +1,14 @@
 import React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import {
-  Button,
-  Toolbar,
-  Typography,
-  unstable_useEnhancedEffect,
-} from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 
 const sections = [
-  { name: "trending", link: "/" },
-  { name: "new", link: "/new" },
+  {
+    name: "trending",
+    link: "/postlist?order=trending",
+  },
+  { name: "new", link: "/postlist?order=new" },
   { name: "post", link: "/add" },
   //{ name: "Trial", link: "/trial" },
 ];
@@ -18,6 +16,27 @@ const sections = [
 const Navbar = ({ sessionManager }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isActive = (section) => {
+    const s = location.search || "";
+
+    if (section.name === "trending") {
+      return (
+        (location.pathname === "/" || location.pathname === "/postlist") &&
+        (s === "" || s.includes("order=trending"))
+      );
+    }
+    if (section.name === "new") {
+      return (
+        (location.pathname === "/" || location.pathname === "/postlist") &&
+        s.includes("order=new")
+      );
+    }
+    if (section.name === "post") {
+      return location.pathname === "/add";
+    }
+    return false;
+  };
 
   const lout = () => {
     sessionManager.logout();
@@ -63,10 +82,8 @@ const Navbar = ({ sessionManager }) => {
               border: "none",
               textTransform: "unset",
               height: 20,
-              color:
-                location.pathname === section.link ? "#0057b7a" : "GrayText",
-              fontWeight:
-                location.pathname === section.link ? "bold" : "normal",
+              color: isActive(section) ? "#0057b7a" : "GrayText",
+              fontWeight: isActive(section) ? "bold" : "normal",
             }}
           >
             {section.name}

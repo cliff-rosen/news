@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { getPosts as apiGetPosts } from "../common/PostAPI";
-import { Container, Link } from "@mui/material";
+import { Link } from "@mui/material";
 import { getElapsedTime } from "../common/TimeUtils";
 import PostVote from "./PostVote";
 
-function PostList({ sessionManager, order }) {
+function PostList({ sessionManager }) {
   const [posts, setPosts] = useState([]);
+  const [more, setMore] = useState(false);
+  const location = useLocation();
+  const { search } = location;
+  const order = new URLSearchParams(search).get("order") || "trending";
+  const start = Number(new URLSearchParams(search).get("start")) || 0;
 
   const updateVote = (idx, newVoteCount, newVote) => {
     var post = posts[idx];
@@ -19,17 +24,20 @@ function PostList({ sessionManager, order }) {
   };
 
   useEffect(() => {
-    const getPosts = async (iOrder) => {
+    const getPosts = async (iOrder, iStart) => {
       try {
-        const data = await apiGetPosts(iOrder);
+        console.log("start", start);
+        const res = await apiGetPosts(iOrder, iStart);
+        const data = res.rows;
         setPosts(data);
+        setMore(res.last > res.end);
       } catch (error) {
         console.log("Error while getting list of stories.", error);
       }
     };
-    console.log("PostList getPost about to run: ", order);
-    getPosts(order);
-  }, [sessionManager.user.userID, order]);
+    console.log("PostList getPost about to run with order: ", order);
+    getPosts(order, start);
+  }, [sessionManager.user.userID, order, start]);
 
   return (
     <div style={{ maxWidth: 800, border: "none" }}>
@@ -56,7 +64,6 @@ function PostList({ sessionManager, order }) {
           >
             {false && i + 1}
           </div>
-
           <div
             style={{
               flex: "0 0 50px",
@@ -74,7 +81,6 @@ function PostList({ sessionManager, order }) {
               updateVote={updateVote}
             ></PostVote>
           </div>
-
           <div>
             <div>
               {post.EntryUrl ? (
@@ -130,6 +136,34 @@ function PostList({ sessionManager, order }) {
           </div>
         </div>
       ))}
+      {more && (
+        <div style={{ marginLeft: 50 }}>
+          <RouterLink
+            style={{
+              fontSize: "14px",
+              textDecoration: "none",
+              color: "#1976D2",
+            }}
+            to={`/?order=${order}&start=${start + 10}`}
+          >
+            - more -
+          </RouterLink>
+        </div>
+      )}
+      {!more && (
+        <div style={{ marginLeft: 50 }}>
+          <RouterLink
+            style={{
+              fontSize: "14px",
+              textDecoration: "none",
+              color: "#1976D2",
+            }}
+            to={`/?order=${order}&start=${0}`}
+          >
+            - back to start -
+          </RouterLink>
+        </div>
+      )}
     </div>
   );
 }

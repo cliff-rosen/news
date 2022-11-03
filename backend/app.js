@@ -143,10 +143,20 @@ app.delete("/entries/:id", (req, res) => {
 });
 
 app.get("/entries", checkForToken, (req, res) => {
+  const PAGE_COUNT = 10;
   const order = req.query.order;
-  console.log("get entries", req.headers["authorization"]);
+  const start = req.query.start || 0;
+  const end = Number(start) + PAGE_COUNT - 1;
+  console.log("get entries", req.query, start, end);
   db.getAllEntries(req.user.userID, order)
-    .then((rows) => res.json(rows))
+    .then((rows) =>
+      res.json({
+        rows: rows.filter((r, i) => i >= start && i <= end),
+        start,
+        end,
+        last: rows.length - 1,
+      })
+    )
     .catch((e) => res.json({ error: e.message }));
 });
 

@@ -26,7 +26,6 @@ function checkForToken(req, res, next) {
     console.log("Token found: " + bearerToken.substring(0, 10));
     req.token = bearerToken;
     jwt.verify(req.token, JWT_SECRET, (err, decoded) => {
-      console.log(JSON.stringify(decoded));
       if (err) {
         console.log("Invalid JWT");
         req.user = { userID: -1 };

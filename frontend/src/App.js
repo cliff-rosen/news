@@ -30,13 +30,11 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={
-              <PostList sessionManager={sessionManager} order={"trending"} />
-            }
+            element={<PostList sessionManager={sessionManager} />}
           />
           <Route
-            path="/new"
-            element={<PostList sessionManager={sessionManager} order={"new"} />}
+            path="/postlist"
+            element={<PostList sessionManager={sessionManager} />}
           />
           <Route
             path="add"
