@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPost } from "../common/PostAPI";
 import { getComments, addComment } from "../common/CommentAPI";
-import PostVote from "./PostVote";
+import Post from "../components/Post";
 import CommentsTree from "./CommentsTree";
-import { Link as RouterLink } from "react-router-dom";
-import { Container, Link } from "@mui/material";
 import { TextField, Button } from "@mui/material";
-import { getElapsedTime } from "../common/TimeUtils";
 
 export default function PostView({ sessionManager }) {
   const [post, setPost] = useState();
@@ -15,11 +12,11 @@ export default function PostView({ sessionManager }) {
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
   const { postid: entryID } = useParams();
-
+  console.log("PostView");
   useEffect(() => {
-    console.log("Post - data retrieval useEffect for ", entryID);
+    console.log("Post - data retrieval useEffect for  ", entryID);
     updatePostPage();
-  }, [entryID]);
+  }, [entryID, sessionManager]);
 
   const updatePostPage = async () => {
     const updatedPost = await getPost(entryID);
@@ -64,122 +61,67 @@ export default function PostView({ sessionManager }) {
     });
   };
 
-  console.log("Post", sessionManager.user);
-
   if (!post) return <div></div>;
 
   return (
-    <div
-      key={post.EntryID}
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        paddingTop: 15,
-        alignItems: "start",
-        justifyContent: "start",
-      }}
-    >
+    <div style={{ border: "none" }}>
+      <Post
+        sessionManager={sessionManager}
+        post={post}
+        updateVote={updateVote}
+      />
+
       <div
         style={{
-          flex: "0 0 50px",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
+          paddingBottom: 10,
           alignItems: "start",
+          justifyContent: "start",
         }}
       >
-        <PostVote
-          sessionManager={sessionManager}
-          postIdx={0}
-          entryID={post.EntryID}
-          voteCount={post.VoteCount}
-          vote={post.Vote}
-          updateVote={updateVote}
-        ></PostVote>
-      </div>
-
-      <div>
+        <div
+          style={{
+            flex: "0 0 50px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+          }}
+        ></div>
         <div>
-          {post.EntryUrl ? (
-            <Link
-              style={{ fontSize: "14px" }}
-              color="primary"
-              href={post.EntryUrl}
-              target="_blank"
-              underline="hover"
-            >
-              {post.EntryTitle}
-            </Link>
-          ) : (
-            <RouterLink
-              style={{
-                fontSize: "14px",
-                textDecoration: "none",
-                color: "#1976D2",
-              }}
-              to={`/post/${post.EntryID}`}
-            >
-              {post.EntryTitle}
-            </RouterLink>
-          )}{" "}
-          <span style={{ fontSize: "12px", color: "gray" }}>
-            {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
-          </span>
-        </div>
-        <div style={{ fontSize: "12px", color: "gray" }}>
-          Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)} ago |{" "}
-          <RouterLink
-            style={{ textDecoration: "none", color: "gray" }}
-            to={`/post/${post.EntryID}`}
-          >
-            {post.CommentCount} comments
-          </RouterLink>
-        </div>{" "}
-        {post.EntryText && (
           <div>
-            <span
-              style={{
-                whiteSpace: "pre-wrap",
-                fontSize: "14px",
-                color: "black",
-              }}
-            >
-              {post.EntryText}
-            </span>
+            {" "}
+            {message}
+            <form onSubmit={submitComment}>
+              <TextField
+                id="comment"
+                style={{ width: "400px", margin: "5px" }}
+                multiline
+                rows={4}
+                type="text"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                variant="outlined"
+              />
+              <br />
+              <Button
+                style={{ textTransform: "unset" }}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                add comment
+              </Button>
+            </form>
           </div>
-        )}
-        <div style={{ marginTop: "20px" }}></div>
-        <div>
-          {" "}
-          {message}
-          <form onSubmit={submitComment}>
-            <TextField
-              id="comment"
-              style={{ width: "400px", margin: "5px" }}
-              multiline
-              rows={4}
-              type="text"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              variant="outlined"
+          <div style={{ marginTop: "20px" }}></div>
+          <div>
+            <CommentsTree
+              sessionManager={sessionManager}
+              comments={comments}
+              updatePostPage={updatePostPage}
             />
-            <br />
-            <Button
-              style={{ textTransform: "unset" }}
-              type="submit"
-              variant="contained"
-              color="primary"
-            >
-              add comment
-            </Button>
-          </form>
-        </div>
-        <div style={{ marginTop: "20px" }}></div>
-        <div>
-          <CommentsTree
-            sessionManager={sessionManager}
-            comments={comments}
-            updatePostPage={updatePostPage}
-          />
+          </div>
         </div>
       </div>
     </div>
