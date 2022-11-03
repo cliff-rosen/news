@@ -6,7 +6,7 @@ import Nav from "./components/Nav.js";
 import LoginFormModal from "./components/LoginFormModal";
 import PostList from "./components/PostList";
 import PostAdd from "./components/PostAdd";
-import Post from "./components/Post";
+import PostView from "./components/PostView";
 import Trial from "./components/Trial";
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
           />
           <Route
             path="post/:postid"
-            element={<Post sessionManager={sessionManager} />}
+            element={<PostView sessionManager={sessionManager} />}
           />
           <Route path="trial" element={<Trial />} />
         </Routes>

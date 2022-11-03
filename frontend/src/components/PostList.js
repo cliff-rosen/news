@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import Post from "../components/Post";
 import { getPosts as apiGetPosts } from "../common/PostAPI";
-import { Link } from "@mui/material";
-import { getElapsedTime } from "../common/TimeUtils";
-import PostVote from "./PostVote";
 
 const POST_LIST_PAGE_SIZE = 15;
 
@@ -47,101 +45,18 @@ function PostList({ sessionManager }) {
 
   return (
     <div style={{ maxWidth: 800, border: "none" }}>
-      {posts.map((post, i) => (
-        <div
-          key={post.EntryID}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            paddingBottom: 10,
-            alignItems: "start",
-            justifyContent: "start",
-          }}
-        >
-          <div
-            style={{
-              flex: "0 0 2px",
-              fontSize: "14px",
-              color: "gray",
-              paddingTop: 2,
-              paddingRight: 0,
-              width: 12,
-            }}
-          >
-            {false && i + 1}
-          </div>
-          <div
-            style={{
-              flex: "0 0 50px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "start",
-            }}
-          >
-            <PostVote
-              sessionManager={sessionManager}
-              postIdx={i}
-              entryID={post.EntryID}
-              voteCount={post.VoteCount}
-              vote={post.Vote}
-              updateVote={updateVote}
-            ></PostVote>
-          </div>
-          <div>
-            <div>
-              {post.EntryUrl ? (
-                <Link
-                  style={{
-                    fontSize: "14px",
-                  }}
-                  color="primary"
-                  href={post.EntryUrl}
-                  target="_blank"
-                  underline="hover"
-                >
-                  {post.EntryTitle}
-                </Link>
-              ) : (
-                <RouterLink
-                  style={{
-                    fontSize: "14px",
-                    textDecoration: "none",
-                    color: "#1976D2",
-                  }}
-                  to={`/post/${post.EntryID}`}
-                >
-                  {post.EntryTitle}
-                </RouterLink>
-              )}{" "}
-              <span
-                style={{
-                  fontSize: "12px",
-                  color: "gray",
-                }}
-              >
-                {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
-              </span>
-            </div>
-            {false && post.EntryText && (
-              <div>
-                <span style={{ fontSize: "12px", color: "black" }}>
-                  {post.EntryText}
-                </span>
-              </div>
-            )}
-            <div style={{ fontSize: "12px", color: "gray" }}>
-              Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)} ago
-              |{" "}
-              <RouterLink
-                style={{ textDecoration: "none", color: "gray" }}
-                to={`/post/${post.EntryID}`}
-              >
-                {post.CommentCount} comments
-              </RouterLink>
-            </div>
-          </div>
-        </div>
-      ))}
+      {posts.map((post, i) => {
+        post.idx = i;
+        return (
+          <Post
+            key={post.EntryID}
+            sessionManager={sessionManager}
+            post={post}
+            updateVote={updateVote}
+          />
+        );
+      })}
+
       {more && (
         <div style={{ marginLeft: 50 }}>
           <RouterLink
@@ -156,7 +71,7 @@ function PostList({ sessionManager }) {
           </RouterLink>
         </div>
       )}
-      {!more && (
+      {!more && posts.length !== POST_LIST_PAGE_SIZE && (
         <div style={{ marginLeft: 50 }}>
           <RouterLink
             style={{
