@@ -29,7 +29,7 @@ function PostAdd({ sessionManager }) {
       setMessage("The entry has been submitted.");
     } catch (e) {
       console.log("error adding post", e);
-      setMessage("OOPS - " + e.message);
+      setMessage("Doh! An unexpected error occurred.  Please try again.");
     }
   };
 

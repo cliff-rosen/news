@@ -3,7 +3,7 @@ import Comment from "./Comment";
 export default function CommentsTree({
   sessionManager,
   comments,
-  updatePostPage,
+  updatePostView,
 }) {
   return (
     <div>
@@ -12,7 +12,7 @@ export default function CommentsTree({
           <Comment
             sessionManager={sessionManager}
             comment={comment}
-            updatePostPage={updatePostPage}
+            updatePostView={updatePostView}
           />
         </div>
       ))}
