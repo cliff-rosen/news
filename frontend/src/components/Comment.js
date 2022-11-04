@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import PostVote from "./PostVote";
+import CommentVote from "./CommentVote";
 import { addComment } from "../common/CommentAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 import { TextField, Button } from "@mui/material";
 
 const COMMENT_INDENT_FACTOR = 25;
 
-export default function Comment({ sessionManager, comment, updatePostView }) {
+export default function Comment({
+  sessionManager,
+  comment,
+  updatePostView,
+  updateCommentVote,
+}) {
   const [reply, setReply] = useState("");
   const [showReply, setShowReply] = useState(false);
 
-  const submitComment = async () => {
+  const submitReply = async () => {
     if (sessionManager.getUserFromStorage().userID === 0) {
       console.log("addComment called with userID === 0", sessionManager.user);
-      sessionManager.showLoginThen(submitComment, []);
+      sessionManager.showLoginThen(submitReply, []);
       return;
     }
 
@@ -67,14 +72,14 @@ export default function Comment({ sessionManager, comment, updatePostView }) {
           }}
         >
           <div style={{ display: "flex" }}>
-            <PostVote
-              sessionManager={{ x: 1 }}
-              postIdx={0}
-              entryID={comment.EntryID}
-              voteCount={0}
-              vote={0}
-              updateVote={(x) => x}
-            ></PostVote>
+            <CommentVote
+              sessionManager={sessionManager}
+              commentIdx={comment.idx}
+              commentID={comment.CommentID}
+              voteCount={comment.VoteCount}
+              vote={comment.Vote}
+              updateCommentVote={updateCommentVote}
+            ></CommentVote>
             <div style={{ alignSelf: "center", fontSize: "11px" }}>
               {!showReply && (
                 <Link
@@ -108,7 +113,7 @@ export default function Comment({ sessionManager, comment, updatePostView }) {
             <Button
               style={{ textTransform: "unset", fontSize: 10 }}
               disabled={!reply}
-              onClick={submitComment}
+              onClick={submitReply}
             >
               reply
             </Button>

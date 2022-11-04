@@ -12,3 +12,8 @@ export const addComment = async (entryID, parentCommentID, commentText) => {
 
   return await fetchPost(`entries/${entryID}/comments`, body);
 };
+
+export const setCommentVote = async (commentID, vote) => {
+  //return fetchPost(`entries/${entryID}/vote/${vote}`);
+  return 1;
+};

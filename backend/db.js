@@ -360,7 +360,9 @@ async function getEntryComment(commentID) {
 async function getEntryComments(entryID) {
   console.log("getEntryComments", entryID);
   dbQueryString = `
-                    SELECT c.*, CONCAT_WS(':', path, CommentID) AS FullPath, u.UserName as CommentUserName
+                    SELECT c.*, CONCAT_WS(':', path, CommentID) AS FullPath, 
+                      u.UserName as CommentUserName,
+                      0 as Vote
                     FROM comment c
                     JOIN user u
                       ON c.CommentUserID = u.UserID

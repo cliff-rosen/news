@@ -61,7 +61,7 @@ export default function PostView({ sessionManager }) {
     }
   };
 
-  const updateVote = (idx, newVoteCount, newVote) => {
+  const updatePostVote = (idx, newVoteCount, newVote) => {
     setPost((curPost) => {
       return { ...curPost, VoteCount: newVoteCount, Vote: newVote };
     });
@@ -74,7 +74,7 @@ export default function PostView({ sessionManager }) {
       <Post
         sessionManager={sessionManager}
         post={post}
-        updateVote={updateVote}
+        updateVote={updatePostVote}
       />
 
       <div
@@ -125,6 +125,7 @@ export default function PostView({ sessionManager }) {
             <CommentsTree
               sessionManager={sessionManager}
               comments={comments}
+              setComments={setComments}
               updatePostView={updatePostView}
             />
           </div>

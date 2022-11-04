@@ -12,7 +12,7 @@ function useQueryParams() {
 }
 
 /*
-PostList(order, start) -> Post(post) -> PostVote(EID, idx, voteStuff)
+PostList(order, start) -> Post(post) -> PostVote(idx, post)
 */
 function PostList({ sessionManager }) {
   const [posts, setPosts] = useState([]);
