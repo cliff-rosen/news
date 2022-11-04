@@ -195,13 +195,25 @@ app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
 app.get("/entries/:entryid/comments", checkForToken, (req, res) => {
   const { entryid } = req.params;
   console.log("get comments", entryid, req.headers["authorization"]);
-  db.getEntryComments(entryid)
+  db.getEntryComments(req.user.userID, entryid)
     .then((rows) => res.json(rows))
     .catch((e) => {
       console.log("error", e);
       res.json({ error: e.message });
     });
 });
+
+app.post(
+  "/entries/comments/:commentid/vote/:value",
+  authenticateToken,
+  (req, res) => {
+    console.log("vote from: ", req.user.userID);
+    const { commentid, value } = req.params;
+    db.addOrUpdateUserCommentVote(req.user.userID, commentid, value)
+      .then((dbres) => res.json(dbres))
+      .catch((e) => res.json({ error: e.message }));
+  }
+);
 
 //////////////////////////////////////////////////////
 

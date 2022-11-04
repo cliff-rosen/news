@@ -13,9 +13,9 @@ export default function CommentVote({
 }) {
   const voteHandler = async (iVote) => {
     //console.log("voteHandler", sessionManager.user);
-    if (sessionManager.user.userID === 0) {
+    if (sessionManager.getUserFromStorage().userID === 0) {
       console.log("voteHandler called with userID === 0");
-      sessionManager.showLoginThen(apiSetCommentVote, [commentID, iVote]);
+      sessionManager.showLoginThen(voteHandler, [iVote]);
       return;
     }
     var newVote;

@@ -357,15 +357,15 @@ async function getEntryComment(commentID) {
   }
 }
 
-async function getEntryComments(entryID) {
+async function getEntryComments(userID, entryID) {
   console.log("getEntryComments", entryID);
   dbQueryString = `
-                    SELECT c.*, CONCAT_WS(':', path, CommentID) AS FullPath, 
-                      u.UserName as CommentUserName,
-                      0 as Vote
+                    SELECT c.*, CONCAT_WS(':', path, c.CommentID) AS FullPath, 
+                      u.UserName as CommentUserName, v.Vote
                     FROM comment c
-                    JOIN user u
-                      ON c.CommentUserID = u.UserID
+                    JOIN user u ON c.CommentUserID = u.UserID
+                    LEFT JOIN user_comment_vote v
+                      ON v.UserID = ${userID} and c.CommentID = v.CommentID
                     WHERE c.EntryID = ${entryID}
                     ORDER BY FullPath
                     `;
@@ -378,6 +378,88 @@ async function getEntryComments(entryID) {
   }
 }
 
+///////////////////////////////////////////////
+async function addOrUpdateUserCommentVote(userID, commentID, vote) {
+  var status = "READY";
+
+  try {
+    await addUserCommentVoteDB(userID, commentID, vote);
+    status = "ADD";
+  } catch (e) {
+    if (e.code === "ER_DUP_ENTRY") {
+      status = "UPDATE";
+    } else {
+      console.log("addOrUpdateUserCommentVote error", e);
+      throw new Error(e);
+    }
+  }
+
+  if (status === "UPDATE") {
+    console.log("addOrUpdateUserCommentVote now updating");
+    await updateUserCommentVoteDB(userID, commentID, vote);
+  }
+
+  await updateCommentVoteCountDB(commentID);
+  return { result: "DONE", status };
+}
+
+async function addUserCommentVoteDB(userID, commentID, vote) {
+  console.log("addUserCommentVoteDB", userID);
+
+  dbQueryString = `
+                    INSERT
+                    INTO user_comment_vote (
+                      UserID, CommentID, Vote
+                    )
+                    VALUES (
+                      ${userID},${commentID},${vote}
+                    )
+                    `;
+  console.log(dbQueryString);
+  const res = await pool.query(dbQueryString);
+  console.log("addUserCommentVoteDB returned", res);
+  return res;
+}
+
+async function updateUserCommentVoteDB(userID, commentID, vote) {
+  console.log("updateUserCommentVote", userID);
+
+  dbQueryString = `
+                    UPDATE user_comment_vote 
+                    SET Vote = ${vote}
+                    WHERE 
+                          UserID = ${userID}
+                      AND CommentID = ${commentID}
+                    `;
+  console.log(dbQueryString);
+  const res = await pool.query(dbQueryString);
+  console.log("updateUserCommentVote returned", res);
+  return res;
+}
+
+async function updateCommentVoteCountDB(commentID) {
+  console.log("updateCommentVoteCountDB", commentID);
+
+  dbQueryString = `
+                    UPDATE comment
+                    SET VoteCount = 
+                      (
+                        SELECT sum(Vote)
+                        FROM user_comment_vote
+                        WHERE commentID = ${commentID}
+                      )
+                    WHERE CommentID = ${commentID}
+                    `;
+
+  console.log(dbQueryString);
+  const res = await pool.query(dbQueryString);
+  if (res.affectedRows !== 1) {
+    throw "Query did not update correct rowcount of 1";
+  }
+  console.log("updateUserCommentVote returned", res);
+  return res;
+}
+
 module.exports.addEntry = addEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
@@ -387,3 +469,4 @@ module.exports.addUser = addUser;
 module.exports.addOrUpdateUserEntryVote = addOrUpdateUserEntryVote;
 module.exports.addComment = addComment;
 module.exports.getEntryComments = getEntryComments;
+module.exports.addOrUpdateUserCommentVote = addOrUpdateUserCommentVote;
