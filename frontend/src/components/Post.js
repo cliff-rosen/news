@@ -37,7 +37,7 @@ export default function Post({ sessionManager, post, updateVote }) {
             {post.EntryUrl ? (
               <Link
                 style={{
-                  fontSize: "14px",
+                  fontSize: "14.5px",
                 }}
                 color="primary"
                 href={post.EntryUrl}
@@ -49,7 +49,7 @@ export default function Post({ sessionManager, post, updateVote }) {
             ) : (
               <RouterLink
                 style={{
-                  fontSize: "14px",
+                  fontSize: "14.5px",
                   textDecoration: "none",
                   color: "#1976D2",
                 }}
@@ -60,7 +60,7 @@ export default function Post({ sessionManager, post, updateVote }) {
             )}{" "}
             <span
               style={{
-                fontSize: "12px",
+                fontSize: "13px",
                 color: "gray",
               }}
             >
@@ -69,12 +69,12 @@ export default function Post({ sessionManager, post, updateVote }) {
           </div>
           {false && post.EntryText && (
             <div>
-              <span style={{ fontSize: "12px", color: "black" }}>
+              <span style={{ fontSize: "13px", color: "black" }}>
                 {post.EntryText}
               </span>
             </div>
           )}
-          <div style={{ fontSize: "12px", color: "gray" }}>
+          <div style={{ fontSize: "13px", color: "gray" }}>
             Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)} ago |{" "}
             <RouterLink
               style={{ textDecoration: "none", color: "gray" }}

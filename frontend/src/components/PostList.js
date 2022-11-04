@@ -12,10 +12,7 @@ function useQueryParams() {
 }
 
 /*
-Displays self retrieved list of Posts
-List based on order and start
-Posts will directly update their vote counts using updateVote
-PostList -> Post -> PostVote
+PostList(order, start) -> Post(post) -> PostVote(EID, idx, voteStuff)
 */
 function PostList({ sessionManager }) {
   const [posts, setPosts] = useState([]);
@@ -45,7 +42,7 @@ function PostList({ sessionManager }) {
         console.log("Error while getting list of stories.", error);
       }
     };
-    console.log("PostList getPost about to run with order: ", order);
+    console.log("PostList.getPost with order, start: ", order, start);
     getPosts(order, start, POST_LIST_PAGE_SIZE);
   }, [sessionManager.user.userID, order, start]);
 

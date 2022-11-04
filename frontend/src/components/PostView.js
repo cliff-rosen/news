@@ -12,17 +12,23 @@ export default function PostView({ sessionManager }) {
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
   const { postid: entryID } = useParams();
-  console.log("PostView");
+
   useEffect(() => {
-    console.log("Post - data retrieval useEffect for  ", entryID);
-    updatePostPage();
+    console.log("Post.useEffect for:", entryID);
+    updatePostView();
   }, [entryID, sessionManager]);
 
-  const updatePostPage = async () => {
-    const updatedPost = await getPost(entryID);
-    const updatedComments = await getComments(entryID);
-    setPost(updatedPost);
-    setComments(updatedComments);
+  const updatePostView = async () => {
+    try {
+      const updatedPost = await getPost(entryID);
+      const updatedComments = await getComments(entryID);
+      setPost(updatedPost);
+      setComments(updatedComments);
+    } catch (e) {
+      console.log("PostView.updatePostView error:", e.message);
+      setMessage("Doh! Something unexpected happened.  Please refresh page.");
+      return;
+    }
   };
 
   const submitComment = async (e) => {
@@ -46,7 +52,7 @@ export default function PostView({ sessionManager }) {
 
     try {
       await addComment(entryID, null, comment);
-      await updatePostPage();
+      await updatePostView();
       setComment("");
       setMessage("");
     } catch (e) {
@@ -61,7 +67,7 @@ export default function PostView({ sessionManager }) {
     });
   };
 
-  if (!post) return <div></div>;
+  if (!post) return <div>{message}</div>;
 
   return (
     <div style={{ border: "none" }}>
@@ -119,7 +125,7 @@ export default function PostView({ sessionManager }) {
             <CommentsTree
               sessionManager={sessionManager}
               comments={comments}
-              updatePostPage={updatePostPage}
+              updatePostView={updatePostView}
             />
           </div>
         </div>

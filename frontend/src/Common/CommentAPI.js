@@ -1,19 +1,7 @@
-import { BASE_API_URL } from "./APIUtils";
-import { getUserToken } from "./Auth";
+import { fetchGet, fetchPost } from "./APIUtils";
 
 export const getComments = async (entryID) => {
-  const res = await fetch(`${BASE_API_URL}/entries/${entryID}/comments`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: getUserToken(),
-    },
-  });
-
-  console.log("api getComments result", res.status);
-  if (res.status !== 200) throw new Error("Post not found");
-  const data = await res.json();
-  return data;
+  return await fetchGet(`entries/${entryID}/comments`);
 };
 
 export const addComment = async (entryID, parentCommentID, commentText) => {
@@ -22,20 +10,5 @@ export const addComment = async (entryID, parentCommentID, commentText) => {
     commentText,
   });
 
-  const res = await fetch(`${BASE_API_URL}/entries/${entryID}/comments`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: getUserToken(),
-    },
-    body,
-  });
-
-  const status = res.status;
-  const data = await res.json();
-
-  console.log("api add result", res.status, data);
-  if (status !== 200 || data.error) {
-    throw new Error("API error");
-  }
+  return await fetchPost(`entries/${entryID}/comments`, body);
 };
