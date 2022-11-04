@@ -7,6 +7,7 @@ import LoginFormModal from "./components/LoginFormModal";
 import PostList from "./components/PostList";
 import PostAdd from "./components/PostAdd";
 import PostView from "./components/PostView";
+import Help from "./components/help";
 import Trial from "./components/Trial";
 
 function App() {
@@ -41,10 +42,11 @@ function App() {
             element={<PostAdd sessionManager={sessionManager} />}
           />
           <Route
-            path="post/:postid"
+            path="/post/:postid"
             element={<PostView sessionManager={sessionManager} />}
           />
-          <Route path="trial" element={<Trial />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/trial" element={<Trial />} />
         </Routes>
       </div>
     </div>

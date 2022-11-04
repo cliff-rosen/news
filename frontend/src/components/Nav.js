@@ -114,6 +114,10 @@ const Navbar = ({ sessionManager }) => {
             login (register)
           </Link>
         )}
+        {" | "}
+        <Link style={{ textDecoration: "none", color: "gray" }} to="/help">
+          help
+        </Link>
       </Box>
     </nav>
   );

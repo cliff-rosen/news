@@ -151,7 +151,7 @@ async function getEntry(userID, entryID) {
     return res;
   } catch (err) {
     console.log("*** Query did not execute: " + err);
-    return "Query did not execute";
+    throw new Error("Query did not execute");
   }
 }
 
@@ -353,7 +353,7 @@ async function getEntryComment(commentID) {
     return res;
   } catch (err) {
     console.log("*** Query did not execute: " + err);
-    return "Query did not execute";
+    throw new Error("Query did not execute");
   }
 }
 
@@ -372,7 +372,7 @@ async function getEntryComments(entryID) {
     return res;
   } catch (err) {
     console.log("*** Query did not execute: " + err);
-    return "Query did not execute";
+    throw new Error("Query did not execute");
   }
 }
 

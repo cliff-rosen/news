@@ -5,7 +5,9 @@ import { addComment } from "../common/CommentAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 import { TextField, Button } from "@mui/material";
 
-export default function Comment({ sessionManager, comment, updatePostPage }) {
+const COMMENT_INDENT_FACTOR = 25;
+
+export default function Comment({ sessionManager, comment, updatePostView }) {
   const [reply, setReply] = useState("");
   const [showReply, setShowReply] = useState(false);
 
@@ -19,7 +21,7 @@ export default function Comment({ sessionManager, comment, updatePostPage }) {
     await addComment(comment.EntryID, comment.CommentID, reply);
     setReply("");
     setShowReply(false);
-    updatePostPage();
+    updatePostView();
   };
 
   return (
@@ -28,7 +30,7 @@ export default function Comment({ sessionManager, comment, updatePostPage }) {
       style={{
         display: "flex",
         flexDirection: "row",
-        paddingLeft: comment.Level * 25,
+        paddingLeft: comment.Level * COMMENT_INDENT_FACTOR,
         paddingTop: 15,
         alignItems: "start",
         justifyContent: "start",

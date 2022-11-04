@@ -11,6 +11,12 @@ function useQueryParams() {
   return useMemo(() => new URLSearchParams(search), [search]);
 }
 
+/*
+Displays self retrieved list of Posts
+List based on order and start
+Posts will directly update their vote counts using updateVote
+PostList -> Post -> PostVote
+*/
 function PostList({ sessionManager }) {
   const [posts, setPosts] = useState([]);
   const [more, setMore] = useState(false);
