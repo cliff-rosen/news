@@ -17,9 +17,7 @@ function createUser(userID, userName) {
   return user;
 }
 
-function checkForToken(req, res, next) {
-  console.log("Verifying token");
-
+function setUserFromToken(req) {
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1] || "";
@@ -27,43 +25,37 @@ function checkForToken(req, res, next) {
     req.token = bearerToken;
     jwt.verify(req.token, JWT_SECRET, (err, decoded) => {
       if (err) {
-        console.log("Invalid JWT");
         req.user = { userID: -1 };
+        console.log("Invalid JWT");
       } else {
         req.user = decoded;
         console.log("Valid JWT", req.user);
       }
-      next();
     });
   } else {
-    console.log("No JWT");
     req.user = { userID: 0 };
-    next();
+    console.log("No JWT");
   }
 }
 
-function authenticateToken(req, res, next) {
+function checkForToken(req, res, next) {
   console.log("Verifying token");
+  setUserFromToken(req);
+  next();
+}
 
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-    const bearerToken = bearerHeader.split(" ")[1] || "";
-    console.log("Token found: " + bearerToken.substring(0, 10));
-    req.token = bearerToken;
-    jwt.verify(req.token, JWT_SECRET, (err, decoded) => {
-      console.log("token: ", JSON.stringify(decoded));
-      if (err) {
-        console.log("Invalid JWT");
-        res.status(401).json({ error: "invalid authorization" });
-      } else {
-        req.user = decoded;
-        console.log("Valid JWT", req.user);
-        next();
-      }
-    });
+function authenticateToken(req, res, next) {
+  console.log("Authorizing token");
+  setUserFromToken(req);
+  if (req.user.userID === -1) {
+    console.log("authenticateToken: invalid token: ", req.user.userID);
+    res.status(401).json({ error: "invalid token" });
+  } else if (req.user.userID === 0) {
+    console.log("authenticateToken: no token found", req.user.userID);
+    res.status(401).json({ error: "authorization required" });
   } else {
-    console.log("No JWT");
-    res.status(401).json({ error: "unauthorized" });
+    console.log("authenticateToken: authentication successful");
+    next();
   }
 }
 

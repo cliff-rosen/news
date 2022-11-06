@@ -28,11 +28,21 @@ export default function LoginFormModal({ sessionManager }) {
     sessionManager.hideLogin();
   };
 
+  const isUsernameValid = (u) => {
+    var usernameRegex = /^[a-zA-Z0-9]+$/;
+    return u.match(usernameRegex);
+  };
+
   const formSubmit = (e) => {
     e.preventDefault();
 
     if (username === "" || password === "") {
       setErrMessage("Please enter both fields.");
+      return;
+    }
+
+    if (!isUsernameValid(username)) {
+      setErrMessage("Username may contain only letters and numbers.");
       return;
     }
 
@@ -55,6 +65,11 @@ export default function LoginFormModal({ sessionManager }) {
 
     if (usernameR === "" || passwordR === "") {
       setErrMessage("Please enter both fields.");
+      return;
+    }
+
+    if (!isUsernameValid(usernameR)) {
+      setErrMessage("Username may contain only letters and numbers.");
       return;
     }
 
@@ -92,7 +107,7 @@ export default function LoginFormModal({ sessionManager }) {
           <form onSubmit={formSubmit}>
             <TextField
               id="username"
-              style={{ width: "400px", margin: "5px" }}
+              style={{ width: "300px", margin: "5px" }}
               autoFocus
               type="text"
               label="Username"
@@ -103,7 +118,7 @@ export default function LoginFormModal({ sessionManager }) {
             <br />
             <TextField
               id="password"
-              style={{ width: "400px", margin: "5px" }}
+              style={{ width: "300px", margin: "5px" }}
               type="password"
               label="Password"
               value={password}
@@ -122,7 +137,7 @@ export default function LoginFormModal({ sessionManager }) {
           <form onSubmit={formSubmitR}>
             <TextField
               id="usernameR"
-              style={{ width: "400px", margin: "5px" }}
+              style={{ width: "300px", margin: "5px" }}
               type="text"
               label="Username"
               value={usernameR}
@@ -132,7 +147,7 @@ export default function LoginFormModal({ sessionManager }) {
             <br />
             <TextField
               id="passwordR"
-              style={{ width: "400px", margin: "5px" }}
+              style={{ width: "300px", margin: "5px" }}
               type="password"
               label="Password"
               value={passwordR}

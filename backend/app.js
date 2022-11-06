@@ -23,7 +23,7 @@ function start(req, res, next) {
 /////////////////// PLAYGROUND /////////////////
 let status = 0;
 
-app.get("/y", checkForToken, function (req, res) {
+app.get("/y/:x", authenticateToken, function (req, res) {
   res.json({ message: "hello" });
 });
 

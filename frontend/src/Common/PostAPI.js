@@ -14,6 +14,10 @@ export const getPosts = async (order, start, limit) => {
 };
 
 export const addPost = async (entryUrl, entryTitle, entryText) => {
+  entryUrl = entryUrl.trim();
+  entryTitle = entryTitle.trim();
+  entryText = entryText.trim();
+
   const body = JSON.stringify({
     entryUrl,
     entryTitle,
