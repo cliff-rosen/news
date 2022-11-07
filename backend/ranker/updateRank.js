@@ -23,6 +23,7 @@ async function doUpdateRank() {
       )
     `
   );
+  conn.end();
   console.log("Rank updated:", res);
   console.log("done");
 }
