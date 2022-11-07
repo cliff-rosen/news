@@ -164,7 +164,7 @@ async function getAllEntries(userID, order, start, limit) {
                       ON v.UserID = ${userID} and e.EntryID = v.EntryID
                     `;
   if (order === "trending") {
-    dbQueryString += " ORDER BY e.VoteCount desc";
+    dbQueryString += " ORDER BY e.Rank desc";
   } else {
     dbQueryString += " ORDER BY e.EntryDateTime desc";
   }

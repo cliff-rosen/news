@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("./secrets.js");
-const db = require("./db");
+const { JWT_SECRET } = require("../common/secrets.js");
+const db = require("../common/db");
 
 /*
   user = {

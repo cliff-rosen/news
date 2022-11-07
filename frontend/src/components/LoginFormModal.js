@@ -14,6 +14,7 @@ export default function LoginFormModal({ sessionManager }) {
   const [password, setPassword] = useState("");
   const [usernameR, setUsernameR] = useState("");
   const [passwordR, setPasswordR] = useState("");
+  const [passwordR2, setPasswordR2] = useState("");
   const [errMessage, setErrMessage] = useState("");
 
   const handleClose = () => {
@@ -21,6 +22,8 @@ export default function LoginFormModal({ sessionManager }) {
     setPassword("");
     setUsernameR("");
     setPasswordR("");
+    setPasswordR2("");
+
     setErrMessage("");
     if (sessionManager.lao.homeOnAbort) {
       navigate("/");
@@ -56,15 +59,21 @@ export default function LoginFormModal({ sessionManager }) {
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
-        setErrMessage("Login error: " + err.message);
+        if (err.message === "INVALID_LOGIN") {
+          setErrMessage("Invalid login.  Please try again.");
+        } else {
+          setErrMessage(
+            "Sorry, an unexpected error occurred.  Please try again."
+          );
+        }
       });
   };
 
   const formSubmitR = (e) => {
     e.preventDefault();
 
-    if (usernameR === "" || passwordR === "") {
-      setErrMessage("Please enter both fields.");
+    if (usernameR === "" || passwordR === "" || passwordR2 === "") {
+      setErrMessage("Please enter all fields.");
       return;
     }
 
@@ -73,15 +82,29 @@ export default function LoginFormModal({ sessionManager }) {
       return;
     }
 
+    if (passwordR != passwordR2) {
+      setErrMessage("The passwords do not match.");
+      return;
+    }
+
     sessionManager
       .register(usernameR, passwordR)
       .then((u) => {
         setUsernameR("");
         setPasswordR("");
+        setPasswordR2("");
         setErrMessage("");
         sessionManager.hideLoginThen(u);
       })
-      .catch((err) => setErrMessage("Registration error: " + err.message));
+      .catch((err) => {
+        if ((err.message = "DUPLICATE")) {
+          setErrMessage(
+            "Sorry, that username is already in use.  Please select another."
+          );
+        } else {
+          setErrMessage("Registration error: " + err.message);
+        }
+      });
   };
 
   return (
@@ -152,6 +175,16 @@ export default function LoginFormModal({ sessionManager }) {
               label="Password"
               value={passwordR}
               onChange={(e) => setPasswordR(e.target.value)}
+              variant="outlined"
+            />
+            <br />
+            <TextField
+              id="password2R"
+              style={{ width: "300px", margin: "5px" }}
+              type="password"
+              label="Password (repeat)"
+              value={passwordR2}
+              onChange={(e) => setPasswordR2(e.target.value)}
               variant="outlined"
             />
             <br />
