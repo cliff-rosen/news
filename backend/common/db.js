@@ -1,6 +1,7 @@
 const mariadb = require("mariadb");
 const hasher = require("bcrypt");
 const psl = require("psl");
+const requestIP = require("request-ip");
 const { dbSecrets } = require("./secrets.js");
 
 /*
@@ -470,6 +471,7 @@ async function addLog(req) {
   } else {
     userID = 0;
   }
+  const ipAddress = requestIP.getClientIp(req);
   const body = { ...req.body };
   console.log(body);
   if (body.hasOwnProperty("password")) {
@@ -484,7 +486,7 @@ async function addLog(req) {
                       DateTimeRequest,
                       URL, Method, Body)
                     VALUES (
-                      ${userID}, '${req.ip}',
+                      ${userID}, '${ipAddress}',
                       NOW(),
                       '${req.url}','${req.method}', '${bodyString}'
                       )
