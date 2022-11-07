@@ -3,10 +3,16 @@ import { getAccess } from "../common/AuthAPI";
 
 export default function Splash({ setOkToTrip }) {
   const [password, setPassword] = useState("");
+  const [tou, setTou] = useState(false);
   const [message, setMessage] = useState("");
 
   const submitForm = (e) => {
     e.preventDefault();
+
+    if (!tou) {
+      setMessage("Please agree to the Terms of Use.");
+      return;
+    }
     getAccess(password)
       .then((res) => setOkToTrip(true))
       .catch((err) => setMessage("Mmmm, nope."));
@@ -14,7 +20,7 @@ export default function Splash({ setOkToTrip }) {
 
   return (
     <div>
-      <div>Tripper's Almanac BETA</div>
+      <div>Tripper's Almanac PRE-LAUNCH</div>
       <div>
         <div style={{ fontSize: "10px" }}>
           <br />
@@ -35,6 +41,13 @@ export default function Splash({ setOkToTrip }) {
           or timeliness of any of the contents of the site. In no event shall
           the owners and operators of the site be liable for any damages
           whatsoever resulting from the use of the site.
+          <br />
+          <br />I agree to the Terms of Use.{" "}
+          <input
+            type="checkbox"
+            onChange={(e) => setTou(e.target.value)}
+            value={tou}
+          />
         </div>
 
         <div>
