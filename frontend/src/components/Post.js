@@ -1,9 +1,14 @@
 import { Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import PostVote from "./PostVote";
+import { logPostClick } from "../common/PostAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 
 export default function Post({ sessionManager, post, updateVote }) {
+  const logClick = () => {
+    logPostClick(post.EntryID);
+  };
+
   return (
     <div>
       <div
@@ -43,6 +48,7 @@ export default function Post({ sessionManager, post, updateVote }) {
                 href={post.EntryUrl}
                 target="_blank"
                 underline="hover"
+                onClick={logClick}
               >
                 {post.EntryTitle}
               </Link>

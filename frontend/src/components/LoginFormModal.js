@@ -32,6 +32,10 @@ export default function LoginFormModal({ sessionManager }) {
   };
 
   const isUsernameValid = (u) => {
+    if (u.length < 2 || u.length > 12) {
+      return false;
+    }
+
     var usernameRegex = /^[a-zA-Z0-9]+$/;
     return u.match(usernameRegex);
   };
@@ -78,7 +82,9 @@ export default function LoginFormModal({ sessionManager }) {
     }
 
     if (!isUsernameValid(usernameR)) {
-      setErrMessage("Username may contain only letters and numbers.");
+      setErrMessage(
+        "Username must be between 2 and 12 charactres and may contain only letters and numbers."
+      );
       return;
     }
 
@@ -111,7 +117,7 @@ export default function LoginFormModal({ sessionManager }) {
     <div>
       <Dialog open={sessionManager.lao.show} onClose={handleClose}>
         <DialogTitle>Login / Register</DialogTitle>
-        <DialogContent>
+        <DialogContent style={{ width: "300px" }}>
           {sessionManager.lao.message && (
             <DialogContentText>
               {sessionManager.lao.message}

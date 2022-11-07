@@ -2,6 +2,10 @@ import { BASE_API_URL } from "./APIUtils";
 import { getUserToken } from "./Auth";
 import { fetchGet, fetchPost } from "./APIUtils";
 
+export const logPostClick = async (entryID) => {
+  return fetchGet(`log/entries/${entryID}/click`);
+};
+
 export const getPost = async (entryID) => {
   return fetchGet(`entries/${entryID}`);
 };

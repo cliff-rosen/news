@@ -104,6 +104,14 @@ app.post("/login", (req, res) => {
     .finally(() => console.log("Back from validateUser()"));
 });
 
+/////////////////////// LOGGING ////////////////////////////
+
+app.get("/log/entries/:entryid/click", checkForToken, (req, res) => {
+  const { entryid } = req.params;
+  console.log("logging entry click for: ", entryid);
+  res.status(200);
+});
+
 /////////////////////// ENTRY ////////////////////////////
 
 app.get("/entries/:entryid", checkForToken, (req, res) => {
