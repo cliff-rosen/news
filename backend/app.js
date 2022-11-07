@@ -29,6 +29,7 @@ app.get("/y/:x", authenticateToken, function (req, res) {
 
 app.post("/access", (req, res) => {
   console.log("Access");
+  db.addLog(req);
   res.setHeader("Access-Control-Allow-Origin", "*");
   password = req.body.password;
   if (password === "letstrip") {
@@ -43,6 +44,7 @@ app.post("/access", (req, res) => {
 /////////////////////// LOGIN/REGISTRATION ////////////////////////////
 app.post("/createuser", (req, res) => {
   console.log("Create user");
+  db.addLog(req);
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   userName = req.body.username;
@@ -74,6 +76,7 @@ app.post("/createuser", (req, res) => {
 */
 app.post("/login", (req, res) => {
   console.log("Login");
+  db.addLog(req);
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   userName = req.body.username;

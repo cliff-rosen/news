@@ -460,6 +460,36 @@ async function updateCommentVoteCountDB(commentID) {
   return res;
 }
 
+////////////////////////////////////////////////////////
+
+async function addLog(req) {
+  console.log("addLog");
+  const userID = req.user?.userID || 0;
+  const body = { ...req.body };
+  console.log(body);
+  if (body.hasOwnProperty("password")) {
+    body.password = "*****";
+  }
+  const bodyString = JSON.stringify(body);
+
+  dbQueryString = `
+                    INSERT
+                    INTO api_log (
+                      UserID, IPAddress,
+                      DateTimeRequest,
+                      URL, Method, Body)
+                    VALUES (
+                      ${userID}, '${req.ip}',
+                      NOW(),
+                      '${req.url}','${req.method}', '${bodyString}'
+                      )
+                    `;
+
+  const res = await pool.query(dbQueryString);
+  console.log("addLog returned", res);
+  return res;
+}
+
 module.exports.addEntry = addEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
@@ -470,3 +500,4 @@ module.exports.addOrUpdateUserEntryVote = addOrUpdateUserEntryVote;
 module.exports.addComment = addComment;
 module.exports.getEntryComments = getEntryComments;
 module.exports.addOrUpdateUserCommentVote = addOrUpdateUserCommentVote;
+module.exports.addLog = addLog;

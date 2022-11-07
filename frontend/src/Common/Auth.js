@@ -70,7 +70,10 @@ export const getUserToken = () => {
   } catch {
     user = { userID: -1, token: "" };
   }
-  return "Bearer " + user.token;
+  if (user.userID > 0) {
+    return "Bearer " + user.token;
+  }
+  return "";
 };
 
 const makeLoginActionObject = () => {

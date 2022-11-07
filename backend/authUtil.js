@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("./secrets.js");
+const db = require("./db");
 
 /*
   user = {
@@ -36,6 +37,7 @@ function setUserFromToken(req) {
     req.user = { userID: 0 };
     console.log("No JWT");
   }
+  db.addLog(req);
 }
 
 function checkForToken(req, res, next) {

@@ -4,10 +4,16 @@ import { getUserToken } from "./Auth";
 export const BASE_API_URL = config.url.API_URL;
 
 function getHeaders() {
-  return {
+  const headers = {
     "Content-Type": "application/json",
-    Authorization: getUserToken(),
   };
+
+  const authProperty = getUserToken();
+
+  if (authProperty != "") {
+    headers["Authorization"] = authProperty;
+  }
+  return headers;
 }
 
 /*
