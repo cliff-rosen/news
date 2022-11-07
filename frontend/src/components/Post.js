@@ -32,7 +32,7 @@ export default function Post({ sessionManager, post, updateVote }) {
             sessionManager={sessionManager}
             postIdx={post.idx}
             entryID={post.EntryID}
-            voteCount={post.VoteCount}
+            VoteScore={post.VoteScore}
             vote={post.Vote}
             updateVote={updateVote}
           ></PostVote>

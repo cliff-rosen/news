@@ -76,7 +76,7 @@ export default function Comment({
               sessionManager={sessionManager}
               commentIdx={comment.idx}
               commentID={comment.CommentID}
-              voteCount={comment.VoteCount}
+              VoteScore={comment.VoteScore}
               vote={comment.Vote}
               updateCommentVote={updateCommentVote}
             ></CommentVote>

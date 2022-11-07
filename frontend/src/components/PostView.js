@@ -61,9 +61,9 @@ export default function PostView({ sessionManager }) {
     }
   };
 
-  const updatePostVote = (idx, newVoteCount, newVote) => {
+  const updatePostVote = (idx, newVoteScore, newVote) => {
     setPost((curPost) => {
-      return { ...curPost, VoteCount: newVoteCount, Vote: newVote };
+      return { ...curPost, VoteScore: newVoteScore, Vote: newVote };
     });
   };
 

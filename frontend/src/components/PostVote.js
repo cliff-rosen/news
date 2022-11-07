@@ -7,7 +7,7 @@ export default function PostVote({
   sessionManager,
   postIdx,
   entryID,
-  voteCount,
+  VoteScore,
   vote,
   updateVote,
 }) {
@@ -19,24 +19,24 @@ export default function PostVote({
       return;
     }
     var newVote;
-    var newVoteCount;
+    var newVoteScore;
 
     if (!vote) {
       // no vote or 0 vote, so straight processing
       newVote = iVote;
-      newVoteCount = voteCount + iVote;
+      newVoteScore = VoteScore + iVote;
     } else if (vote === iVote) {
       // undoing whatever the existing vote is
       newVote = 0;
-      newVoteCount = voteCount - iVote;
+      newVoteScore = VoteScore - iVote;
     } else {
       // switching from 1 to -1 or -1 to 1;
       newVote = iVote;
-      newVoteCount = voteCount + 2 * iVote;
+      newVoteScore = VoteScore + 2 * iVote;
     }
 
     await apiSetPostVote(entryID, newVote);
-    updateVote(postIdx, newVoteCount, newVote);
+    updateVote(postIdx, newVoteScore, newVote);
   };
 
   return (
@@ -51,7 +51,7 @@ export default function PostVote({
       >
         <ArrowDropUpIcon fontSize="medium" />
       </IconButton>
-      <span style={{ fontSize: 10 }}>{voteCount}</span>
+      <span style={{ fontSize: 10 }}>{VoteScore}</span>
       <IconButton
         style={{
           height: 10,

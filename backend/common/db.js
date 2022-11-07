@@ -202,7 +202,7 @@ async function addOrUpdateUserEntryVote(userID, entryID, vote) {
     await updateUserEntryVoteDB(userID, entryID, vote);
   }
 
-  await updateEntryVoteCountDB(entryID);
+  await updateEntryVoteScoreDB(entryID);
   return { result: "DONE", status };
 }
 
@@ -240,12 +240,12 @@ async function updateUserEntryVoteDB(userID, entryID, vote) {
   return res;
 }
 
-async function updateEntryVoteCountDB(entryID) {
-  console.log("updateEntryVoteCountDB", entryID);
+async function updateEntryVoteScoreDB(entryID) {
+  console.log("updateEntryVoteScoreDB", entryID);
 
   dbQueryString = `
                     UPDATE entry
-                    SET VoteCount = 
+                    SET VoteScore = 
                       (
                         SELECT sum(Vote)
                         FROM user_entry_vote
@@ -399,7 +399,7 @@ async function addOrUpdateUserCommentVote(userID, commentID, vote) {
     await updateUserCommentVoteDB(userID, commentID, vote);
   }
 
-  await updateCommentVoteCountDB(commentID);
+  await updateCommentVoteScoreDB(commentID);
   return { result: "DONE", status };
 }
 
@@ -437,12 +437,12 @@ async function updateUserCommentVoteDB(userID, commentID, vote) {
   return res;
 }
 
-async function updateCommentVoteCountDB(commentID) {
-  console.log("updateCommentVoteCountDB", commentID);
+async function updateCommentVoteScoreDB(commentID) {
+  console.log("updateCommentVoteScoreDB", commentID);
 
   dbQueryString = `
                     UPDATE comment
-                    SET VoteCount = 
+                    SET VoteScore = 
                       (
                         SELECT sum(Vote)
                         FROM user_comment_vote

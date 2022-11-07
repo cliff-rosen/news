@@ -6,9 +6,9 @@ export default function CommentsTree({
   setComments,
   updatePostView,
 }) {
-  const updateCommentVote = (idx, newVoteCount, newVote) => {
+  const updateCommentVote = (idx, newVoteScore, newVote) => {
     var comment = comments[idx];
-    comment = { ...comment, VoteCount: newVoteCount, Vote: newVote };
+    comment = { ...comment, VoteScore: newVoteScore, Vote: newVote };
     setComments((curComments) => {
       var newComments = [...curComments];
       newComments[idx] = comment;

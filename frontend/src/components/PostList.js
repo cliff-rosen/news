@@ -23,9 +23,9 @@ function PostList({ sessionManager }) {
   const order = queryParams.get("order") || "trending";
   const start = Number(queryParams.get("start")) || 0;
 
-  const updateVote = (idx, newVoteCount, newVote) => {
+  const updateVote = (idx, newVoteScore, newVote) => {
     var post = posts[idx];
-    post = { ...post, VoteCount: newVoteCount, Vote: newVote };
+    post = { ...post, VoteScore: newVoteScore, Vote: newVote };
     setPosts((curPosts) => {
       var newPosts = [...curPosts];
       newPosts[idx] = post;

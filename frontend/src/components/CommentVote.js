@@ -7,7 +7,7 @@ export default function CommentVote({
   sessionManager,
   commentIdx,
   commentID,
-  voteCount,
+  VoteScore,
   vote,
   updateCommentVote,
 }) {
@@ -19,24 +19,24 @@ export default function CommentVote({
       return;
     }
     var newVote;
-    var newVoteCount;
+    var newVoteScore;
 
     if (!vote) {
       // no vote or 0 vote, so straight processing
       newVote = iVote;
-      newVoteCount = voteCount + iVote;
+      newVoteScore = VoteScore + iVote;
     } else if (vote === iVote) {
       // undoing whatever the existing vote is
       newVote = 0;
-      newVoteCount = voteCount - iVote;
+      newVoteScore = VoteScore - iVote;
     } else {
       // switching from 1 to -1 or -1 to 1;
       newVote = iVote;
-      newVoteCount = voteCount + 2 * iVote;
+      newVoteScore = VoteScore + 2 * iVote;
     }
 
     await apiSetCommentVote(commentID, newVote);
-    updateCommentVote(commentIdx, newVoteCount, newVote);
+    updateCommentVote(commentIdx, newVoteScore, newVote);
   };
 
   return (
@@ -51,7 +51,7 @@ export default function CommentVote({
       >
         <ArrowDropUpIcon fontSize="medium" />
       </IconButton>
-      <span style={{ fontSize: 10 }}>{voteCount}</span>
+      <span style={{ fontSize: 10 }}>{VoteScore}</span>
       <IconButton
         style={{
           height: 10,
