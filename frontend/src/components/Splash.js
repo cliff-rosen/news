@@ -13,6 +13,7 @@ export default function Splash({ setOkToTrip }) {
       setMessage("Please agree to the Terms of Use.");
       return;
     }
+
     getAccess(password)
       .then((res) => setOkToTrip(true))
       .catch((err) => setMessage("Mmmm, nope."));
@@ -62,6 +63,7 @@ export default function Splash({ setOkToTrip }) {
             onChange={(e) => setPassword(e.target.value)}
           />{" "}
           <button type="submit">enter</button>
+          <br />
           {message}
         </form>
       </div>

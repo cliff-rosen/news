@@ -464,7 +464,12 @@ async function updateCommentVoteCountDB(commentID) {
 
 async function addLog(req) {
   console.log("addLog");
-  const userID = req.user?.userID || 0;
+  var userID;
+  if (req.user) {
+    userID = req.user.userID;
+  } else {
+    userID = 0;
+  }
   const body = { ...req.body };
   console.log(body);
   if (body.hasOwnProperty("password")) {
