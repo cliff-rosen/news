@@ -10,7 +10,7 @@ function getHeaders() {
 
   const authProperty = getUserToken();
 
-  if (authProperty != "") {
+  if (authProperty !== "") {
     headers["Authorization"] = authProperty;
   }
   return headers;

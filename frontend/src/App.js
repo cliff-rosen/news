@@ -14,7 +14,7 @@ function App() {
   const sessionManager = useSessionManager();
   const [okToTrip, setOkToTrip] = useState(false);
 
-  if (!okToTrip) {
+  if (false && !okToTrip) {
     return <Splash setOkToTrip={setOkToTrip} />;
   }
 
@@ -46,7 +46,7 @@ function App() {
             element={<PostView sessionManager={sessionManager} />}
           />
           <Route path="/help" element={<Help />} />
-          <Route path="/trial" element={<Trial />} />
+          <Route path="/trial/*" element={<Trial />} />
         </Routes>
       </div>
     </div>

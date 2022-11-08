@@ -75,6 +75,7 @@ export default function PostView({ sessionManager }) {
         sessionManager={sessionManager}
         post={post}
         updateVote={updatePostVote}
+        showText={true}
       />
 
       <div

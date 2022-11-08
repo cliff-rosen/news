@@ -4,7 +4,7 @@ import PostVote from "./PostVote";
 import { logPostClick } from "../common/PostAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 
-export default function Post({ sessionManager, post, updateVote }) {
+export default function Post({ sessionManager, post, updateVote, showText }) {
   const logClick = () => {
     logPostClick(post.EntryID);
   };
@@ -73,9 +73,15 @@ export default function Post({ sessionManager, post, updateVote }) {
               {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
             </span>
           </div>
-          {false && post.EntryText && (
+          {showText && post.EntryText && (
             <div>
-              <span style={{ fontSize: "13px", color: "black" }}>
+              <span
+                style={{
+                  whiteSpace: "pre-wrap",
+                  fontSize: "13px",
+                  color: "black",
+                }}
+              >
                 {post.EntryText}
               </span>
             </div>

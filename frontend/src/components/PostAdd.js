@@ -64,6 +64,7 @@ function PostAdd({ sessionManager }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           variant="outlined"
+          required
         />
         <br />
         <TextField

@@ -90,7 +90,7 @@ export default function LoginFormModal({ sessionManager }) {
       return;
     }
 
-    if (passwordR != passwordR2) {
+    if (passwordR !== passwordR2) {
       setErrMessage("The passwords do not match.");
       return;
     }
@@ -145,6 +145,7 @@ export default function LoginFormModal({ sessionManager }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               variant="outlined"
+              required
             />
             <br />
             <TextField
@@ -155,6 +156,7 @@ export default function LoginFormModal({ sessionManager }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               variant="outlined"
+              required
             />
             <br />
             <DialogActions>
@@ -174,6 +176,7 @@ export default function LoginFormModal({ sessionManager }) {
               value={usernameR}
               onChange={(e) => setUsernameR(e.target.value)}
               variant="outlined"
+              required
             />
             <br />
             <TextField
@@ -184,6 +187,7 @@ export default function LoginFormModal({ sessionManager }) {
               value={passwordR}
               onChange={(e) => setPasswordR(e.target.value)}
               variant="outlined"
+              required
             />
             <br />
             <TextField
@@ -194,6 +198,7 @@ export default function LoginFormModal({ sessionManager }) {
               value={passwordR2}
               onChange={(e) => setPasswordR2(e.target.value)}
               variant="outlined"
+              required
             />
             <br />
             <DialogActions>

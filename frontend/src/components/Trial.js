@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Feedback from "./Feedback";
 
 function X() {
   console.log("X");
@@ -14,11 +16,10 @@ export default function Trial(props) {
   };
   return (
     <div>
-      count: {count}
-      <form onSubmit={submitForm}>
-        <button type="submit">go</button>
-      </form>
-      <X />
+      Trial
+      <Routes>
+        <Route path="/feedback" element={<Feedback />} />
+      </Routes>
     </div>
   );
 }
