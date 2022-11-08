@@ -511,9 +511,9 @@ async function addFeedback(req) {
 
   dbQueryString = `
                     INSERT
-                    INTO api_log (
+                    INTO feedback (
                       UserID, IPAddress, UserAgent,
-                      DateTimeRequest,
+                      DateTimeAdded,
                       FeedbackText)
                     VALUES (
                       ${userID}, '${ipAddress}', '${userAgent}',

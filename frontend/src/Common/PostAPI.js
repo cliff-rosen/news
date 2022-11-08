@@ -32,3 +32,13 @@ export const addPost = async (entryUrl, entryTitle, entryText) => {
 export const setPostVote = async (entryID, vote) => {
   return fetchPost(`entries/${entryID}/vote/${vote}`);
 };
+
+export const addFeedback = async (feedbackText) => {
+  feedbackText = feedbackText.trim();
+
+  const body = {
+    feedbackText,
+  };
+
+  return fetchPost("feedback", body);
+};

@@ -15,6 +15,7 @@
 CREATE TABLE IF NOT EXISTS `api_log` (
   `UserID` int(11) DEFAULT NULL,
   `IPAddress` varchar(50) DEFAULT NULL,
+  `UserAgent` varchar(200) DEFAULT NULL,
   `DateTimeRequest` timestamp NULL DEFAULT NULL,
   `URL` varchar(250) DEFAULT NULL,
   `Method` varchar(10) DEFAULT NULL,
@@ -41,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_comment_comment` FOREIGN KEY (`ParentCommentID`) REFERENCES `comment` (`CommentID`),
   CONSTRAINT `FK_comment_entry` FOREIGN KEY (`EntryID`) REFERENCES `entry` (`EntryID`),
   CONSTRAINT `FK_comment_user` FOREIGN KEY (`CommentUserID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -56,11 +57,22 @@ CREATE TABLE IF NOT EXISTS `entry` (
   `EntryUrl` varchar(2048) DEFAULT NULL,
   `EntryUrlDomain` varchar(250) DEFAULT NULL,
   `VoteScore` int(11) NOT NULL DEFAULT 0,
-  `CommentCount` int(11) unsigned NOT NULL DEFAULT 0,
+  `CommentCount` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`EntryID`),
   KEY `FK_USER_ID` (`UserID`),
   CONSTRAINT `FK_USER_ID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table dev.feedback
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `UserID` int(11) DEFAULT NULL,
+  `IPAddress` varchar(50) DEFAULT NULL,
+  `UserAgent` varchar(200) DEFAULT NULL,
+  `DateTimeAdded` timestamp NULL DEFAULT NULL,
+  `FeedbackText` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -71,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `Password` varchar(100) NOT NULL,
   PRIMARY KEY (`UserID`) USING BTREE,
   UNIQUE KEY `UserName` (`UserName`)
-) ENGINE=InnoDB AUTO_INCREMENT=143 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 

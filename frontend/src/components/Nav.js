@@ -82,7 +82,7 @@ const Navbar = ({ sessionManager }) => {
               border: "none",
               textTransform: "unset",
               height: 20,
-              color: isActive(section) ? "#0057b7a" : "GrayText",
+              color: isActive(section) ? "#1976d2" : "GrayText",
               fontWeight: isActive(section) ? "bold" : "normal",
             }}
           >
@@ -115,7 +115,14 @@ const Navbar = ({ sessionManager }) => {
           </Link>
         )}
         {" | "}
-        <Link style={{ textDecoration: "none", color: "gray" }} to="/help">
+        <Link
+          style={{
+            textDecoration: "none",
+            color: location.pathname === "/help" ? "#1976d2" : "gray",
+            fontWeight: location.pathname === "/help" ? "bold" : "normal",
+          }}
+          to="/help"
+        >
           help
         </Link>
       </Box>

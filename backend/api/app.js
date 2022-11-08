@@ -229,7 +229,7 @@ app.post(
 app.post("/feedback", checkForToken, (req, res) => {
   console.log("add feedback");
   db.addFeedback(req)
-    .then((dbres) => res.json(dbres))
+    .then((dbres) => res.json({ result: "SUCCESS" }))
     .catch((e) => {
       console.log("error", e);
       res.json({ error: e });

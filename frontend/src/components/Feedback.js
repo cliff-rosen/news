@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TextField, Button } from "@mui/material";
+import { addFeedback } from "../common/PostAPI";
 
 export default function Feedback() {
   const [feedbackText, setFeedbackText] = useState("");
@@ -9,7 +10,7 @@ export default function Feedback() {
     e.preventDefault();
 
     try {
-      //await apiAddPost(url, title, desc);
+      await addFeedback(feedbackText);
       setFeedbackText("");
       setMessage("Thanks for the feedback!");
     } catch (e) {
@@ -25,7 +26,6 @@ export default function Feedback() {
         <form onSubmit={formSubmit}>
           <TextField
             id="feedbackText"
-            autoFocus
             style={{ width: "400px", margin: "5px" }}
             type="text"
             label="Please type your feedback here"
