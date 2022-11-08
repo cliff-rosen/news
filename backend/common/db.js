@@ -507,7 +507,8 @@ async function addFeedback(req) {
   }
   const ipAddress = requestIP.getClientIp(req);
   const userAgent = req.headers["user-agent"];
-  const feedbackText = req.body.feedbackText;
+  var feedbackText = req.body.feedbackText;
+  feedbackText = feedbackText.replace(/'/g, "\\'");
 
   dbQueryString = `
                     INSERT

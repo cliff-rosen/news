@@ -16,7 +16,7 @@ export default function Help() {
           information regarding their safe and legal use. The site may be of
           interest to consumers, therapists, scientists, investors, regulators,
           and anyone else who’s curious about the space. We hope to build a
-          community where people are engaged in learning and meaningful
+          community where people are engaged in learning and in meaningful
           discussion.{" "}
         </div>
 
@@ -33,8 +33,8 @@ export default function Help() {
           <br />
           <br />
           To view the most recent posts (sorted by time stamp), click on ’new’
-          at the to of the page. To view trending posts (sorted by a function of
-          recency and activity), click on ’trending.’
+          at the top of the page. To view trending posts (sorted by a function
+          of recency and activity), click on ’trending.’
           <br />
           <br />
           Clicking on the title of any post containing a link will open that
@@ -64,8 +64,8 @@ export default function Help() {
           source, but remove site names (which will appear automatically) and
           anything resembling clickbait. When linking to resources or books,
           please include ‘Resource:’ or ‘Book:’ before the title. In the
-          ‘Description’ field (optional), include any elaboration that you feel
-          will help elucidate the intent of the post.
+          ‘Description’ field (optional), include anything you feel will
+          elucidate the intent of the post.
           <br />
           <br />
           In all posts and comments you submit, PLEASE:
