@@ -1,9 +1,7 @@
-import { BASE_API_URL } from "./APIUtils";
-import { getUserToken } from "./Auth";
 import { fetchGet, fetchPost } from "./APIUtils";
 
 export const logPostClick = async (entryID) => {
-  return fetchGet(`log/entries/${entryID}/click`);
+  return fetchGet(`entries/${entryID}/logclick`);
 };
 
 export const getPost = async (entryID) => {
@@ -22,11 +20,11 @@ export const addPost = async (entryUrl, entryTitle, entryText) => {
   entryTitle = entryTitle.trim();
   entryText = entryText.trim();
 
-  const body = JSON.stringify({
+  const body = {
     entryUrl,
     entryTitle,
     entryText,
-  });
+  };
 
   return fetchPost("entries", body);
 };

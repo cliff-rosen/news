@@ -49,7 +49,9 @@ export default function LoginFormModal({ sessionManager }) {
     }
 
     if (!isUsernameValid(username)) {
-      setErrMessage("Username may contain only letters and numbers.");
+      setErrMessage(
+        "Username may contain only letters and numbers and must be between 2 and 12 characters."
+      );
       return;
     }
 
@@ -63,7 +65,7 @@ export default function LoginFormModal({ sessionManager }) {
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
-        if (err.message === "INVALID_LOGIN") {
+        if (err.message === "UNAUTHORIZED") {
           setErrMessage("Invalid login.  Please try again.");
         } else {
           setErrMessage(

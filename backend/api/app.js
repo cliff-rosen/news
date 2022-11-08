@@ -34,7 +34,7 @@ app.post("/access", (req, res) => {
   password = req.body.password;
   if (password === "letstrip") {
     console.log("access granted");
-    res.send("access granted");
+    res.json({ status: "ACCESS_GRANTED" });
   } else {
     console.log("access failed");
     res.status(401).json({ error: "Invalid password" });
@@ -95,7 +95,7 @@ app.post("/login", (req, res) => {
         err.message === "Invalid username"
       ) {
         console.log("Login error", err.message);
-        res.status(401).json({ error: "Invalid username or password" });
+        res.status(401).json({ error: "INVALID_LOGIN" });
       } else {
         console.log("Unexpected error", err.message);
         res.status(500).json({ error: "Unexpected error" });
@@ -106,7 +106,7 @@ app.post("/login", (req, res) => {
 
 /////////////////////// LOGGING ////////////////////////////
 
-app.get("/log/entries/:entryid/click", checkForToken, (req, res) => {
+app.get("/entries/:entryid/logclick", checkForToken, (req, res) => {
   const { entryid } = req.params;
   console.log("logging entry click for: ", entryid);
   res.status(200);
@@ -225,6 +225,16 @@ app.post(
       .catch((e) => res.json({ error: e.message }));
   }
 );
+
+app.post("/feedback", checkForToken, (req, res) => {
+  console.log("add feedback");
+  db.addFeedback(req)
+    .then((dbres) => res.json(dbres))
+    .catch((e) => {
+      console.log("error", e);
+      res.json({ error: e });
+    });
+});
 
 //////////////////////////////////////////////////////
 

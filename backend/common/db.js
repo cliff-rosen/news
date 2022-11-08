@@ -472,8 +472,8 @@ async function addLog(req) {
     userID = 0;
   }
   const ipAddress = requestIP.getClientIp(req);
+  const userAgent = req.headers["user-agent"];
   const body = { ...req.body };
-  console.log(body);
   if (body.hasOwnProperty("password")) {
     body.password = "*****";
   }
@@ -482,11 +482,11 @@ async function addLog(req) {
   dbQueryString = `
                     INSERT
                     INTO api_log (
-                      UserID, IPAddress,
+                      UserID, IPAddress, UserAgent,
                       DateTimeRequest,
                       URL, Method, Body)
                     VALUES (
-                      ${userID}, '${ipAddress}',
+                      ${userID}, '${ipAddress}', '${userAgent}',
                       NOW(),
                       '${req.url}','${req.method}', '${bodyString}'
                       )
@@ -494,6 +494,36 @@ async function addLog(req) {
 
   const res = await pool.query(dbQueryString);
   console.log("addLog returned", res);
+  return res;
+}
+
+async function addFeedback(req) {
+  console.log("addFeedback");
+  var userID;
+  if (req.user) {
+    userID = req.user.userID;
+  } else {
+    userID = 0;
+  }
+  const ipAddress = requestIP.getClientIp(req);
+  const userAgent = req.headers["user-agent"];
+  const feedbackText = req.body.feedbackText;
+
+  dbQueryString = `
+                    INSERT
+                    INTO api_log (
+                      UserID, IPAddress, UserAgent,
+                      DateTimeRequest,
+                      FeedbackText)
+                    VALUES (
+                      ${userID}, '${ipAddress}', '${userAgent}',
+                      NOW(),
+                      '${feedbackText}'
+                      )
+                    `;
+
+  const res = await pool.query(dbQueryString);
+  console.log("addFeedback returned", res);
   return res;
 }
 
@@ -508,3 +538,4 @@ module.exports.addComment = addComment;
 module.exports.getEntryComments = getEntryComments;
 module.exports.addOrUpdateUserCommentVote = addOrUpdateUserCommentVote;
 module.exports.addLog = addLog;
+module.exports.addFeedback = addFeedback;

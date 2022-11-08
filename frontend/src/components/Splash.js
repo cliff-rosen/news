@@ -23,7 +23,7 @@ export default function Splash({ setOkToTrip }) {
     <div>
       <div>Tripper's Almanac PRE-LAUNCH</div>
       <div>
-        <div style={{ fontSize: "10px" }}>
+        <div style={{ fontSize: "10px", width: 500 }}>
           <br />
           <u>Terms of Use</u>
           <br />
@@ -55,6 +55,7 @@ export default function Splash({ setOkToTrip }) {
           <br />
         </div>
         <form onSubmit={submitForm}>
+          <span style={{ fontSize: 14 }}>Password: </span>
           <input
             autoFocus
             type="password"

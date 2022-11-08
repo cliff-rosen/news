@@ -6,10 +6,10 @@ export const getComments = async (entryID) => {
 
 export const addComment = async (entryID, parentCommentID, commentText) => {
   commentText = commentText.trim();
-  const body = JSON.stringify({
+  const body = {
     parentCommentID,
     commentText,
-  });
+  };
 
   return await fetchPost(`entries/${entryID}/comments`, body);
 };

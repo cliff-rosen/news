@@ -35,13 +35,15 @@ async function doFetch(method, endpoint, body) {
     headers,
   };
   if (body) {
-    options.body = body;
+    options.body = JSON.stringify(body);
   }
 
   const res = await fetch(`${BASE_API_URL}/${endpoint}`, options);
   const data = await res.json();
 
-  if (res.status !== 200 || data.error) {
+  if (res.status === 401) {
+    throw new Error("UNAUTHORIZED");
+  } else if (res.status !== 200 || data.error) {
     throw new Error(
       `doFetch error. [status=${res.status}, error=${data?.error}]`
     );

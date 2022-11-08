@@ -1,45 +1,23 @@
-import { BASE_API_URL } from "./APIUtils";
+import { fetchPost } from "./APIUtils";
 
 export const getAccess = async (password) => {
-  const body = JSON.stringify({ password });
-  const res = await fetch(`${BASE_API_URL}/access`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  });
-
-  if (res.status === 200) {
-    return "ok";
-  } else if (res.status === 401) {
-    console.log("AuthAPI.login - 401");
-    throw new Error("INVALID_LOGIN");
-  } else if (res.error) {
-    throw new Error(res.error);
-  } else {
-    throw new Error("UNKNOWN_LOGIN_ERROR");
+  var res;
+  try {
+    res = await fetchPost("access", { password });
+    return res;
+  } catch (e) {
+    console.log("getAccess error: ", e.message);
+    if (e.message === "UNAUTHORIZED") {
+      console.log("AuthAPI.login - 401");
+      throw new Error("INVALID_LOGIN");
+    } else {
+      throw new Error("UNKNOWN_LOGIN_ERROR");
+    }
   }
 };
 
 export const register = async (username, password) => {
-  const body = JSON.stringify({ username, password });
-  const res = await fetch(`${BASE_API_URL}/createuser`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  });
-
-  const user = await res.json();
-  if (res.status === 200 && !user.error) {
-    return user;
-  } else if (user.error) {
-    throw new Error(user.error);
-  } else {
-    throw new Error("UNKNOWN_REGISTRATION_ERROR");
-  }
+  return fetchPost("createuser", { username, password });
 };
 
 /*
@@ -51,23 +29,5 @@ export const register = async (username, password) => {
     unknown error                               EXCEPTION UNKNOWN_LOGIN_ERROR
 */
 export const login = async (username, password) => {
-  const body = JSON.stringify({ username, password });
-  const res = await fetch(`${BASE_API_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  });
-
-  if (res.status === 200) {
-    return res.json();
-  } else if (res.status === 401) {
-    console.log("AuthAPI.login - 401");
-    throw new Error("INVALID_LOGIN");
-  } else if (res.error) {
-    throw new Error(res.error);
-  } else {
-    throw new Error("UNKNOWN_LOGIN_ERROR");
-  }
+  return await fetchPost("login", { username, password });
 };
