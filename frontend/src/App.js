@@ -7,7 +7,7 @@ import LoginFormModal from "./components/LoginFormModal";
 import PostList from "./components/PostList";
 import PostAdd from "./components/PostAdd";
 import PostView from "./components/PostView";
-import Help from "./components/help";
+import Help from "./components/Help";
 import Trial from "./components/Trial";
 
 function App() {
