@@ -85,7 +85,7 @@ export default function LoginFormModal({ sessionManager }) {
 
     if (!isUsernameValid(usernameR)) {
       setErrMessage(
-        "Username must be between 2 and 12 charactres and may contain only letters and numbers."
+        "Username must be between 2 and 12 characters and may contain only letters and numbers."
       );
       return;
     }

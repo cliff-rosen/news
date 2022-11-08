@@ -109,7 +109,7 @@ app.post("/login", (req, res) => {
 app.get("/entries/:entryid/logclick", checkForToken, (req, res) => {
   const { entryid } = req.params;
   console.log("logging entry click for: ", entryid);
-  res.status(200);
+  res.json({ result: "SUCCESS" });
 });
 
 /////////////////////// ENTRY ////////////////////////////
