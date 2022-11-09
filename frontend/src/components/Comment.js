@@ -101,13 +101,16 @@ export default function Comment({
         {showReply && (
           <div style={{ border: "none" }}>
             <TextField
+              sx={{
+                width: { xs: 350, md: 600 },
+                margin: "5px",
+              }}
               autoFocus
               value={reply}
               onChange={(e) => setReply(e.target.value)}
               multiline
               rows={4}
               size="small"
-              InputProps={{ style: { fontSize: 10, width: "400px" } }}
             />
             <br />
             <Button

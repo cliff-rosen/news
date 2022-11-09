@@ -10,7 +10,7 @@ const sections = [
   },
   { name: "new", link: "/postlist?order=new" },
   { name: "post", link: "/add" },
-  { name: "trial", link: "/trial" },
+  //{ name: "trial", link: "/trial" },
 ];
 
 const Navbar = ({ sessionManager }) => {

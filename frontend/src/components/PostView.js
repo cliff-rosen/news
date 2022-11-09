@@ -102,7 +102,7 @@ export default function PostView({ sessionManager }) {
             <form onSubmit={submitComment}>
               <TextField
                 id="comment"
-                style={{ width: "400px", margin: "5px" }}
+                sx={{ width: { xs: 350, md: 600 }, margin: "5px" }}
                 multiline
                 rows={4}
                 type="text"
