@@ -10,7 +10,7 @@ const sections = [
   },
   { name: "new", link: "/postlist?order=new" },
   { name: "post", link: "/add" },
-  //{ name: "Trial", link: "/trial" },
+  { name: "trial", link: "/trial" },
 ];
 
 const Navbar = ({ sessionManager }) => {
@@ -38,7 +38,7 @@ const Navbar = ({ sessionManager }) => {
     return false;
   };
 
-  const lout = () => {
+  const logout = () => {
     sessionManager.logout();
   };
 
@@ -67,11 +67,13 @@ const Navbar = ({ sessionManager }) => {
           TA
         </Link>
       </Typography>
-      <div style={{ minWidth: 30 }}></div>
+      <div style={{ minWidth: 20 }}></div>
+
       <Box
         sx={{
           flexGrow: 1,
           border: "none",
+          display: { xs: "none", sm: "block" },
         }}
       >
         {sections.map((section) => (
@@ -91,14 +93,41 @@ const Navbar = ({ sessionManager }) => {
         ))}
       </Box>
 
-      <Box sx={{ flexGrow: 0, fontSize: ".8em" }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          border: "none",
+          display: { xs: "block", sm: "none" },
+        }}
+      >
+        {sections.map((section) => (
+          <Button
+            key={section.link}
+            onClick={() => navigate(section.link)}
+            style={{
+              border: "none",
+              textTransform: "unset",
+              height: 20,
+              color: isActive(section) ? "#1976d2" : "GrayText",
+              fontWeight: isActive(section) ? "bold" : "normal",
+              fontSize: ".7em",
+              maxWidth: "50px",
+              minWidth: "30px",
+            }}
+          >
+            {section.name}
+          </Button>
+        ))}
+      </Box>
+
+      <Box sx={{ flexGrow: 0, fontSize: ".7em" }}>
         {sessionManager.user?.userID > 0 ? (
           <span>
             {sessionManager.user.userName} |{" "}
             <Link
               style={{ textDecoration: "none", color: "gray" }}
               to="#"
-              onClick={lout}
+              onClick={logout}
             >
               logout
             </Link>

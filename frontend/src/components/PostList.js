@@ -55,7 +55,7 @@ function PostList({ sessionManager }) {
   }
 
   return (
-    <div style={{ maxWidth: 800, border: "none" }}>
+    <div style={{ border: "none" }}>
       {posts.map((post, i) => {
         post.idx = i;
         return (

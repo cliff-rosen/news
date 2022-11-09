@@ -14,7 +14,7 @@ function App() {
   const sessionManager = useSessionManager();
   const [okToTrip, setOkToTrip] = useState(false);
 
-  if (!okToTrip) {
+  if (false && !okToTrip) {
     return <Splash setOkToTrip={setOkToTrip} />;
   }
 

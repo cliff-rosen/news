@@ -32,7 +32,6 @@ function PostAdd({ sessionManager }) {
       setMessage("Doh! An unexpected error occurred.  Please try again.");
     }
   };
-
   return (
     <div>
       <div>
@@ -48,7 +47,7 @@ function PostAdd({ sessionManager }) {
         <TextField
           id="url"
           autoFocus
-          style={{ width: "400px", margin: "5px" }}
+          sx={{ width: { sm: 350, md: 600 }, margin: "5px" }}
           type="text"
           label="URL"
           value={url}
@@ -58,7 +57,7 @@ function PostAdd({ sessionManager }) {
         <br />
         <TextField
           id="title"
-          style={{ width: "400px", margin: "5px" }}
+          sx={{ width: { sm: 350, md: 600 }, margin: "5px" }}
           type="text"
           label="Title"
           value={title}
@@ -69,7 +68,7 @@ function PostAdd({ sessionManager }) {
         <br />
         <TextField
           id="desc"
-          style={{ width: "400px", margin: "5px" }}
+          sx={{ width: { sm: 350, md: 600 }, margin: "5px" }}
           multiline
           rows={4}
           type="text"

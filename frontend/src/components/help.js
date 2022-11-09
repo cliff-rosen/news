@@ -2,7 +2,7 @@ import Feedback from "./Feedback";
 
 export default function Help() {
   return (
-    <div style={{ margin: "20px" }}>
+    <div style={{ margin: "20px", color: "gray", border: "none" }}>
       <div style={{ whiteSpace: "pre-wrap", marginBottom: 30 }}>
         <div style={{ textDecoration: "underline", marginBottom: 20 }}>
           Background
