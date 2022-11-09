@@ -142,7 +142,7 @@ export default function LoginFormModal({ sessionManager }) {
           <form onSubmit={formSubmit} style={{ border: "none" }}>
             <TextField
               id="username"
-              sx={{ width: { xs: 300, md: 300 }, margin: "5px" }}
+              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
               autoFocus
               type="text"
               label="Username"
@@ -154,7 +154,7 @@ export default function LoginFormModal({ sessionManager }) {
             <br />
             <TextField
               id="password"
-              sx={{ width: { xs: 300, md: 300 }, margin: "5px" }}
+              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
               type="password"
               label="Password"
               value={password}
@@ -174,7 +174,7 @@ export default function LoginFormModal({ sessionManager }) {
           <form onSubmit={formSubmitR}>
             <TextField
               id="usernameR"
-              sx={{ width: { xs: 300, md: 300 }, margin: "5px" }}
+              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
               type="text"
               label="Username"
               value={usernameR}
@@ -185,7 +185,7 @@ export default function LoginFormModal({ sessionManager }) {
             <br />
             <TextField
               id="passwordR"
-              sx={{ width: { xs: 300, md: 300 }, margin: "5px" }}
+              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
               type="password"
               label="Password"
               value={passwordR}
@@ -196,7 +196,7 @@ export default function LoginFormModal({ sessionManager }) {
             <br />
             <TextField
               id="password2R"
-              sx={{ width: { xs: 300, md: 300 }, margin: "5px" }}
+              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
               type="password"
               label="Password (repeat)"
               value={passwordR2}

@@ -23,7 +23,7 @@ export default function Splash({ setOkToTrip }) {
     <div>
       <div>Tripper's Almanac PRE-LAUNCH</div>
       <div>
-        <div style={{ fontSize: "10px", width: 500 }}>
+        <div style={{ fontSize: "10px", maxWidth: 500 }}>
           <br />
           <u>Terms of Use</u>
           <br />

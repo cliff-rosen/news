@@ -102,7 +102,7 @@ export default function Comment({
           <div style={{ border: "none" }}>
             <TextField
               sx={{
-                width: { xs: 350, md: 600 },
+                width: { xs: 250, md: 600 },
                 margin: "5px",
               }}
               autoFocus

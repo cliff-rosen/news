@@ -27,7 +27,7 @@ export default function Feedback() {
         <form onSubmit={formSubmit}>
           <TextField
             id="feedbackText"
-            sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
+            sx={{ width: { xs: 275, md: 600 }, margin: "5px" }}
             type="text"
             label="Please type your feedback here"
             value={feedbackText}

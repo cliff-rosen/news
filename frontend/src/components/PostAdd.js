@@ -47,7 +47,7 @@ function PostAdd({ sessionManager }) {
         <TextField
           id="url"
           autoFocus
-          sx={{ width: { xs: 350, md: 600 }, margin: "5px" }}
+          sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
           type="text"
           label="URL"
           value={url}
@@ -57,7 +57,7 @@ function PostAdd({ sessionManager }) {
         <br />
         <TextField
           id="title"
-          sx={{ width: { xs: 350, md: 600 }, margin: "5px" }}
+          sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
           type="text"
           label="Title"
           value={title}
@@ -68,7 +68,7 @@ function PostAdd({ sessionManager }) {
         <br />
         <TextField
           id="desc"
-          sx={{ width: { xs: 350, md: 600 }, margin: "5px" }}
+          sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
           multiline
           rows={4}
           type="text"
