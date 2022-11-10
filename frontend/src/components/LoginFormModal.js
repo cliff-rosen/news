@@ -32,7 +32,7 @@ export default function LoginFormModal({ sessionManager }) {
   };
 
   const isUsernameValid = (u) => {
-    if (u.length < 2 || u.length > 12) {
+    if (u.length < 2 || u.length > 15) {
       return false;
     }
 
@@ -116,104 +116,102 @@ export default function LoginFormModal({ sessionManager }) {
   };
 
   return (
-    <div>
-      <Dialog
-        open={sessionManager.lao.show}
-        onClose={handleClose}
-        PaperProps={{ sx: { width: 350 } }}
-      >
-        <DialogTitle>Login / Register</DialogTitle>
-        <DialogContent>
-          {sessionManager.lao.message && (
-            <DialogContentText>
-              {sessionManager.lao.message}
-              <br /> <br />
-            </DialogContentText>
-          )}
-          {errMessage ? (
-            <span>
-              {errMessage} <br />
-              <br />
-            </span>
-          ) : (
-            ""
-          )}
-          <DialogContentText>LOGIN </DialogContentText>
-          <form onSubmit={formSubmit} style={{ border: "none" }}>
-            <TextField
-              id="username"
-              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
-              autoFocus
-              type="text"
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              variant="outlined"
-              required
-            />
+    <Dialog
+      open={sessionManager.lao.show}
+      onClose={handleClose}
+      PaperProps={{ sx: { width: 350 } }}
+    >
+      <DialogTitle>Login / Register</DialogTitle>
+      <DialogContent>
+        {sessionManager.lao.message && (
+          <DialogContentText>
+            {sessionManager.lao.message}
+            <br /> <br />
+          </DialogContentText>
+        )}
+        {errMessage ? (
+          <span style={{ color: "red" }}>
+            {errMessage} <br />
             <br />
-            <TextField
-              id="password"
-              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
-              type="password"
-              label="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              variant="outlined"
-              required
-            />
-            <br />
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit" variant="contained" color="primary">
-                login
-              </Button>
-            </DialogActions>
-          </form>{" "}
-          <DialogContentText>REGISTER</DialogContentText>
-          <form onSubmit={formSubmitR}>
-            <TextField
-              id="usernameR"
-              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
-              type="text"
-              label="Username"
-              value={usernameR}
-              onChange={(e) => setUsernameR(e.target.value)}
-              variant="outlined"
-              required
-            />
-            <br />
-            <TextField
-              id="passwordR"
-              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
-              type="password"
-              label="Password"
-              value={passwordR}
-              onChange={(e) => setPasswordR(e.target.value)}
-              variant="outlined"
-              required
-            />
-            <br />
-            <TextField
-              id="password2R"
-              sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
-              type="password"
-              label="Password (repeat)"
-              value={passwordR2}
-              onChange={(e) => setPasswordR2(e.target.value)}
-              variant="outlined"
-              required
-            />
-            <br />
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit" variant="contained" color="primary">
-                register
-              </Button>
-            </DialogActions>
-          </form>{" "}
-        </DialogContent>
-      </Dialog>
-    </div>
+          </span>
+        ) : (
+          ""
+        )}
+        <DialogContentText>LOGIN </DialogContentText>
+        <form onSubmit={formSubmit} style={{ border: "none" }}>
+          <TextField
+            id="username"
+            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            autoFocus
+            type="text"
+            label="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            variant="outlined"
+            required
+          />
+          <br />
+          <TextField
+            id="password"
+            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            type="password"
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            variant="outlined"
+            required
+          />
+          <br />
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained" color="primary">
+              login
+            </Button>
+          </DialogActions>
+        </form>{" "}
+        <DialogContentText>REGISTER</DialogContentText>
+        <form onSubmit={formSubmitR}>
+          <TextField
+            id="usernameR"
+            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            type="text"
+            label="Username"
+            value={usernameR}
+            onChange={(e) => setUsernameR(e.target.value)}
+            variant="outlined"
+            required
+          />
+          <br />
+          <TextField
+            id="passwordR"
+            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            type="password"
+            label="Password"
+            value={passwordR}
+            onChange={(e) => setPasswordR(e.target.value)}
+            variant="outlined"
+            required
+          />
+          <br />
+          <TextField
+            id="password2R"
+            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            type="password"
+            label="Password (repeat)"
+            value={passwordR2}
+            onChange={(e) => setPasswordR2(e.target.value)}
+            variant="outlined"
+            required
+          />
+          <br />
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained" color="primary">
+              register
+            </Button>
+          </DialogActions>
+        </form>{" "}
+      </DialogContent>
+    </Dialog>
   );
 }
