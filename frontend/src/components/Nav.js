@@ -40,6 +40,8 @@ const Navbar = ({ sessionManager }) => {
 
   const logout = () => {
     sessionManager.logout();
+    sessionManager.setSnackbarMessage("Logged out");
+    sessionManager.setShowSnackbar(true);
   };
 
   return (

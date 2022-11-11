@@ -90,6 +90,8 @@ const makeLoginActionObject = () => {
 export const useSessionManager = () => {
   const [user, setUser] = useState(getUser());
   const [lao, setLao] = useState(makeLoginActionObject());
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const showLogin = (message) => {
     setLao({ ...lao, show: true, message });
@@ -156,5 +158,9 @@ export const useSessionManager = () => {
     login,
     logout,
     requireUser,
+    showSnackbar,
+    setShowSnackbar,
+    snackbarMessage,
+    setSnackbarMessage,
   };
 };

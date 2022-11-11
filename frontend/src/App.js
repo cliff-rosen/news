@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { useSessionManager } from "./common/Auth";
 import Splash from "./components/Splash";
 import Nav from "./components/Nav.js";
+import SessionMessage from "./components/SessionMessage";
 import LoginFormModal from "./components/LoginFormModal";
 import PostList from "./components/PostList";
 import PostAdd from "./components/PostAdd";
@@ -14,7 +15,7 @@ function App() {
   const sessionManager = useSessionManager();
   const [okToTrip, setOkToTrip] = useState(false);
 
-  if (!okToTrip) {
+  if (process.env.NODE_ENV !== "development" && !okToTrip) {
     return <Splash setOkToTrip={setOkToTrip} />;
   }
 
@@ -26,6 +27,7 @@ function App() {
       }}
     >
       <div style={{ flexGrow: 1, border: "none", maxWidth: 800 }}>
+        <SessionMessage sessionManager={sessionManager} />
         <LoginFormModal sessionManager={sessionManager} />
         <Nav sessionManager={sessionManager} />
         <Routes>

@@ -7,6 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Alert from "@mui/material/Alert";
 
 export default function LoginFormModal({ sessionManager }) {
   const navigate = useNavigate();
@@ -23,8 +24,8 @@ export default function LoginFormModal({ sessionManager }) {
     setUsernameR("");
     setPasswordR("");
     setPasswordR2("");
-
     setErrMessage("");
+
     if (sessionManager.lao.homeOnAbort) {
       navigate("/");
     }
@@ -62,6 +63,8 @@ export default function LoginFormModal({ sessionManager }) {
         setPassword("");
         setErrMessage("");
         sessionManager.hideLoginThen(u);
+        sessionManager.setSnackbarMessage("Login successful");
+        sessionManager.setShowSnackbar(true);
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
@@ -103,6 +106,8 @@ export default function LoginFormModal({ sessionManager }) {
         setPasswordR2("");
         setErrMessage("");
         sessionManager.hideLoginThen(u);
+        sessionManager.setSnackbarMessage("Registration successful");
+        sessionManager.setShowSnackbar(true);
       })
       .catch((err) => {
         if ((err.message = "DUPLICATE")) {
@@ -130,10 +135,10 @@ export default function LoginFormModal({ sessionManager }) {
           </DialogContentText>
         )}
         {errMessage ? (
-          <span style={{ color: "red" }}>
+          <Alert severity="error">
             {errMessage} <br />
             <br />
-          </span>
+          </Alert>
         ) : (
           ""
         )}
