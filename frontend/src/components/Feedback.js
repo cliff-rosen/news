@@ -20,30 +20,29 @@ export default function Feedback() {
   };
 
   return (
-    <div>
-      <div style={{}}>
+    <div style={{}}>
+      <br />
+      {message}
+      <form onSubmit={formSubmit}>
+        <TextField
+          margin="normal"
+          fullWidth
+          id="feedbackText"
+          type="text"
+          label="Please type your feedback here"
+          value={feedbackText}
+          onChange={(e) => setFeedbackText(e.target.value)}
+          variant="outlined"
+          multiline
+          rows={5}
+          required
+          onFocus={() => setMessage("")}
+        />
         <br />
-        {message} <br />
-        <form onSubmit={formSubmit}>
-          <TextField
-            id="feedbackText"
-            sx={{ width: { xs: 275, md: 600 }, margin: "5px" }}
-            type="text"
-            label="Please type your feedback here"
-            value={feedbackText}
-            onChange={(e) => setFeedbackText(e.target.value)}
-            variant="outlined"
-            multiline
-            rows={5}
-            required
-            onFocus={() => setMessage("")}
-          />
-          <br />
-          <Button type="submit" variant="contained" color="primary">
-            submit
-          </Button>
-        </form>
-      </div>
+        <Button type="submit" variant="contained" color="primary">
+          submit
+        </Button>
+      </form>
     </div>
   );
 }

@@ -18,7 +18,7 @@ async function doUpdateRank() {
     `
       UPDATE entry
       SET Rank = (
-        SELECT 100 * (1 + VoteScore + CommentCount) 
+        SELECT 100 * (1 + VoteScoreActual + VoteScoreBias + CommentCount) 
           / POWER(TIMESTAMPDIFF(DAY, EntryDateTime, NOW()) + 1, 1.8)
       )
     `

@@ -158,7 +158,8 @@ async function getEntry(userID, entryID) {
 
 async function getAllEntries(userID, order, start, limit) {
   dbQueryString = `
-                    SELECT e.*, u.UserName, v.Vote
+                    SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore,
+                    u.UserName, v.Vote
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 
@@ -246,7 +247,7 @@ async function updateEntryVoteScoreDB(entryID) {
 
   dbQueryString = `
                     UPDATE entry
-                    SET VoteScore = 
+                    SET VoteScoreActual = 
                       (
                         SELECT sum(Vote)
                         FROM user_entry_vote
