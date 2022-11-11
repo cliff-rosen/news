@@ -77,14 +77,13 @@ export default function PostView({ sessionManager }) {
         updateVote={updatePostVote}
         showText={true}
       />
-
       <div
         style={{
           display: "flex",
           flexDirection: "row",
-          paddingBottom: 10,
           alignItems: "start",
           justifyContent: "start",
+          border: "none",
         }}
       >
         <div
@@ -93,16 +92,23 @@ export default function PostView({ sessionManager }) {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
+            border: "none",
           }}
         ></div>
-        <div>
-          <div>
+        <div style={{ flex: 1, border: "none" }}>
+          <div style={{ border: "none" }}>
             {" "}
             {message}
             <form onSubmit={submitComment}>
               <TextField
+                style={{
+                  border: "none",
+                  marginTop: 5,
+                  marginRight: 20,
+                  marginBottom: 10,
+                }}
+                fullWidth
                 id="comment"
-                sx={{ width: { xs: 250, md: 600 }, margin: "5px" }}
                 multiline
                 rows={4}
                 type="text"

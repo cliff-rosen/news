@@ -477,7 +477,8 @@ async function addLog(req) {
   if (body.hasOwnProperty("password")) {
     body.password = "*****";
   }
-  const bodyString = JSON.stringify(body);
+  var bodyString = JSON.stringify(body);
+  bodyString = bodyString.replace(/'/g, "\\'");
 
   dbQueryString = `
                     INSERT

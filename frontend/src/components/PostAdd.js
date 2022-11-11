@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { addPost as apiAddPost } from "../common/PostAPI";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import { TextField, Button } from "@mui/material";
 
@@ -43,45 +45,55 @@ function PostAdd({ sessionManager }) {
         )}
       </div>
       <div style={{ margin: "20px" }}></div>
-      <form onSubmit={formSubmit}>
-        <TextField
-          id="url"
-          autoFocus
-          sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
-          type="text"
-          label="URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          variant="outlined"
-        />
-        <br />
-        <TextField
-          id="title"
-          sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
-          type="text"
-          label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          variant="outlined"
-          required
-        />
-        <br />
-        <TextField
-          id="desc"
-          sx={{ width: { xs: 300, md: 600 }, margin: "5px" }}
-          multiline
-          rows={4}
-          type="text"
-          label="Description"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-          variant="outlined"
-        />
-        <br />
-        <Button type="submit" variant="contained" color="primary">
-          post
-        </Button>
-      </form>
+      <Container maxWidth="xs">
+        <Box component="form" onSubmit={formSubmit} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="url"
+            autoFocus
+            type="text"
+            label="URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            variant="outlined"
+          />
+          <br />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="title"
+            type="text"
+            label="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            variant="outlined"
+            required
+          />
+          <br />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="desc"
+            multiline
+            rows={4}
+            type="text"
+            label="Description"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            variant="outlined"
+          />
+          <br />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={{ marginTop: 20 }}
+          >
+            post
+          </Button>
+        </Box>
+      </Container>
     </div>
   );
 }

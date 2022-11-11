@@ -56,7 +56,10 @@ export default function Comment({
         |
       </div>
 
-      <div className={"CommentContent"} style={{ border: "none" }}>
+      <div
+        className={"CommentContent"}
+        style={{ flex: 1, marginRight: 10, border: "none" }}
+      >
         <div style={{ fontSize: "12px", color: "gray" }}>
           {comment.CommentUserName} {getElapsedTime(comment.DateTimeAdded)} ago
         </div>
@@ -102,9 +105,9 @@ export default function Comment({
           <div style={{ border: "none" }}>
             <TextField
               sx={{
-                width: { xs: 250, md: 600 },
                 margin: "5px",
               }}
+              fullWidth
               autoFocus
               value={reply}
               onChange={(e) => setReply(e.target.value)}

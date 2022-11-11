@@ -8,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 
 export default function LoginFormModal({ sessionManager }) {
   const navigate = useNavigate();
@@ -141,10 +142,11 @@ export default function LoginFormModal({ sessionManager }) {
           ""
         )}
         <DialogContentText>LOGIN </DialogContentText>
-        <form onSubmit={formSubmit} style={{ border: "none" }}>
+        <Box component="form" onSubmit={formSubmit} sx={{ mt: 1 }}>
           <TextField
+            margin="normal"
             id="username"
-            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            fullWidth
             autoFocus
             type="text"
             label="Username"
@@ -155,8 +157,9 @@ export default function LoginFormModal({ sessionManager }) {
           />
           <br />
           <TextField
+            margin="normal"
             id="password"
-            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            fullWidth
             type="password"
             label="Password"
             value={password}
@@ -171,12 +174,13 @@ export default function LoginFormModal({ sessionManager }) {
               login
             </Button>
           </DialogActions>
-        </form>{" "}
+        </Box>{" "}
         <DialogContentText>REGISTER</DialogContentText>
         <form onSubmit={formSubmitR}>
           <TextField
+            margin="normal"
             id="usernameR"
-            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            fullWidth
             type="text"
             label="Username"
             value={usernameR}
@@ -186,8 +190,9 @@ export default function LoginFormModal({ sessionManager }) {
           />
           <br />
           <TextField
+            margin="normal"
             id="passwordR"
-            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            fullWidth
             type="password"
             label="Password"
             value={passwordR}
@@ -197,8 +202,9 @@ export default function LoginFormModal({ sessionManager }) {
           />
           <br />
           <TextField
+            margin="normal"
             id="password2R"
-            sx={{ width: { xs: 200, md: 300 }, margin: "5px" }}
+            fullWidth
             type="password"
             label="Password (repeat)"
             value={passwordR2}
