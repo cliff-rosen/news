@@ -139,7 +139,7 @@ async function deleteEntry(entryID) {
 
 async function getEntry(userID, entryID) {
   dbQueryString = `
-                      SELECT e.*, u.UserName, v.Vote
+                      SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore, u.UserName, v.Vote
                       FROM entry e
                       JOIN user u ON e.UserID = u.UserID
                       LEFT JOIN user_entry_vote v 
