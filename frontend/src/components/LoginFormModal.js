@@ -63,8 +63,7 @@ export default function LoginFormModal({ sessionManager }) {
         setPassword("");
         setErrMessage("");
         sessionManager.hideLoginThen(u);
-        sessionManager.setSnackbarMessage("Login successful");
-        sessionManager.setShowSnackbar(true);
+        sessionManager.setSessionMessageWrapper("Login successful");
       })
       .catch((err) => {
         console.log("formSubmit: ", err.message);
@@ -106,8 +105,7 @@ export default function LoginFormModal({ sessionManager }) {
         setPasswordR2("");
         setErrMessage("");
         sessionManager.hideLoginThen(u);
-        sessionManager.setSnackbarMessage("Registration successful");
-        sessionManager.setShowSnackbar(true);
+        sessionManager.setSessionMessageWrapper("Registration successful");
       })
       .catch((err) => {
         if ((err.message = "DUPLICATE")) {

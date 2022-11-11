@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { TextField, Button } from "@mui/material";
+import { useState, useEffect } from "react";
 import { addPost as apiAddPost } from "../common/PostAPI";
-import { useEffect } from "react";
+import Alert from "@mui/material/Alert";
+import { TextField, Button } from "@mui/material";
 
 function PostAdd({ sessionManager }) {
   const [url, setUrl] = useState("");
@@ -26,7 +26,7 @@ function PostAdd({ sessionManager }) {
       setUrl("");
       setTitle("");
       setDesc("");
-      setMessage("The entry has been submitted.");
+      sessionManager.setSessionMessageWrapper("Entry submitted");
     } catch (e) {
       console.log("error adding post", e);
       setMessage("Doh! An unexpected error occurred.  Please try again.");
@@ -37,7 +37,7 @@ function PostAdd({ sessionManager }) {
       <div>
         {message && (
           <div>
-            {message}
+            <Alert severity="error">{message}</Alert>
             <br />
           </div>
         )}

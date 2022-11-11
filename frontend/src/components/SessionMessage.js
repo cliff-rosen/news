@@ -4,13 +4,13 @@ import { Alert } from "@mui/material";
 export default function SessionMessage({ sessionManager }) {
   return (
     <Snackbar
-      open={sessionManager.showSnackbar}
-      autoHideDuration={2000}
-      onClose={() => sessionManager.setShowSnackbar(false)}
+      open={sessionManager.showSessionMessage}
+      autoHideDuration={3000}
+      onClose={() => sessionManager.setShowSessionMessage(false)}
       severity="info"
     >
       <Alert severity="success" sx={{ width: "100%" }}>
-        {sessionManager.snackbarMessage}
+        {sessionManager.sessionMessage}
       </Alert>
     </Snackbar>
   );

@@ -90,8 +90,8 @@ const makeLoginActionObject = () => {
 export const useSessionManager = () => {
   const [user, setUser] = useState(getUser());
   const [lao, setLao] = useState(makeLoginActionObject());
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [showSessionMessage, setShowSessionMessage] = useState(false);
+  const [sessionMessage, setSessionMessage] = useState("");
 
   const showLogin = (message) => {
     setLao({ ...lao, show: true, message });
@@ -146,6 +146,12 @@ export const useSessionManager = () => {
     setUser(getUser());
   };
 
+  const setSessionMessageWrapper = (message) => {
+    console.log("show message", message);
+    setSessionMessage(message);
+    setShowSessionMessage(true);
+  };
+
   return {
     user,
     lao,
@@ -158,9 +164,9 @@ export const useSessionManager = () => {
     login,
     logout,
     requireUser,
-    showSnackbar,
-    setShowSnackbar,
-    snackbarMessage,
-    setSnackbarMessage,
+    sessionMessage,
+    setSessionMessageWrapper,
+    showSessionMessage,
+    setShowSessionMessage,
   };
 };
