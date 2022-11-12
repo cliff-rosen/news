@@ -17,6 +17,8 @@ function PostAdd({ sessionManager }) {
   const [message, setMessage] = useState("");
   const [substances, setSubstances] = useState([]);
   const [conditions, setConditions] = useState([]);
+  const [substancesSelection, setSubstancesSelection] = useState({});
+  const [conditionsSelection, setConditionsSelection] = useState({});
 
   useEffect(() => {
     sessionManager.requireUser();
@@ -24,12 +26,28 @@ function PostAdd({ sessionManager }) {
 
   useEffect(() => {
     const getAttributes = async () => {
-      setSubstances(await getSubstances());
-      setConditions(await getConditions());
+      const sub = await getSubstances();
+      const cond = await getConditions();
+      setSubstances(sub);
+      setConditions(cond);
     };
 
     getAttributes();
   }, []);
+
+  const handleSubstancesSelection = (e) => {
+    setSubstancesSelection((s) => {
+      s[e.target.id] = e.target.checked;
+      return s;
+    });
+  };
+
+  const handleConditionsSelection = (e) => {
+    setConditionsSelection((c) => {
+      c[e.target.id] = e.target.checked;
+      return c;
+    });
+  };
 
   const formSubmit = async (e) => {
     e.preventDefault();
@@ -113,8 +131,15 @@ function PostAdd({ sessionManager }) {
               <FormGroup>
                 {substances.map((substance) => (
                   <FormControlLabel
-                    id={substance.SubstanceID}
-                    control={<Checkbox />}
+                    key={substance.SubstanceID}
+                    control={
+                      <Checkbox
+                        id={substance.SubstanceID.toString()}
+                        checked={substancesSelection[substance.SubstanceID]}
+                        onChange={handleSubstancesSelection}
+                        size="small"
+                      />
+                    }
                     label={substance.SubstanceName}
                   />
                 ))}
@@ -125,8 +150,15 @@ function PostAdd({ sessionManager }) {
               <FormGroup>
                 {conditions.map((condition) => (
                   <FormControlLabel
-                    id={condition.ConditionID}
-                    control={<Checkbox />}
+                    key={condition.ConditionID}
+                    control={
+                      <Checkbox
+                        id={condition.ConditionID.toString()}
+                        checked={conditionsSelection[condition.ConditionID]}
+                        onChange={handleConditionsSelection}
+                        size="small"
+                      />
+                    }
                     label={condition.ConditionName}
                   />
                 ))}

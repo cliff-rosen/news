@@ -550,7 +550,7 @@ async function getSubstances() {
 async function getConditions() {
   dbQueryString = `
                       SELECT *
-                      FROM condition
+                      FROM health_condition
                       ORDER BY ConditionName
                       `;
 
