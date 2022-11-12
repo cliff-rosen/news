@@ -42,7 +42,15 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_comment_comment` FOREIGN KEY (`ParentCommentID`) REFERENCES `comment` (`CommentID`),
   CONSTRAINT `FK_comment_entry` FOREIGN KEY (`EntryID`) REFERENCES `entry` (`EntryID`),
   CONSTRAINT `FK_comment_user` FOREIGN KEY (`CommentUserID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table dev.condition
+CREATE TABLE IF NOT EXISTS `condition` (
+  `ConditionID` smallint(6) DEFAULT NULL,
+  `ConditionName` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -56,12 +64,13 @@ CREATE TABLE IF NOT EXISTS `entry` (
   `EntryText` text DEFAULT NULL,
   `EntryUrl` varchar(2048) DEFAULT NULL,
   `EntryUrlDomain` varchar(250) DEFAULT NULL,
-  `VoteScore` int(11) NOT NULL DEFAULT 0,
+  `VoteScoreActual` smallint(6) NOT NULL DEFAULT 0,
+  `VoteScoreBias` smallint(6) DEFAULT NULL,
   `CommentCount` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`EntryID`),
   KEY `FK_USER_ID` (`UserID`),
   CONSTRAINT `FK_USER_ID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -76,6 +85,14 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table dev.substance
+CREATE TABLE IF NOT EXISTS `substance` (
+  `SubstanceID` smallint(6) DEFAULT NULL,
+  `SubstanceName` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table dev.user
 CREATE TABLE IF NOT EXISTS `user` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
@@ -83,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `Password` varchar(100) NOT NULL,
   PRIMARY KEY (`UserID`) USING BTREE,
   UNIQUE KEY `UserName` (`UserName`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 

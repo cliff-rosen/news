@@ -1,19 +1,35 @@
 import { useState, useEffect } from "react";
 import { addPost as apiAddPost } from "../common/PostAPI";
+import { getSubstances, getConditions } from "../common/AttributeAPI";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import { TextField, Button } from "@mui/material";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 function PostAdd({ sessionManager }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [message, setMessage] = useState("");
+  const [substances, setSubstances] = useState([]);
+  const [conditions, setConditions] = useState([]);
 
   useEffect(() => {
     sessionManager.requireUser();
   });
+
+  useEffect(() => {
+    const getAttributes = async () => {
+      setSubstances(await getSubstances());
+      setConditions(await getConditions());
+    };
+
+    getAttributes();
+  }, []);
 
   const formSubmit = async (e) => {
     e.preventDefault();
@@ -84,6 +100,39 @@ function PostAdd({ sessionManager }) {
             variant="outlined"
           />
           <br />
+          <br />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              border: "none",
+            }}
+          >
+            <div>
+              <FormLabel>SUBSTANCES</FormLabel>
+              <FormGroup>
+                {substances.map((substance) => (
+                  <FormControlLabel
+                    id={substance.SubstanceID}
+                    control={<Checkbox />}
+                    label={substance.SubstanceName}
+                  />
+                ))}
+              </FormGroup>
+            </div>
+            <div>
+              <FormLabel>CONDITIONS</FormLabel>
+              <FormGroup>
+                {conditions.map((condition) => (
+                  <FormControlLabel
+                    id={condition.ConditionID}
+                    control={<Checkbox />}
+                    label={condition.ConditionName}
+                  />
+                ))}
+              </FormGroup>
+            </div>
+          </div>
           <Button
             type="submit"
             variant="contained"

@@ -104,6 +104,16 @@ app.post("/login", (req, res) => {
     .finally(() => console.log("Back from validateUser()"));
 });
 
+/////////////////////// ATTRIBUTES ////////////////////////////
+
+app.get("/attribute/substance", (req, res) => {
+  db.getSubstances().then((dbres) => res.json(dbres));
+});
+
+app.get("/attribute/condition", (req, res) => {
+  db.getConditions().then((dbres) => res.json(dbres));
+});
+
 /////////////////////// LOGGING ////////////////////////////
 
 app.get("/entries/:entryid/logclick", checkForToken, (req, res) => {

@@ -530,6 +530,39 @@ async function addFeedback(req) {
   return res;
 }
 
+//////////////////////////////////////////////////////////////
+async function getSubstances() {
+  dbQueryString = `
+                      SELECT *
+                      FROM substance
+                      ORDER BY SubstanceName
+                      `;
+
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    throw new Error("Query did not execute");
+  }
+}
+
+async function getConditions() {
+  dbQueryString = `
+                      SELECT *
+                      FROM condition
+                      ORDER BY ConditionName
+                      `;
+
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    throw new Error("Query did not execute");
+  }
+}
+
 module.exports.addEntry = addEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
@@ -542,3 +575,5 @@ module.exports.getEntryComments = getEntryComments;
 module.exports.addOrUpdateUserCommentVote = addOrUpdateUserCommentVote;
 module.exports.addLog = addLog;
 module.exports.addFeedback = addFeedback;
+module.exports.getSubstances = getSubstances;
+module.exports.getConditions = getConditions;
