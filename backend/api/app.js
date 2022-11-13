@@ -107,10 +107,12 @@ app.post("/login", (req, res) => {
 /////////////////////// ATTRIBUTES ////////////////////////////
 
 app.get("/attribute/substance", (req, res) => {
+  console.log("getting substances");
   db.getSubstances().then((dbres) => res.json(dbres));
 });
 
 app.get("/attribute/condition", (req, res) => {
+  console.log("getting conditions");
   db.getConditions().then((dbres) => res.json(dbres));
 });
 
@@ -141,10 +143,12 @@ app.get("/entries/:entryid", checkForToken, (req, res) => {
 app.post("/entries", authenticateToken, (req, res) => {
   console.log("add entry: ", req.body.entryText);
   db.addEntry(
+    req.user.userID,
     req.body.entryTitle,
     req.body.entryText,
     req.body.entryUrl,
-    req.user.userID
+    req.body.substances,
+    req.body.conditions
   )
     .then((dbres) => res.json({ entryID: Number(dbres.insertId) }))
     .catch((e) => {

@@ -102,8 +102,27 @@ function getDomain(url) {
   }
 }
 
-async function addEntry(entryTitle, entryText, entryUrl, userID) {
+async function addEntry(
+  userID,
+  entryTitle,
+  entryText,
+  entryUrl,
+  substances,
+  conditions
+) {
   console.log("addEntry: ", entryTitle);
+
+  const res = await addEntryDB(userID, entryTitle, entryText, entryUrl);
+  const entryID = res.insertId;
+  await addEntryAttributesDB(entryID, "substance", substances || []);
+  await addEntryAttributesDB(entryID, "condition", conditions || []);
+  //await addEntryConditionsDB(conditions);
+
+  return { status: "success" };
+}
+
+async function addEntryDB(userID, entryTitle, entryText, entryUrl) {
+  console.log("addEntryDB: ", entryTitle);
   entryTitle = entryTitle.replace(/'/g, "\\'");
   entryText = entryText.replace(/'/g, "\\'");
   const entryUrlDomain = getDomain(entryUrl);
@@ -123,6 +142,41 @@ async function addEntry(entryTitle, entryText, entryUrl, userID) {
   const res = await pool.query(dbQueryString);
   console.log("addEntry returned", res);
   return res;
+}
+
+async function addEntryAttributesDB(entryID, attributeName, attributes) {
+  console.log("addEntryAttributesDB: ", attributes);
+
+  var attributeTableName;
+  var attributeColumnName;
+
+  if (attributeName === "substance") {
+    attributeTableName = "entry_substance";
+    attributeColumnName = "SubstanceID";
+  } else if (attributeName === "condition") {
+    attributeTableName = "entry_health_condition";
+    attributeColumnName = "ConditionID";
+  } else {
+    throw new Error("addEntryAttributesDB - invalid attributeName");
+  }
+
+  attributes.forEach(async (attributeID) => {
+    dbQueryString = `
+      INSERT
+      INTO ${attributeTableName} (
+        EntryID,
+        ${attributeColumnName}
+      )
+      VALUES (
+        ${entryID},
+        ${attributeID}
+      )
+      `;
+
+    const res = await pool.query(dbQueryString);
+  });
+
+  return { status: "success" };
 }
 
 async function deleteEntry(entryID) {

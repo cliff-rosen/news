@@ -32,7 +32,9 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 {
     "entryTitle": "delete me",
     "entryText": "",
-    "entryUrl": ""
+    "entryUrl": "",
+    "substances": [1, 2],
+    "conditions": [3, 4]
 }
 
 ###
