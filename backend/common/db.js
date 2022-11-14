@@ -104,6 +104,7 @@ function getDomain(url) {
 
 async function addEntry(
   userID,
+  entryTypeID,
   entryTitle,
   entryText,
   entryUrl,
@@ -113,7 +114,13 @@ async function addEntry(
   console.log("addEntry: ", entryTitle);
 
   try {
-    const res = await addEntryDB(userID, entryTitle, entryText, entryUrl);
+    const res = await addEntryDB(
+      userID,
+      entryTypeID,
+      entryTitle,
+      entryText,
+      entryUrl
+    );
     const entryID = res.insertId;
     await addEntryAttributesDB(entryID, "substance", substances || []);
     await addEntryAttributesDB(entryID, "condition", conditions || []);
@@ -125,7 +132,13 @@ async function addEntry(
   return { status: "success" };
 }
 
-async function addEntryDB(userID, entryTitle, entryText, entryUrl) {
+async function addEntryDB(
+  userID,
+  entryTypeID,
+  entryTitle,
+  entryText,
+  entryUrl
+) {
   console.log("addEntryDB: ", entryTitle);
   entryTitle = entryTitle.replace(/'/g, "\\'");
   entryText = entryText.replace(/'/g, "\\'");
@@ -134,11 +147,12 @@ async function addEntryDB(userID, entryTitle, entryText, entryUrl) {
   dbQueryString = `
                     INSERT
                     INTO entry (
-                      UserID,
+                      UserID, EntryTypeID,
                       EntryTitle, EntryText, EntryUrl, EntryUrlDomain,
-                      EntryDateTime)
+                      EntryDateTime
+                      )
                     VALUES (
-                      ${userID},
+                      ${userID}, ${entryTypeID},
                       '${entryTitle}','${entryText}', '${entryUrl}', '${entryUrlDomain}',
                       NOW())
                     `;
@@ -647,6 +661,21 @@ async function getConditions() {
   }
 }
 
+async function getEntryTypes() {
+  dbQueryString = `
+                      SELECT *
+                      FROM entry_type
+                      `;
+
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    throw new Error("Query did not execute");
+  }
+}
+
 module.exports.addEntry = addEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
@@ -661,3 +690,4 @@ module.exports.addLog = addLog;
 module.exports.addFeedback = addFeedback;
 module.exports.getSubstances = getSubstances;
 module.exports.getConditions = getConditions;
+module.exports.getEntryTypes = getEntryTypes;

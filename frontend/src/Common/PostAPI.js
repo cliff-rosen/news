@@ -16,6 +16,7 @@ export const getPosts = async (order, start, limit) => {
 };
 
 export const addPost = async (
+  entryTypeID,
   entryUrl,
   entryTitle,
   entryText,
@@ -37,6 +38,7 @@ export const addPost = async (
   }
 
   const body = {
+    entryTypeID,
     entryUrl,
     entryTitle,
     entryText,

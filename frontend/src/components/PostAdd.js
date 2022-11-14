@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react";
 import { addPost as apiAddPost } from "../common/PostAPI";
-import { getSubstances, getConditions } from "../common/AttributeAPI";
+import {
+  conditionsList as conditions,
+  substancesList as substances,
+} from "../common/Lookups";
+import { getEntryTypes } from "../common/LookupAPI";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import { TextField, Button } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
-import {
-  conditionsList as conditions,
-  substancesList as substances,
-} from "../common/Lookups";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
 
 function PostAdd({ sessionManager }) {
+  const [entryTypes, setEntryTypes] = useState([]);
+  const [entryTypeID, setEntryTypeID] = useState(0);
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [message, setMessage] = useState("");
-  //const [substances, setSubstances] = useState([]);
-  //const [conditions, setConditions] = useState([]);
   const [substancesSelection, setSubstancesSelection] = useState({});
   const [conditionsSelection, setConditionsSelection] = useState({});
 
@@ -28,18 +32,29 @@ function PostAdd({ sessionManager }) {
     sessionManager.requireUser();
   });
 
-  /*
   useEffect(() => {
-    const getAttributes = async () => {
-      const sub = await getSubstances();
-      const cond = await getConditions();
-      setSubstances(sub);
-      setConditions(cond);
+    const getLookups = async () => {
+      const et = await getEntryTypes();
+      setEntryTypes(et);
     };
 
-    getAttributes();
+    getLookups();
   }, []);
-*/
+
+  const isLinkRequired = () => {
+    if (entryTypeID === 0) return false;
+    return Boolean(
+      entryTypes.find((e) => e.EntryTypeID === entryTypeID).RequiresLink
+    );
+  };
+
+  const getURLLabel = () => {
+    if (entryTypeID === 0) return "";
+    const URLLabel =
+      entryTypes.find((e) => e.EntryTypeID === entryTypeID).EntryTypeName +
+      " URL";
+    return URLLabel;
+  };
 
   const handleSubstancesSelection = (e) => {
     setSubstancesSelection((ss) => {
@@ -60,6 +75,11 @@ function PostAdd({ sessionManager }) {
   const formSubmit = async (e) => {
     e.preventDefault();
 
+    if (entryTypeID === 0) {
+      setMessage("Please select a post type.");
+      return;
+    }
+
     if (title === "") {
       setMessage("Please add a title.");
       return;
@@ -67,6 +87,7 @@ function PostAdd({ sessionManager }) {
 
     try {
       await apiAddPost(
+        entryTypeID,
         url,
         title,
         desc,
@@ -88,29 +109,54 @@ function PostAdd({ sessionManager }) {
 
   return (
     <div>
-      <div>
+      <div style={{ margin: "20px" }}></div>
+      <Container maxWidth="xs">
         {message && (
           <div>
             <Alert severity="error">{message}</Alert>
             <br />
           </div>
         )}
-      </div>
-      <div style={{ margin: "20px" }}></div>
-      <Container maxWidth="xs">
         <Box component="form" onSubmit={formSubmit} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            fullWidth
-            id="url"
-            autoFocus
-            type="text"
-            label="URL"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            variant="outlined"
-          />
-          <br />
+          <FormControl fullWidth>
+            <InputLabel>Post Type</InputLabel>
+            <Select
+              value={entryTypeID}
+              label="Post Type"
+              onChange={(e) => {
+                setEntryTypeID(e.target.value);
+                setMessage("");
+              }}
+            >
+              {entryTypeID === 0 && (
+                <MenuItem key={0} value={0}>
+                  Please select a post type
+                </MenuItem>
+              )}
+              {entryTypes.map((et) => (
+                <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
+                  {et.EntryTypeName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {isLinkRequired() && (
+            <span>
+              <TextField
+                required
+                margin="normal"
+                fullWidth
+                id="url"
+                autoFocus
+                type="text"
+                label={getURLLabel()}
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                variant="outlined"
+              />
+              <br />
+            </span>
+          )}
           <TextField
             margin="normal"
             fullWidth

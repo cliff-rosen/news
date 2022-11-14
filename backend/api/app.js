@@ -104,7 +104,12 @@ app.post("/login", (req, res) => {
     .finally(() => console.log("Back from validateUser()"));
 });
 
-/////////////////////// ATTRIBUTES ////////////////////////////
+/////////////////////// ATTRIBUTES/LOOKUPS ////////////////////////////
+
+app.get("/entries/types", (req, res) => {
+  console.log("getting entry types");
+  db.getEntryTypes().then((dbres) => res.json(dbres));
+});
 
 app.get("/attribute/substance", (req, res) => {
   console.log("getting substances");
@@ -144,6 +149,7 @@ app.post("/entries", authenticateToken, (req, res) => {
   console.log("/entries", req.body.entryTitle);
   db.addEntry(
     req.user.userID,
+    req.body.entryTypeID,
     req.body.entryTitle,
     req.body.entryText,
     req.body.entryUrl,
