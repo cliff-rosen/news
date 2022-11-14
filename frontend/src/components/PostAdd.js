@@ -20,7 +20,7 @@ import InputLabel from "@mui/material/InputLabel";
 
 function PostAdd({ sessionManager }) {
   const [entryTypes, setEntryTypes] = useState([]);
-  const [entryTypeID, setEntryTypeID] = useState(0);
+  const [entryTypeID, setEntryTypeID] = useState("");
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -42,7 +42,7 @@ function PostAdd({ sessionManager }) {
   }, []);
 
   const isLinkRequired = () => {
-    if (entryTypeID === 0) return false;
+    if (entryTypeID === "") return false;
     return Boolean(
       entryTypes.find((e) => e.EntryTypeID === entryTypeID).RequiresLink
     );
@@ -75,7 +75,7 @@ function PostAdd({ sessionManager }) {
   const formSubmit = async (e) => {
     e.preventDefault();
 
-    if (entryTypeID === 0) {
+    if (entryTypeID === "") {
       setMessage("Please select a post type.");
       return;
     }
@@ -94,8 +94,9 @@ function PostAdd({ sessionManager }) {
         substancesSelection,
         conditionsSelection
       );
-      setUrl("");
+      setEntryTypeID("");
       setTitle("");
+      setUrl("");
       setDesc("");
       setMessage("");
       setSubstancesSelection({});
@@ -128,71 +129,60 @@ function PostAdd({ sessionManager }) {
                 setMessage("");
               }}
             >
-              {entryTypeID === 0 && (
-                <MenuItem key={0} value={0}>
-                  Please select a post type
-                </MenuItem>
-              )}
               {entryTypes.map((et) => (
                 <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
                   {et.EntryTypeName}
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
-          {isLinkRequired() && (
-            <span>
-              <TextField
-                required
-                margin="normal"
-                fullWidth
-                id="url"
-                autoFocus
-                type="text"
-                label={getURLLabel()}
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                variant="outlined"
-              />
-              <br />
-            </span>
-          )}
-          <TextField
-            margin="normal"
-            fullWidth
-            id="title"
-            type="text"
-            label="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            variant="outlined"
-            required
-          />
-          <br />
-          <TextField
-            margin="normal"
-            fullWidth
-            id="desc"
-            multiline
-            rows={4}
-            type="text"
-            label="Description"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-            variant="outlined"
-          />
-          <br />
-          <br />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              border: "none",
-            }}
-          >
-            <div>
-              <FormLabel>SUBSTANCES</FormLabel>
+            <TextField
+              margin="normal"
+              fullWidth
+              id="title"
+              type="text"
+              label="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              variant="outlined"
+              required
+            />
+            {isLinkRequired() && (
+              <span>
+                <TextField
+                  required
+                  margin="normal"
+                  fullWidth
+                  id="url"
+                  type="text"
+                  label={getURLLabel()}
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  variant="outlined"
+                />
+                <br />
+              </span>
+            )}
+            <TextField
+              margin="normal"
+              fullWidth
+              id="desc"
+              multiline
+              rows={4}
+              type="text"
+              label="Description"
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              variant="outlined"
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                border: "none",
+              }}
+            >
               <FormGroup>
+                <FormLabel>SUBSTANCES</FormLabel>
                 {substances.map((substance) => (
                   <FormControlLabel
                     key={substance.SubstanceID}
@@ -200,12 +190,6 @@ function PostAdd({ sessionManager }) {
                       <Checkbox
                         id={substance.SubstanceID.toString()}
                         checked={
-                          substancesSelection[substance.SubstanceID] ===
-                          undefined
-                            ? false
-                            : substancesSelection[substance.SubstanceID]
-                        }
-                        value={
                           substancesSelection[substance.SubstanceID] ===
                           undefined
                             ? false
@@ -219,10 +203,8 @@ function PostAdd({ sessionManager }) {
                   />
                 ))}
               </FormGroup>
-            </div>
-            <div>
-              <FormLabel>CONDITIONS</FormLabel>
               <FormGroup>
+                <FormLabel>CONDITIONS</FormLabel>
                 {conditions.map((condition) => (
                   <FormControlLabel
                     key={condition.ConditionID}
@@ -230,12 +212,6 @@ function PostAdd({ sessionManager }) {
                       <Checkbox
                         id={condition.ConditionID.toString()}
                         checked={
-                          conditionsSelection[condition.ConditionID] ===
-                          undefined
-                            ? false
-                            : conditionsSelection[condition.ConditionID]
-                        }
-                        value={
                           conditionsSelection[condition.ConditionID] ===
                           undefined
                             ? false
@@ -250,15 +226,15 @@ function PostAdd({ sessionManager }) {
                 ))}
               </FormGroup>
             </div>
-          </div>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            style={{ marginTop: 20 }}
-          >
-            post
-          </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginTop: 20 }}
+            >
+              post
+            </Button>
+          </FormControl>
         </Box>
       </Container>
     </div>

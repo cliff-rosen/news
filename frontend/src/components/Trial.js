@@ -1,21 +1,12 @@
 import * as React from "react";
-import { Link as RouterLink, MemoryRouter } from "react-router-dom";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Link from "@mui/material/Link";
+import Checkbox from "@mui/material/Checkbox";
 
-export default function Trial() {
-  return (
-    <div>
-      <Link to="/">Link</Link>
-      <br />
-      <Link to="/" component={RouterLink}>
-        Link with comp
-      </Link>
-      <br />
-      <RouterLink to="/">Router Link</RouterLink>
-      <br />
-    </div>
-  );
+export default function ControlledCheckbox() {
+  const [checked, setChecked] = React.useState(true);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
+  return <Checkbox checked={checked} onChange={handleChange} />;
 }
