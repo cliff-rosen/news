@@ -9,14 +9,18 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
+import {
+  conditionsList as conditions,
+  substancesList as substances,
+} from "../common/Lookups";
 
 function PostAdd({ sessionManager }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [message, setMessage] = useState("");
-  const [substances, setSubstances] = useState([]);
-  const [conditions, setConditions] = useState([]);
+  //const [substances, setSubstances] = useState([]);
+  //const [conditions, setConditions] = useState([]);
   const [substancesSelection, setSubstancesSelection] = useState({});
   const [conditionsSelection, setConditionsSelection] = useState({});
 
@@ -24,6 +28,7 @@ function PostAdd({ sessionManager }) {
     sessionManager.requireUser();
   });
 
+  /*
   useEffect(() => {
     const getAttributes = async () => {
       const sub = await getSubstances();
@@ -34,6 +39,7 @@ function PostAdd({ sessionManager }) {
 
     getAttributes();
   }, []);
+*/
 
   const handleSubstancesSelection = (e) => {
     setSubstancesSelection((ss) => {

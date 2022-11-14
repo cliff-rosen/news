@@ -210,10 +210,12 @@ async function getEntry(userID, entryID) {
                       LEFT JOIN (
                         SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
                         FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
+                        WHERE e1.EntryID = ${entryID}
                       ) AS substances ON e.entryID = substances.entryid
                       LEFT JOIN (
                         SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
                         FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
+                        WHERE e2.EntryID = ${entryID}
                       ) AS conditions ON e.entryID = conditions.entryid
                       WHERE e.EntryID = ${entryID}
                       `;
@@ -230,11 +232,22 @@ async function getEntry(userID, entryID) {
 async function getAllEntries(userID, order, start, limit) {
   dbQueryString = `
                     SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore,
-                    u.UserName, v.Vote
+                    u.UserName, v.Vote,
+                    SubstanceIDs, ConditionIDs
                     FROM entry e
                     JOIN user u ON e.UserID = u.UserID
                     LEFT JOIN user_entry_vote v 
                       ON v.UserID = ${userID} and e.EntryID = v.EntryID
+                    LEFT JOIN (
+                      SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
+                      FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
+                      GROUP BY e1.entryid
+                    ) AS substances ON e.entryID = substances.entryid
+                    LEFT JOIN (
+                      SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
+                      FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
+                      GROUP BY e2.entryid                      
+                    ) AS conditions ON e.entryID = conditions.entryid
                     `;
   if (order === "trending") {
     dbQueryString += " ORDER BY e.Rank desc";

@@ -1,10 +1,28 @@
+import { useState } from "react";
 import { Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import PostVote from "./PostVote";
 import { logPostClick } from "../common/PostAPI";
 import { getElapsedTime } from "../common/TimeUtils";
+import { conditionsMap, substancesMap } from "../common/Lookups";
+import { useEffect } from "react";
 
 export default function Post({ sessionManager, post, updateVote, showText }) {
+  const [substances, setSubstances] = useState([]);
+  const [conditions, setConditions] = useState([]);
+
+  useEffect(() => {
+    const subsArr = post.SubstanceIDs ? post.SubstanceIDs.split(",") : [];
+    var subs = subsArr.map((s) => substancesMap[s]);
+    subs = subs.join(", ");
+    setSubstances(subs);
+
+    const condsArr = post.ConditionIDs ? post.ConditionIDs.split(",") : [];
+    var conds = condsArr.map((c) => conditionsMap[c]);
+    conds = conds.join(", ");
+    setConditions(conds);
+  }, [post]);
+
   const logClick = () => {
     logPostClick(post.EntryID);
   };
@@ -73,6 +91,11 @@ export default function Post({ sessionManager, post, updateVote, showText }) {
               {post.EntryUrlDomain ? "(" + post.EntryUrlDomain + ")" : ""}
             </span>
           </div>
+          {(substances || conditions) && (
+            <div style={{ fontSize: "12px", color: "gray" }}>
+              <b>substances</b>: {substances} | <b>conditions:</b> {conditions}
+            </div>
+          )}
           {showText && post.EntryText && (
             <div>
               <span
