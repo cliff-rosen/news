@@ -141,7 +141,7 @@ app.get("/entries/:entryid", checkForToken, (req, res) => {
 });
 
 app.post("/entries", authenticateToken, (req, res) => {
-  console.log("add entry: ", req.body.entryText);
+  console.log("/entries", req.body.entryTitle);
   db.addEntry(
     req.user.userID,
     req.body.entryTitle,

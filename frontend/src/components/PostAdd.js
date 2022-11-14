@@ -36,16 +36,18 @@ function PostAdd({ sessionManager }) {
   }, []);
 
   const handleSubstancesSelection = (e) => {
-    setSubstancesSelection((s) => {
-      s[e.target.id] = e.target.checked;
-      return s;
+    setSubstancesSelection((ss) => {
+      const ssNew = { ...ss };
+      ssNew[e.target.id] = e.target.checked;
+      return ssNew;
     });
   };
 
   const handleConditionsSelection = (e) => {
-    setConditionsSelection((c) => {
-      c[e.target.id] = e.target.checked;
-      return c;
+    setConditionsSelection((cs) => {
+      const csNew = { ...cs };
+      csNew[e.target.id] = e.target.checked;
+      return csNew;
     });
   };
 
@@ -58,16 +60,26 @@ function PostAdd({ sessionManager }) {
     }
 
     try {
-      await apiAddPost(url, title, desc);
+      await apiAddPost(
+        url,
+        title,
+        desc,
+        substancesSelection,
+        conditionsSelection
+      );
       setUrl("");
       setTitle("");
       setDesc("");
+      setMessage("");
+      setSubstancesSelection({});
+      setConditionsSelection({});
       sessionManager.setSessionMessageWrapper("Entry submitted");
     } catch (e) {
       console.log("error adding post", e);
       setMessage("Doh! An unexpected error occurred.  Please try again.");
     }
   };
+
   return (
     <div>
       <div>
@@ -135,7 +147,18 @@ function PostAdd({ sessionManager }) {
                     control={
                       <Checkbox
                         id={substance.SubstanceID.toString()}
-                        checked={substancesSelection[substance.SubstanceID]}
+                        checked={
+                          substancesSelection[substance.SubstanceID] ===
+                          undefined
+                            ? false
+                            : substancesSelection[substance.SubstanceID]
+                        }
+                        value={
+                          substancesSelection[substance.SubstanceID] ===
+                          undefined
+                            ? false
+                            : substancesSelection[substance.SubstanceID]
+                        }
                         onChange={handleSubstancesSelection}
                         size="small"
                       />
@@ -154,7 +177,18 @@ function PostAdd({ sessionManager }) {
                     control={
                       <Checkbox
                         id={condition.ConditionID.toString()}
-                        checked={conditionsSelection[condition.ConditionID]}
+                        checked={
+                          conditionsSelection[condition.ConditionID] ===
+                          undefined
+                            ? false
+                            : conditionsSelection[condition.ConditionID]
+                        }
+                        value={
+                          conditionsSelection[condition.ConditionID] ===
+                          undefined
+                            ? false
+                            : conditionsSelection[condition.ConditionID]
+                        }
                         onChange={handleConditionsSelection}
                         size="small"
                       />

@@ -112,11 +112,15 @@ async function addEntry(
 ) {
   console.log("addEntry: ", entryTitle);
 
-  const res = await addEntryDB(userID, entryTitle, entryText, entryUrl);
-  const entryID = res.insertId;
-  await addEntryAttributesDB(entryID, "substance", substances || []);
-  await addEntryAttributesDB(entryID, "condition", conditions || []);
-  //await addEntryConditionsDB(conditions);
+  try {
+    const res = await addEntryDB(userID, entryTitle, entryText, entryUrl);
+    const entryID = res.insertId;
+    await addEntryAttributesDB(entryID, "substance", substances || []);
+    await addEntryAttributesDB(entryID, "condition", conditions || []);
+  } catch (e) {
+    console.log("addEntry error:", e.message);
+    throw new Error("Add entry error");
+  }
 
   return { status: "success" };
 }
@@ -173,7 +177,11 @@ async function addEntryAttributesDB(entryID, attributeName, attributes) {
       )
       `;
 
-    const res = await pool.query(dbQueryString);
+    try {
+      await pool.query(dbQueryString);
+    } catch (e) {
+      console.log("addEntryAttributesDB Error:", e);
+    }
   });
 
   return { status: "success" };
@@ -193,11 +201,20 @@ async function deleteEntry(entryID) {
 
 async function getEntry(userID, entryID) {
   dbQueryString = `
-                      SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore, u.UserName, v.Vote
+                      SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore, u.UserName, v.Vote,
+                      SubstanceIDs, ConditionIDs
                       FROM entry e
                       JOIN user u ON e.UserID = u.UserID
                       LEFT JOIN user_entry_vote v 
-                      ON v.UserID = ${userID} and e.EntryID = v.EntryID                      
+                      ON v.UserID = ${userID} and e.EntryID = v.EntryID 
+                      LEFT JOIN (
+                        SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
+                        FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
+                      ) AS substances ON e.entryID = substances.entryid
+                      LEFT JOIN (
+                        SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
+                        FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
+                      ) AS conditions ON e.entryID = conditions.entryid
                       WHERE e.EntryID = ${entryID}
                       `;
 
