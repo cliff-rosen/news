@@ -42,15 +42,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_comment_comment` FOREIGN KEY (`ParentCommentID`) REFERENCES `comment` (`CommentID`),
   CONSTRAINT `FK_comment_entry` FOREIGN KEY (`EntryID`) REFERENCES `entry` (`EntryID`),
   CONSTRAINT `FK_comment_user` FOREIGN KEY (`CommentUserID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
-
--- Data exporting was unselected.
-
--- Dumping structure for table dev.condition
-CREATE TABLE IF NOT EXISTS `condition` (
-  `ConditionID` smallint(6) DEFAULT NULL,
-  `ConditionName` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -58,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `condition` (
 CREATE TABLE IF NOT EXISTS `entry` (
   `EntryID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
+  `EntryTypeID` tinyint(4) DEFAULT NULL,
   `EntryDateTime` timestamp NULL DEFAULT NULL,
   `Rank` int(11) DEFAULT 0,
   `EntryTitle` tinytext DEFAULT NULL,
@@ -65,12 +58,46 @@ CREATE TABLE IF NOT EXISTS `entry` (
   `EntryUrl` varchar(2048) DEFAULT NULL,
   `EntryUrlDomain` varchar(250) DEFAULT NULL,
   `VoteScoreActual` smallint(6) NOT NULL DEFAULT 0,
-  `VoteScoreBias` smallint(6) DEFAULT NULL,
+  `VoteScoreBias` smallint(6) NOT NULL DEFAULT 0,
   `CommentCount` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`EntryID`),
   KEY `FK_USER_ID` (`UserID`),
   CONSTRAINT `FK_USER_ID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table dev.entry_health_condition
+CREATE TABLE IF NOT EXISTS `entry_health_condition` (
+  `EntryID` int(11) NOT NULL,
+  `ConditionID` smallint(6) NOT NULL,
+  KEY `FK_entry_condition_entry` (`EntryID`) USING BTREE,
+  KEY `FK_entry_condition_condition` (`ConditionID`) USING BTREE,
+  CONSTRAINT `FK_entry_condition_condition` FOREIGN KEY (`ConditionID`) REFERENCES `health_condition` (`ConditionID`),
+  CONSTRAINT `FK_entry_condition_entry` FOREIGN KEY (`EntryID`) REFERENCES `entry` (`EntryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table dev.entry_substance
+CREATE TABLE IF NOT EXISTS `entry_substance` (
+  `EntryID` int(11) NOT NULL,
+  `SubstanceID` smallint(6) NOT NULL,
+  KEY `FK_entry_substance_entry` (`EntryID`),
+  KEY `Index 2` (`SubstanceID`),
+  CONSTRAINT `FK_entry_substance_entry` FOREIGN KEY (`EntryID`) REFERENCES `entry` (`EntryID`),
+  CONSTRAINT `FK_entry_substance_substance` FOREIGN KEY (`SubstanceID`) REFERENCES `substance` (`SubstanceID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table dev.entry_type
+CREATE TABLE IF NOT EXISTS `entry_type` (
+  `EntryTypeID` tinyint(4) NOT NULL,
+  `EntryTypeName` varchar(50) NOT NULL DEFAULT '',
+  `RequiresLink` tinyint(1) NOT NULL DEFAULT 0,
+  KEY `Index 1` (`EntryTypeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -85,10 +112,20 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table dev.health_condition
+CREATE TABLE IF NOT EXISTS `health_condition` (
+  `ConditionID` smallint(6) NOT NULL,
+  `ConditionName` varchar(50) NOT NULL,
+  KEY `Index 1` (`ConditionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table dev.substance
 CREATE TABLE IF NOT EXISTS `substance` (
-  `SubstanceID` smallint(6) DEFAULT NULL,
-  `SubstanceName` varchar(50) DEFAULT NULL
+  `SubstanceID` smallint(6) NOT NULL,
+  `SubstanceName` varchar(50) NOT NULL,
+  KEY `Index 1` (`SubstanceID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.

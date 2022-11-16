@@ -118,6 +118,7 @@ export default function PostView({ sessionManager }) {
               />
               <br />
               <Button
+                disabled={!comment}
                 style={{ textTransform: "unset" }}
                 type="submit"
                 variant="contained"

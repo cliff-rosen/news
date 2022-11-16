@@ -209,7 +209,7 @@ app.post("/entries/:entryid/vote/:value", authenticateToken, (req, res) => {
 
 app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
   const { entryid } = req.params;
-  console.log("/comments running");
+  console.log("post comments running");
   db.addComment(
     req.user.userID,
     req.body.parentCommentID,
@@ -217,6 +217,16 @@ app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
     req.body.commentText
   )
     .then((dbres) => res.json({ commentID: Number(dbres.insertId) }))
+    .catch((e) => {
+      console.log("error", e);
+      res.json({ error: e });
+    });
+});
+
+app.put("/entries/:entryid/comments", authenticateToken, (req, res) => {
+  console.log("put comments running");
+  db.updateComment(req.body.commentID, req.body.commentText)
+    .then((dbres) => res.json({ result: "SUCCESS" }))
     .catch((e) => {
       console.log("error", e);
       res.json({ error: e });

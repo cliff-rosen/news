@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CommentVote from "./CommentVote";
-import { addComment } from "../common/CommentAPI";
+import { addComment, updateComment } from "../common/CommentAPI";
 import { getElapsedTime } from "../common/TimeUtils";
 import { TextField, Button } from "@mui/material";
 
@@ -15,6 +15,8 @@ export default function Comment({
 }) {
   const [reply, setReply] = useState("");
   const [showReply, setShowReply] = useState(false);
+  const [newCommentText, setNewCommentText] = useState(comment.CommentText);
+  const [showEdit, setShowEdit] = useState(false);
 
   const submitReply = async () => {
     if (sessionManager.getUserFromStorage().userID === 0) {
@@ -26,6 +28,12 @@ export default function Comment({
     await addComment(comment.EntryID, comment.CommentID, reply);
     setReply("");
     setShowReply(false);
+    updatePostView();
+  };
+
+  const submitUpdatedComment = async () => {
+    await updateComment(comment.EntryID, comment.CommentID, newCommentText);
+    setShowEdit(false);
     updatePostView();
   };
 
@@ -55,7 +63,6 @@ export default function Comment({
       >
         |
       </div>
-
       <div
         className={"CommentContent"}
         style={{ flex: 1, marginRight: 10, border: "none" }}
@@ -66,6 +73,36 @@ export default function Comment({
         <div style={{ whiteSpace: "pre-wrap", fontSize: "13px" }}>
           {comment.CommentText}
         </div>
+        {showEdit && (
+          <div style={{ border: "none" }}>
+            <TextField
+              sx={{
+                margin: "5px",
+              }}
+              fullWidth
+              autoFocus
+              value={newCommentText}
+              onChange={(e) => setNewCommentText(e.target.value)}
+              multiline
+              rows={4}
+              size="small"
+            />
+            <br />
+            <Button
+              style={{ textTransform: "unset", fontSize: 10 }}
+              onClick={() => setShowEdit(false)}
+            >
+              cancel
+            </Button>
+            <Button
+              style={{ textTransform: "unset", fontSize: 10 }}
+              disabled={!newCommentText}
+              onClick={submitUpdatedComment}
+            >
+              update
+            </Button>
+          </div>
+        )}
         <div
           style={{
             flex: "0 0 50px",
@@ -97,6 +134,20 @@ export default function Comment({
                   reply
                 </Link>
               )}
+              {!showEdit &&
+                comment.CommentUserID === sessionManager.user.userID && (
+                  <Link
+                    style={{
+                      textDecoration: "none",
+                      color: "gray",
+                      marginLeft: 10,
+                    }}
+                    to="#"
+                    onClick={() => setShowEdit(true)}
+                  >
+                    edit
+                  </Link>
+                )}
             </div>
           </div>
         </div>
@@ -118,16 +169,16 @@ export default function Comment({
             <br />
             <Button
               style={{ textTransform: "unset", fontSize: 10 }}
+              onClick={() => setShowReply(false)}
+            >
+              cancel
+            </Button>{" "}
+            <Button
+              style={{ textTransform: "unset", fontSize: 10 }}
               disabled={!reply}
               onClick={submitReply}
             >
               reply
-            </Button>
-            <Button
-              style={{ textTransform: "unset", fontSize: 10 }}
-              onClick={() => setShowReply(false)}
-            >
-              cancel
             </Button>
           </div>
         )}

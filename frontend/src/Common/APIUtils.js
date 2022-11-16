@@ -25,7 +25,8 @@ function getHeaders() {
         parsed json includes "error" property
 */
 async function doFetch(method, endpoint, body) {
-  if (method !== "GET" && method !== "POST") {
+  if (method !== "GET" && method !== "POST" && method !== "PUT") {
+    console.log("doFetch called with invalid method:", method);
     throw new Error("doFetch called with invalid method:" + method);
   }
 
@@ -60,4 +61,9 @@ export async function fetchGet(endpoint) {
 export async function fetchPost(endpoint, body) {
   console.log("fetchPost", endpoint);
   return doFetch("POST", endpoint, body);
+}
+
+export async function fetchPut(endpoint, body) {
+  console.log("fetchPut", endpoint);
+  return doFetch("PUT", endpoint, body);
 }

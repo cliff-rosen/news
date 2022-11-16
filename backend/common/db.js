@@ -441,6 +441,20 @@ async function updateEntryCommentCountDB(entryID) {
   return res;
 }
 
+async function updateComment(commentID, commentText) {
+  console.log("updateComment", commentID);
+  commentText = commentText.replace(/'/g, "\\'");
+  dbQueryString = `
+                    UPDATE comment
+                    SET CommentText = '${commentText}'
+                    WHERE CommentID = ${commentID}
+                    `;
+
+  const res = await pool.query(dbQueryString);
+  console.log("updateCommentDB returned", res);
+  return res;
+}
+
 async function getEntryComment(commentID) {
   console.log("getEntryComment", commentID);
   dbQueryString = `
@@ -684,6 +698,7 @@ module.exports.validateUser = validateUser;
 module.exports.addUser = addUser;
 module.exports.addOrUpdateUserEntryVote = addOrUpdateUserEntryVote;
 module.exports.addComment = addComment;
+module.exports.updateComment = updateComment;
 module.exports.getEntryComments = getEntryComments;
 module.exports.addOrUpdateUserCommentVote = addOrUpdateUserCommentVote;
 module.exports.addLog = addLog;

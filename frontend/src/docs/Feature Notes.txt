@@ -1,0 +1,22 @@
+Feature Notes
+
+User Scoring
+
+- keep record of all scoring events
+
+- how to handle "undoing" a score (i.e. user upvotes and then retracts)
+
+  if we want to purge undone scores from scoring history report,
+  we need a key for all scoring transactions that can be referencing for undoing
+  ex: addScore(forUserID, fromUserID, entityType, entityID, scoreTrans, score)
+  if user 1 upvotes a post from user 2:
+    addScore(2, 1, post, postID, vote, 1)
+  no, we can check scoring transaction table for
+    (forUserID, fromUserID, entityType, entityID, scoreTrans )
+  if a record exists, then 
+
+
+Editing
+
+- updating a post can be tricky if the post type is changed
+  this may result in invalid links

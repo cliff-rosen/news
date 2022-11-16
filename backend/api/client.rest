@@ -82,5 +82,5 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 
 
 ###
-GET http://localhost:4000/attribute/condition  HTTP/1.1
+GET http://localhost:4000/entries/types  HTTP/1.1
 content-type: application/json
