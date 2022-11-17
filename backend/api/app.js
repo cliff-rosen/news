@@ -146,7 +146,7 @@ app.get("/entries/:entryid", checkForToken, (req, res) => {
 });
 
 app.post("/entries", authenticateToken, (req, res) => {
-  console.log("/entries", req.body.entryTitle);
+  console.log("adding entry", req.body.entryTitle);
   db.addEntry(
     req.user.userID,
     req.body.entryTypeID,
@@ -165,7 +165,7 @@ app.post("/entries", authenticateToken, (req, res) => {
 
 app.delete("/entries/:id", (req, res) => {
   const { id } = req.params;
-  console.log("get delete", id);
+  console.log("deleting entry", id);
   db.deleteEntry(id).then((result) => {
     console.log("result", typeof result);
     res.json({ res: "placeholder" });
@@ -178,7 +178,7 @@ app.get("/entries", checkForToken, (req, res) => {
   const order = req.query.order;
   const start = Number(req.query.start) || 0;
   const limit = Number(req.query.limit) || LIMIT;
-  console.log("get entries", req.query, start, limit);
+  console.log("getting entries", req.query, start, limit);
 
   db.getAllEntries(req.user.userID, order, start, limit + 1)
     .then((rows) => {
@@ -200,7 +200,7 @@ app.get("/entries", checkForToken, (req, res) => {
 });
 
 app.post("/entries/:entryid/vote/:value", authenticateToken, (req, res) => {
-  console.log("vote from: ", req.user.userID);
+  console.log("entry vote from: ", req.user.userID);
   const { entryid, value } = req.params;
   db.addOrUpdateUserEntryVote(req.user.userID, entryid, value)
     .then((dbres) => res.json(dbres))
@@ -209,7 +209,7 @@ app.post("/entries/:entryid/vote/:value", authenticateToken, (req, res) => {
 
 app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
   const { entryid } = req.params;
-  console.log("post comments running");
+  console.log("adding comment for entryid", entryid);
   db.addComment(
     req.user.userID,
     req.body.parentCommentID,
@@ -224,7 +224,7 @@ app.post("/entries/:entryid/comments", authenticateToken, (req, res) => {
 });
 
 app.put("/entries/:entryid/comments", authenticateToken, (req, res) => {
-  console.log("put comments running");
+  console.log("updating commentid", req.body.commentID);
   db.updateComment(req.body.commentID, req.body.commentText)
     .then((dbres) => res.json({ result: "SUCCESS" }))
     .catch((e) => {
@@ -235,7 +235,7 @@ app.put("/entries/:entryid/comments", authenticateToken, (req, res) => {
 
 app.get("/entries/:entryid/comments", checkForToken, (req, res) => {
   const { entryid } = req.params;
-  console.log("get comments", entryid, req.headers["authorization"]);
+  console.log("getting comments for ", entryid);
   db.getEntryComments(req.user.userID, entryid)
     .then((rows) => res.json(rows))
     .catch((e) => {
@@ -248,7 +248,7 @@ app.post(
   "/entries/comments/:commentid/vote/:value",
   authenticateToken,
   (req, res) => {
-    console.log("vote from: ", req.user.userID);
+    console.log("posting comment vote from: ", req.user.userID);
     const { commentid, value } = req.params;
     db.addOrUpdateUserCommentVote(req.user.userID, commentid, value)
       .then((dbres) => res.json(dbres))
