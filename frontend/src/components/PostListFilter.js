@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   conditionsList as conditions,
   substancesList as substances,
@@ -17,13 +16,11 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 
-export default function PostFilter() {
+export default function PostListFilter({ applyFilter, hideFilter }) {
   const [entryTypes, setEntryTypes] = useState([]);
   const [entryTypeID, setEntryTypeID] = useState("");
   const [substancesSelection, setSubstancesSelection] = useState({});
   const [conditionsSelection, setConditionsSelection] = useState({});
-  const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const getLookups = async () => {
@@ -33,6 +30,12 @@ export default function PostFilter() {
 
     getLookups();
   }, []);
+
+  const clearFilter = () => {
+    setEntryTypeID("");
+    setSubstancesSelection({});
+    setConditionsSelection({});
+  };
 
   const handleSubstancesSelection = (e) => {
     setSubstancesSelection((ss) => {
@@ -53,7 +56,12 @@ export default function PostFilter() {
   return (
     <Container
       maxWidth="xs"
-      style={{ backgroundColor: "#eeeeee", border: "none", padding: 20 }}
+      style={{
+        backgroundColor: "#eeeeee",
+        border: "none",
+        padding: 10,
+        marginBottom: 10,
+      }}
     >
       <Box component="form" sx={{ mt: 1 }}>
         <FormControl fullWidth>
@@ -65,6 +73,9 @@ export default function PostFilter() {
               setEntryTypeID(e.target.value);
             }}
           >
+            <MenuItem key={0} value={""}>
+              -
+            </MenuItem>
             {entryTypes.map((et) => (
               <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
                 {et.EntryTypeName}
@@ -124,11 +135,39 @@ export default function PostFilter() {
           </div>
         </FormControl>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="contained" color="primary" style={{ margin: 10 }}>
+          <Button
+            onClick={hideFilter}
+            variant="contained"
+            color="primary"
+            style={{ margin: 10 }}
+          >
             cancel
           </Button>
-          <Button variant="contained" color="primary" style={{ margin: 10 }}>
+          <Button
+            onClick={clearFilter}
+            variant="contained"
+            color="primary"
+            style={{ margin: 10 }}
+          >
+            clear
+          </Button>
+          <Button
+            onClick={() =>
+              applyFilter(entryTypeID, substancesSelection, conditionsSelection)
+            }
+            variant="contained"
+            color="primary"
+            style={{ margin: 10 }}
+          >
             apply filter
+          </Button>
+          <Button
+            onClick={hideFilter}
+            variant="contained"
+            color="primary"
+            style={{ margin: 10 }}
+          >
+            hide filter
           </Button>
         </div>
       </Box>

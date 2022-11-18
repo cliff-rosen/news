@@ -1,10 +1,10 @@
 # PostView Component Architecture
 
 <pre>
-PostView({ sessionManager })   
-    post  
-    comments  
-    updatePostView  
+PostView(sessionManager)   
+    s post  
+    s comments  
+    m updatePostView  
 
     Post(
         sessionManager={sessionManager}
@@ -19,7 +19,7 @@ PostView({ sessionManager })
         setComments={setComments}
         updatePostView={updatePostView}
     )
-    updateCommentVote
+    m updateCommentVote
 
         Comment(
             key={comment.CommentID}

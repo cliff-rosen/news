@@ -8,11 +8,20 @@ export const getPost = async (entryID) => {
   return fetchGet(`entries/${entryID}`);
 };
 
-export const getPosts = async (order, start, limit) => {
+export const getPosts = async (
+  order,
+  start,
+  limit,
+  entryTypeID,
+  substanceIDs,
+  conditionIDs
+) => {
   order = order || "trending";
   start = start || 0;
-
-  return fetchGet(`entries?order=${order}&start=${start}&limit=${limit}`);
+  console.log("subs", substanceIDs);
+  return fetchGet(
+    `entries?order=${order}&start=${start}&limit=${limit}&entrytypeid=${entryTypeID}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`
+  );
 };
 
 export const addPost = async (

@@ -1,3 +1,11 @@
+POST https://api-staging.trippersalmanac.com/access  HTTP/1.1
+content-type: application/json
+
+{
+    "password": "letstrip"
+}
+
+###
 
 GET http://localhost:4000/y/1?a=1&b=2  HTTP/1.1
 content-type: application/json

@@ -280,6 +280,78 @@ async function getAllEntries(userID, order, start, limit) {
   }
 }
 
+async function getFilteredEntries(
+  userID,
+  order,
+  start,
+  limit,
+  entryTypeID,
+  substanceIDs,
+  conditionIDs
+) {
+  dbQueryString = `
+      SELECT SubstanceIDs, ConditionIDs,
+        e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore,
+        u.UserName, v.Vote
+      FROM entry e
+      JOIN user u ON e.UserID = u.UserID
+      LEFT JOIN user_entry_vote v 
+      ON v.UserID = ${userID} and e.EntryID = v.EntryID
+      LEFT JOIN (
+        SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
+        FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
+        GROUP BY e1.entryid
+      ) AS substances ON e.entryID = substances.entryid
+      LEFT JOIN (
+        SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
+        FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
+        GROUP BY e2.entryid                      
+      ) AS conditions ON e.entryID = conditions.entryid
+      `;
+
+  if (substanceIDs) {
+    dbQueryString += `
+    JOIN (
+      SELECT distinct es2.entryID
+      FROM entry_substance es2
+      WHERE es2.substanceid IN (${substanceIDs})
+    ) AS esid ON esid.entryID = e.entryID
+ `;
+  }
+
+  if (conditionIDs) {
+    dbQueryString += `
+    JOIN (
+      SELECT distinct ec2.entryID
+      FROM entry_health_condition ec2
+      WHERE ec2.conditionid IN (${conditionIDs})
+    ) AS ecid ON ecid.entryID = e.entryID
+  `;
+  }
+
+  if (entryTypeID) {
+    dbQueryString += `
+    WHERE e.entryTypeID = ${entryTypeID}
+  `;
+  }
+
+  if (order === "trending") {
+    dbQueryString += " ORDER BY e.Rank desc";
+  } else {
+    dbQueryString += " ORDER BY e.EntryDateTime desc";
+  }
+
+  dbQueryString += ` LIMIT ${limit} OFFSET ${start}`;
+  console.log(dbQueryString);
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    throw new Error("Query did not execute");
+  }
+}
+
 ////////////////////////////////////////////////////
 
 async function addOrUpdateUserEntryVote(userID, entryID, vote) {
@@ -706,3 +778,4 @@ module.exports.addFeedback = addFeedback;
 module.exports.getSubstances = getSubstances;
 module.exports.getConditions = getConditions;
 module.exports.getEntryTypes = getEntryTypes;
+module.exports.getFilteredEntries = getFilteredEntries;

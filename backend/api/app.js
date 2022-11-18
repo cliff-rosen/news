@@ -178,9 +178,21 @@ app.get("/entries", checkForToken, (req, res) => {
   const order = req.query.order;
   const start = Number(req.query.start) || 0;
   const limit = Number(req.query.limit) || LIMIT;
+  const entrytypeid = Number(req.query.entrytypeid) || 0;
+  const substanceids = req.query.substanceids;
+  const conditionids = req.query.conditionids;
+
   console.log("getting entries", req.query, start, limit);
 
-  db.getAllEntries(req.user.userID, order, start, limit + 1)
+  db.getFilteredEntries(
+    req.user.userID,
+    order,
+    start,
+    limit + 1,
+    entrytypeid,
+    substanceids,
+    conditionids
+  )
     .then((rows) => {
       console.log("rows: ", rows.length);
       var more = false;
