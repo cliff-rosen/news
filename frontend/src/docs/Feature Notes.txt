@@ -20,3 +20,38 @@ Editing
 
 - updating a post can be tricky if the post type is changed
   this may result in invalid links
+
+
+List Input/Filter
+
+- input params are: order, start, entryTypeID, substanceIDs, conditionIDs
+
+- key issues:
+  - when to pull filter values from local storage vs. url
+
+- PostList entry points:
+  1 direct request of list url
+    if no order present: use filter values from local storage || defaults
+    if order present but no filters: use order, start || 0, -, -, -
+    if order and filters present: use url values; update filter in local storage
+  2 top nav "view" option: use filter values from local storage || defaults
+    /postlist?order=default
+  3 selecting trending and new tabs: use selected order, 0, filter values from local storage
+    /postlist?order=trending
+  4 page changed through page controls: use url values
+  5 filter is changed through Apply Filter: use url values
+
+- how to identify when PostList is being requested through url
+  direct: postlist
+          postlist?order=trending
+          postlist?order=trending&start=0&entrytypeid=12&substanceids=2,3&conditionids=1
+  topnav: postlist
+  tab:    postlist?order=trending
+  apply:  postlist?order=trending&start=0&entrytypeid=12&substanceids=2,3&conditionids=1
+
+- filter rules:
+  if no filter params in url, then use stored values and renavigate
+  else use url params and updated stored values
+
+- when filter is applied, filter values are saved to local storage and applied to url params
+

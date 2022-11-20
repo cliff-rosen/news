@@ -1,137 +1,27 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
-  conditionsList as conditions,
-  substancesList as substances,
-} from "../common/Lookups";
-import { getEntryTypes } from "../common/LookupAPI";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
-import FormGroup from "@mui/material/FormGroup";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
+  writeFilterParamsToLocalStorage,
+  readFilterFromLocalStorage,
+  isFilterStored,
+} from "../common/FilterUtils";
 
-export default function PostFilter() {
-  const [entryTypes, setEntryTypes] = useState([]);
-  const [entryTypeID, setEntryTypeID] = useState("");
-  const [substancesSelection, setSubstancesSelection] = useState({});
-  const [conditionsSelection, setConditionsSelection] = useState({});
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function Trial() {
+  const [a, setA] = useState(1);
+  var x = 1;
+
+  console.log("rendering");
 
   useEffect(() => {
-    const getLookups = async () => {
-      const et = await getEntryTypes();
-      setEntryTypes(et);
-    };
-
-    getLookups();
+    console.log("useEffect");
+    x++;
+    setA(a + 1);
   }, []);
 
-  const handleSubstancesSelection = (e) => {
-    setSubstancesSelection((ss) => {
-      const ssNew = { ...ss };
-      ssNew[e.target.id] = e.target.checked;
-      return ssNew;
-    });
-  };
-
-  const handleConditionsSelection = (e) => {
-    setConditionsSelection((cs) => {
-      const csNew = { ...cs };
-      csNew[e.target.id] = e.target.checked;
-      return csNew;
-    });
-  };
-
   return (
-    <Container
-      maxWidth="xs"
-      style={{ backgroundColor: "#eeeeee", border: "none", padding: 20 }}
-    >
-      <Box component="form" sx={{ mt: 1 }}>
-        <FormControl fullWidth>
-          <InputLabel>Post Type</InputLabel>
-          <Select
-            value={entryTypeID}
-            label="Post Type"
-            onChange={(e) => {
-              setEntryTypeID(e.target.value);
-            }}
-          >
-            {entryTypes.map((et) => (
-              <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
-                {et.EntryTypeName}
-              </MenuItem>
-            ))}
-          </Select>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              border: "none",
-            }}
-          >
-            <FormGroup>
-              <FormLabel>SUBSTANCES</FormLabel>
-              {substances.map((substance) => (
-                <FormControlLabel
-                  key={substance.SubstanceID}
-                  control={
-                    <Checkbox
-                      id={substance.SubstanceID.toString()}
-                      checked={
-                        substancesSelection[substance.SubstanceID] === undefined
-                          ? false
-                          : substancesSelection[substance.SubstanceID]
-                      }
-                      onChange={handleSubstancesSelection}
-                      size="small"
-                    />
-                  }
-                  label={substance.SubstanceName}
-                />
-              ))}
-            </FormGroup>
-            <FormGroup>
-              <FormLabel>CONDITIONS</FormLabel>
-              {conditions.map((condition) => (
-                <FormControlLabel
-                  key={condition.ConditionID}
-                  control={
-                    <Checkbox
-                      id={condition.ConditionID.toString()}
-                      checked={
-                        conditionsSelection[condition.ConditionID] === undefined
-                          ? false
-                          : conditionsSelection[condition.ConditionID]
-                      }
-                      onChange={handleConditionsSelection}
-                      size="small"
-                    />
-                  }
-                  label={condition.ConditionName}
-                />
-              ))}
-            </FormGroup>
-          </div>
-        </FormControl>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button variant="contained" color="primary" style={{ margin: 10 }}>
-            cancel
-          </Button>
-          <Button variant="contained" color="primary" style={{ margin: 10 }}>
-            apply filter
-          </Button>
-        </div>
-      </Box>
-    </Container>
+    <div>
+      hello {x}
+      {a}
+    </div>
   );
 }

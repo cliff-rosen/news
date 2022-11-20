@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { addPost as apiAddPost } from "../common/PostAPI";
 import {
+  entryTypeList,
   conditionsList as conditions,
   substancesList as substances,
 } from "../common/Lookups";
-import { getEntryTypes } from "../common/LookupAPI";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
@@ -19,7 +19,6 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 
 function PostAdd({ sessionManager }) {
-  const [entryTypes, setEntryTypes] = useState([]);
   const [entryTypeID, setEntryTypeID] = useState("");
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
@@ -32,26 +31,17 @@ function PostAdd({ sessionManager }) {
     sessionManager.requireUser();
   });
 
-  useEffect(() => {
-    const getLookups = async () => {
-      const et = await getEntryTypes();
-      setEntryTypes(et);
-    };
-
-    getLookups();
-  }, []);
-
   const isLinkRequired = () => {
     if (entryTypeID === "") return false;
     return Boolean(
-      entryTypes.find((e) => e.EntryTypeID === entryTypeID).RequiresLink
+      entryTypeList.find((e) => e.EntryTypeID === entryTypeID).RequiresLink
     );
   };
 
   const getURLLabel = () => {
     if (entryTypeID === 0) return "";
     const URLLabel =
-      entryTypes.find((e) => e.EntryTypeID === entryTypeID).EntryTypeName +
+      entryTypeList.find((e) => e.EntryTypeID === entryTypeID).EntryTypeName +
       " URL";
     return URLLabel;
   };
@@ -129,7 +119,7 @@ function PostAdd({ sessionManager }) {
                 setMessage("");
               }}
             >
-              {entryTypes.map((et) => (
+              {entryTypeList.map((et) => (
                 <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
                   {et.EntryTypeName}
                 </MenuItem>

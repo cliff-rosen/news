@@ -1,17 +1,20 @@
-import { useState, useEffect, useMemo } from "react";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import {
+  useFilterParams,
+  writeFilterParamsToLocalStorage,
+  readFilterFromLocalStorage,
+  isFilterStored,
+  writeFilterObjectToLocalStorage,
+  getStoredFilterURL,
+  getStoredFilterText,
+} from "../common/FilterUtils";
 import Post from "../components/Post";
 import PostListFilter from "./PostListFilter";
 import { getPosts as apiGetPosts } from "../common/PostAPI";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 const POST_LIST_PAGE_SIZE = 15;
-
-function useQueryParams() {
-  const { search } = useLocation();
-
-  return useMemo(() => new URLSearchParams(search), [search]);
-}
 
 function PostList({ sessionManager }) {
   const [posts, setPosts] = useState([]);
@@ -19,30 +22,17 @@ function PostList({ sessionManager }) {
   const [fetchError, setFetchError] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
 
-  const queryParams = useQueryParams();
-  const order = queryParams.get("order") || "trending";
-  const start = Number(queryParams.get("start")) || 0;
-  const entryTypeID = queryParams.get("entrytypeid") || "";
-  const substanceIDs = queryParams.get("substanceids") || "";
-  const conditionIDs = queryParams.get("conditionids") || "";
-  const navigate = useNavigate();
+  const { order, start, entryTypeID, substanceIDs, conditionIDs } =
+    useFilterParams();
 
-  const updateVote = (idx, newVoteScore, newVote) => {
-    var post = posts[idx];
-    post = { ...post, VoteScore: newVoteScore, Vote: newVote };
-    setPosts((curPosts) => {
-      var newPosts = [...curPosts];
-      newPosts[idx] = post;
-      return newPosts;
-    });
-  };
+  const navigate = useNavigate();
 
   const hideFilter = () => {
     setShowFilter(false);
   };
 
   const applyFilter = (
-    entryTypeID,
+    newEntryTypeID,
     substancesSelection,
     conditionsSelection
   ) => {
@@ -61,13 +51,33 @@ function PostList({ sessionManager }) {
     }
     newConditionIDs = conditions.join(",");
 
+    writeFilterObjectToLocalStorage({
+      order,
+      start,
+      entryTypeID: newEntryTypeID,
+      substanceIDs: newSubstanceIDs,
+      conditionIDs: newConditionIDs,
+    });
+
+    getStoredFilterText();
+
     navigate(
-      `/?order=${order}&start=${start}&entrytypeid=${entryTypeID}&substanceids=${newSubstanceIDs}&conditionids=${newConditionIDs}`
+      `/postlist?order=${order}&start=${start}&entrytypeid=${newEntryTypeID}&substanceids=${newSubstanceIDs}&conditionids=${newConditionIDs}`
     );
   };
 
   const toggleFilter = () => {
     setShowFilter(!showFilter);
+  };
+
+  const updateVote = (idx, newVoteScore, newVote) => {
+    var post = posts[idx];
+    post = { ...post, VoteScore: newVoteScore, Vote: newVote };
+    setPosts((curPosts) => {
+      var newPosts = [...curPosts];
+      newPosts[idx] = post;
+      return newPosts;
+    });
   };
 
   useEffect(() => {
@@ -107,9 +117,20 @@ function PostList({ sessionManager }) {
 
   return (
     <div style={{ border: "none" }}>
-      <Button onClick={toggleFilter}>filter</Button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Button onClick={toggleFilter}>filter</Button>
+        {isFilterStored() && (
+          <Typography style={{ fontSize: 12 }}>
+            [{getStoredFilterText()}]
+          </Typography>
+        )}
+      </div>
       {showFilter && (
-        <PostListFilter applyFilter={applyFilter} hideFilter={hideFilter} />
+        <PostListFilter
+          applyFilter={applyFilter}
+          hideFilter={hideFilter}
+          selections={{ entryTypeID, substanceIDs, conditionIDs }}
+        />
       )}
       {posts.map((post, i) => {
         post.idx = i;
@@ -122,7 +143,6 @@ function PostList({ sessionManager }) {
           />
         );
       })}
-
       {more && (
         <div style={{ marginLeft: 50 }}>
           <RouterLink
@@ -131,7 +151,7 @@ function PostList({ sessionManager }) {
               textDecoration: "none",
               color: "#1976D2",
             }}
-            to={`/?order=${order}&start=${start + POST_LIST_PAGE_SIZE}`}
+            to={getStoredFilterURL(start + POST_LIST_PAGE_SIZE)}
           >
             - more -
           </RouterLink>
@@ -145,7 +165,7 @@ function PostList({ sessionManager }) {
               textDecoration: "none",
               color: "#1976D2",
             }}
-            to={`/?order=${order}&start=${0}`}
+            to={getStoredFilterURL(0)}
           >
             - back to start -
           </RouterLink>

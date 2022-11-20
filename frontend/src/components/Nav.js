@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useFilterParams } from "../common/FilterUtils";
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 
@@ -16,6 +17,8 @@ const sections = [
 const Navbar = ({ sessionManager }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { order, start, entryTypeID, substanceIDs, conditionIDs } =
+    useFilterParams();
 
   const isActive = (section) => {
     const s = location.search || "";

@@ -18,7 +18,6 @@ export const getPosts = async (
 ) => {
   order = order || "trending";
   start = start || 0;
-  console.log("subs", substanceIDs);
   return fetchGet(
     `entries?order=${order}&start=${start}&limit=${limit}&entrytypeid=${entryTypeID}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`
   );

@@ -1,3 +1,41 @@
+export const entryTypeList = [
+  {
+    EntryTypeID: 1,
+    EntryTypeName: "News Article",
+    RequiresLink: 1,
+  },
+  {
+    EntryTypeID: 2,
+    EntryTypeName: "Research Report",
+    RequiresLink: 1,
+  },
+  {
+    EntryTypeID: 3,
+    EntryTypeName: "Research Center",
+    RequiresLink: 0,
+  },
+  {
+    EntryTypeID: 4,
+    EntryTypeName: "Question",
+    RequiresLink: 0,
+  },
+  {
+    EntryTypeID: 5,
+    EntryTypeName: "Discussion",
+    RequiresLink: 0,
+  },
+  {
+    EntryTypeID: 6,
+    EntryTypeName: "Misc Link",
+    RequiresLink: 1,
+  },
+  {
+    EntryTypeID: 7,
+    EntryTypeName: "Misc (No Link)",
+    RequiresLink: 0,
+  },
+];
+
 export const substancesList = [
   {
     SubstanceID: 7,
@@ -57,6 +95,16 @@ export const conditionsList = [
 ];
 
 /////////////////////////////////////////////
+
+export const entryTypeMap = {
+  1: "News Article",
+  2: "Research Report",
+  3: "Research Center",
+  4: "Question",
+  5: "Discussion",
+  6: "Misc Link",
+  7: "Misc (No Link)",
+};
 
 export const substancesMap = {
   7: "5-MEO-DMT",

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import {
+  entryTypeList,
   conditionsList as conditions,
   substancesList as substances,
 } from "../common/Lookups";
-import { getEntryTypes } from "../common/LookupAPI";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -16,20 +16,31 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 
-export default function PostListFilter({ applyFilter, hideFilter }) {
-  const [entryTypes, setEntryTypes] = useState([]);
-  const [entryTypeID, setEntryTypeID] = useState("");
+const makeSelectionObject = (selectionList) => {
+  if (!selectionList) {
+    return {};
+  }
+  const selectionArr = selectionList.split(",");
+  const selObj = selectionArr.reduce((acc, cur) => {
+    acc[cur] = true;
+    return acc;
+  }, {});
+  return selObj;
+};
+
+export default function PostListFilter({
+  applyFilter,
+  hideFilter,
+  selections,
+}) {
+  const [entryTypeID, setEntryTypeID] = useState(selections.entryTypeID);
   const [substancesSelection, setSubstancesSelection] = useState({});
   const [conditionsSelection, setConditionsSelection] = useState({});
 
   useEffect(() => {
-    const getLookups = async () => {
-      const et = await getEntryTypes();
-      setEntryTypes(et);
-    };
-
-    getLookups();
-  }, []);
+    setSubstancesSelection(makeSelectionObject(selections.substanceIDs));
+    setConditionsSelection(makeSelectionObject(selections.conditionIDs));
+  }, [selections]);
 
   const clearFilter = () => {
     setEntryTypeID("");
@@ -65,7 +76,7 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
     >
       <Box component="form" sx={{ mt: 1 }}>
         <FormControl fullWidth>
-          <InputLabel>Post Type</InputLabel>
+          <FormLabel>POST TYPE</FormLabel>
           <Select
             value={entryTypeID}
             label="Post Type"
@@ -76,7 +87,7 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
             <MenuItem key={0} value={""}>
               -
             </MenuItem>
-            {entryTypes.map((et) => (
+            {entryTypeList.map((et) => (
               <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
                 {et.EntryTypeName}
               </MenuItem>
@@ -95,6 +106,11 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
               {substances.map((substance) => (
                 <FormControlLabel
                   key={substance.SubstanceID}
+                  label={
+                    <Typography style={{ fontSize: 12 }} color="textSecondary">
+                      {substance.SubstanceName}
+                    </Typography>
+                  }
                   control={
                     <Checkbox
                       id={substance.SubstanceID.toString()}
@@ -107,7 +123,6 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
                       size="small"
                     />
                   }
-                  label={substance.SubstanceName}
                 />
               ))}
             </FormGroup>
@@ -115,7 +130,13 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
               <FormLabel>CONDITIONS</FormLabel>
               {conditions.map((condition) => (
                 <FormControlLabel
+                  style={{ border: "none" }}
                   key={condition.ConditionID}
+                  label={
+                    <Typography style={{ fontSize: 12 }} color="textSecondary">
+                      {condition.ConditionName}
+                    </Typography>
+                  }
                   control={
                     <Checkbox
                       id={condition.ConditionID.toString()}
@@ -128,7 +149,6 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
                       size="small"
                     />
                   }
-                  label={condition.ConditionName}
                 />
               ))}
             </FormGroup>
@@ -159,7 +179,7 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
             color="primary"
             style={{ margin: 10 }}
           >
-            apply filter
+            apply
           </Button>
           <Button
             onClick={hideFilter}
@@ -167,7 +187,7 @@ export default function PostListFilter({ applyFilter, hideFilter }) {
             color="primary"
             style={{ margin: 10 }}
           >
-            hide filter
+            hide
           </Button>
         </div>
       </Box>
