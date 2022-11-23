@@ -145,7 +145,7 @@ function PostList({ sessionManager }) {
           applyFilter={applyFilter}
           hideFilter={hideFilter}
           selections={{
-            entryTypeIDS: sEntryTypeIDs || entryTypeIDs,
+            entryTypeIDs: sEntryTypeIDs || entryTypeIDs,
             substanceIDs: sSubstanceIDs || substanceIDs,
             conditionIDs: sConditionIDs || conditionIDs,
           }}

@@ -38,9 +38,10 @@ export default function PostListFilter({
   const [entryTypesSelection, setEntryTypesSelection] = useState({});
 
   useEffect(() => {
+    console.log("effect", selections.entryTypeIDs);
     setSubstancesSelection(makeSelectionObject(selections.substanceIDs));
     setConditionsSelection(makeSelectionObject(selections.conditionIDs));
-    setConditionsSelection(makeSelectionObject(selections.entryTypeIDs));
+    setEntryTypesSelection(makeSelectionObject(selections.entryTypeIDs));
   }, [selections]);
 
   const clearFilter = () => {
