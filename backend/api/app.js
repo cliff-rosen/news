@@ -178,7 +178,7 @@ app.get("/entries", checkForToken, (req, res) => {
   const order = req.query.order;
   const start = Number(req.query.start) || 0;
   const limit = Number(req.query.limit) || LIMIT;
-  const entrytypeid = Number(req.query.entrytypeid) || 0;
+  const entrytypeids = req.query.entrytypeids;
   const substanceids = req.query.substanceids;
   const conditionids = req.query.conditionids;
 
@@ -189,7 +189,7 @@ app.get("/entries", checkForToken, (req, res) => {
     order,
     start,
     limit + 1,
-    entrytypeid,
+    entrytypeids,
     substanceids,
     conditionids
   )

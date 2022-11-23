@@ -12,14 +12,14 @@ export const getPosts = async (
   order,
   start,
   limit,
-  entryTypeID,
+  entryTypeIDs,
   substanceIDs,
   conditionIDs
 ) => {
   order = order || "trending";
   start = start || 0;
   return fetchGet(
-    `entries?order=${order}&start=${start}&limit=${limit}&entrytypeid=${entryTypeID}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`
+    `entries?order=${order}&start=${start}&limit=${limit}&entrytypeids=${entryTypeIDs}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`
   );
 };
 

@@ -285,7 +285,7 @@ async function getFilteredEntries(
   order,
   start,
   limit,
-  entryTypeID,
+  entryTypeIDs,
   substanceIDs,
   conditionIDs
 ) {
@@ -329,9 +329,9 @@ async function getFilteredEntries(
   `;
   }
 
-  if (entryTypeID) {
+  if (entryTypeIDs) {
     dbQueryString += `
-    WHERE e.entryTypeID = ${entryTypeID}
+    WHERE e.entryTypeID IN (${entryTypeIDs})
   `;
   }
 
@@ -677,7 +677,7 @@ async function addLog(req) {
                       '${req.url}','${req.method}', '${bodyString}'
                       )
                     `;
-
+  console.log(dbQueryString);
   const res = await pool.query(dbQueryString);
   console.log("addLog returned", res);
   return res;

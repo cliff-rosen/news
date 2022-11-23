@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { entryTypeMap, substancesMap, conditionsMap } from "./Lookups";
 
-export function useFilterParams() {
+export function useFilterQueryParams() {
   const { search } = useLocation();
   const getQueryParams = useMemo(() => {
     return new URLSearchParams(search);
@@ -10,11 +10,11 @@ export function useFilterParams() {
 
   const order = getQueryParams.get("order") || "trending";
   const start = Number(getQueryParams.get("start")) || 0;
-  const entryTypeID = getQueryParams.get("entrytypeid") || "";
+  const entryTypeIDs = getQueryParams.get("entrytypeids") || "";
   const substanceIDs = getQueryParams.get("substanceids") || "";
   const conditionIDs = getQueryParams.get("conditionids") || "";
 
-  return { order, start, entryTypeID, substanceIDs, conditionIDs };
+  return { order, start, entryTypeIDs, substanceIDs, conditionIDs };
 }
 
 export function writeFilterObjectToLocalStorage(filter) {
@@ -24,11 +24,11 @@ export function writeFilterObjectToLocalStorage(filter) {
 export function writeFilterParamsToLocalStorage(
   order,
   start,
-  entryTypeID,
+  entryTypeIDs,
   substanceIDs,
   conditionIDs
 ) {
-  const filter = { order, start, entryTypeID, substanceIDs, conditionIDs };
+  const filter = { order, start, entryTypeIDs, substanceIDs, conditionIDs };
   writeFilterObjectToLocalStorage(filter);
 }
 
@@ -39,7 +39,7 @@ export function readFilterFromLocalStorage() {
 
 export function isFilterStored() {
   const filter = readFilterFromLocalStorage();
-  if (filter.entryTypeID || filter.substanceIDs || filter.conditionIDs) {
+  if (filter.entryTypeIDs || filter.substanceIDs || filter.conditionIDs) {
     return true;
   }
   return false;
@@ -47,9 +47,9 @@ export function isFilterStored() {
 
 export function getStoredFilterURL(start) {
   start = start || 0;
-  const { order, dummyStart, entryTypeID, substanceIDs, conditionIDs } =
+  const { order, dummyStart, entryTypeIDs, substanceIDs, conditionIDs } =
     readFilterFromLocalStorage();
-  return `/postlist?order=${order}&start=${start}&entrytypeid=${entryTypeID}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`;
+  return `/postlist?order=${order}&start=${start}&entrytypeids=${entryTypeIDs}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`;
 }
 
 export function getStoredFilterText() {
@@ -57,15 +57,19 @@ export function getStoredFilterText() {
     return "";
   }
 
-  var entryTypeText = "";
+  var entryTypesText = "";
   var substancesText = "";
   var conditionsText = "";
 
-  const { order, start, entryTypeID, substanceIDs, conditionIDs } =
+  const { order, start, entryTypeIDs, substanceIDs, conditionIDs } =
     readFilterFromLocalStorage();
 
-  if (entryTypeID) {
-    entryTypeText = "POST TYPE: " + entryTypeMap[entryTypeID];
+  if (entryTypeIDs) {
+    entryTypesText = entryTypeIDs
+      .split(",")
+      .map((etid) => entryTypeMap[etid])
+      .join(", ");
+    entryTypesText = "POST TYPES: " + entryTypesText;
   }
 
   if (substanceIDs) {
@@ -84,7 +88,7 @@ export function getStoredFilterText() {
     conditionsText = "CONDITIONS: " + conditionsText;
   }
 
-  var filterText = entryTypeText;
+  var filterText = entryTypesText;
   if (substancesText) {
     filterText += filterText ? ", " : "";
     filterText += substancesText;

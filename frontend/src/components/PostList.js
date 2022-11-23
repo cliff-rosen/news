@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
-  useFilterParams,
+  useFilterQueryParams,
   writeFilterParamsToLocalStorage,
   readFilterFromLocalStorage,
   isFilterStored,
@@ -22,8 +22,15 @@ function PostList({ sessionManager }) {
   const [fetchError, setFetchError] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
 
-  const { order, start, entryTypeID, substanceIDs, conditionIDs } =
-    useFilterParams();
+  const { order, start, entryTypeIDs, substanceIDs, conditionIDs } =
+    useFilterQueryParams();
+  const {
+    dummy1,
+    dummy2,
+    entryTypeIDs: sEntryTypeIDs,
+    substanceIDs: sSubstanceIDs,
+    conditionIDs: sConditionIDs,
+  } = readFilterFromLocalStorage();
 
   const navigate = useNavigate();
 
@@ -32,14 +39,21 @@ function PostList({ sessionManager }) {
   };
 
   const applyFilter = (
-    newEntryTypeID,
+    entryTypesSelection,
     substancesSelection,
     conditionsSelection
   ) => {
+    const entryTypes = [];
     const substances = [];
     const conditions = [];
+    var newEntryTypeIDs = "";
     var newSubstanceIDs = "";
     var newConditionIDs = "";
+
+    for (const [key, value] of Object.entries(entryTypesSelection)) {
+      if (value) entryTypes.push(key);
+    }
+    newEntryTypeIDs = entryTypes.join(",");
 
     for (const [key, value] of Object.entries(substancesSelection)) {
       if (value) substances.push(key);
@@ -54,15 +68,13 @@ function PostList({ sessionManager }) {
     writeFilterObjectToLocalStorage({
       order,
       start,
-      entryTypeID: newEntryTypeID,
+      entryTypeIDs: newEntryTypeIDs,
       substanceIDs: newSubstanceIDs,
       conditionIDs: newConditionIDs,
     });
 
-    getStoredFilterText();
-
     navigate(
-      `/postlist?order=${order}&start=${start}&entrytypeid=${newEntryTypeID}&substanceids=${newSubstanceIDs}&conditionids=${newConditionIDs}`
+      `/postlist?order=${order}&start=${start}&entrytypeids=${newEntryTypeIDs}&substanceids=${newSubstanceIDs}&conditionids=${newConditionIDs}`
     );
   };
 
@@ -87,9 +99,9 @@ function PostList({ sessionManager }) {
           order,
           start,
           POST_LIST_PAGE_SIZE,
-          entryTypeID,
-          substanceIDs,
-          conditionIDs
+          sEntryTypeIDs || entryTypeIDs,
+          sSubstanceIDs || substanceIDs,
+          sConditionIDs || conditionIDs
         );
         const data = res.rows;
         setPosts(data);
@@ -106,9 +118,12 @@ function PostList({ sessionManager }) {
     sessionManager.user.userID,
     order,
     start,
-    entryTypeID,
+    entryTypeIDs,
     substanceIDs,
     conditionIDs,
+    sEntryTypeIDs,
+    sSubstanceIDs,
+    sConditionIDs,
   ]);
 
   if (fetchError) {
@@ -129,7 +144,11 @@ function PostList({ sessionManager }) {
         <PostListFilter
           applyFilter={applyFilter}
           hideFilter={hideFilter}
-          selections={{ entryTypeID, substanceIDs, conditionIDs }}
+          selections={{
+            entryTypeIDS: sEntryTypeIDs || entryTypeIDs,
+            substanceIDs: sSubstanceIDs || substanceIDs,
+            conditionIDs: sConditionIDs || conditionIDs,
+          }}
         />
       )}
       {posts.map((post, i) => {
@@ -157,7 +176,7 @@ function PostList({ sessionManager }) {
           </RouterLink>
         </div>
       )}
-      {!more && posts.length !== POST_LIST_PAGE_SIZE && (
+      {start > 0 && !more && posts.length !== POST_LIST_PAGE_SIZE && (
         <div style={{ marginLeft: 50 }}>
           <RouterLink
             style={{

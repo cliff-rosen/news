@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  entryTypeList,
+  entryTypeList as entryTypes,
   conditionsList as conditions,
   substancesList as substances,
 } from "../common/Lookups";
@@ -33,17 +33,18 @@ export default function PostListFilter({
   hideFilter,
   selections,
 }) {
-  const [entryTypeID, setEntryTypeID] = useState(selections.entryTypeID);
   const [substancesSelection, setSubstancesSelection] = useState({});
   const [conditionsSelection, setConditionsSelection] = useState({});
+  const [entryTypesSelection, setEntryTypesSelection] = useState({});
 
   useEffect(() => {
     setSubstancesSelection(makeSelectionObject(selections.substanceIDs));
     setConditionsSelection(makeSelectionObject(selections.conditionIDs));
+    setConditionsSelection(makeSelectionObject(selections.entryTypeIDs));
   }, [selections]);
 
   const clearFilter = () => {
-    setEntryTypeID("");
+    setEntryTypesSelection({});
     setSubstancesSelection({});
     setConditionsSelection({});
   };
@@ -64,6 +65,14 @@ export default function PostListFilter({
     });
   };
 
+  const handleEntryTypesSelection = (e) => {
+    setEntryTypesSelection((es) => {
+      const esNew = { ...es };
+      esNew[e.target.id] = e.target.checked;
+      return esNew;
+    });
+  };
+
   return (
     <Container
       maxWidth="xs"
@@ -76,24 +85,6 @@ export default function PostListFilter({
     >
       <Box component="form" sx={{ mt: 1 }}>
         <FormControl fullWidth>
-          <FormLabel>POST TYPE</FormLabel>
-          <Select
-            value={entryTypeID}
-            label="Post Type"
-            onChange={(e) => {
-              setEntryTypeID(e.target.value);
-            }}
-          >
-            <MenuItem key={0} value={""}>
-              -
-            </MenuItem>
-            {entryTypeList.map((et) => (
-              <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
-                {et.EntryTypeName}
-              </MenuItem>
-            ))}
-          </Select>
-
           <div
             style={{
               display: "flex",
@@ -101,6 +92,31 @@ export default function PostListFilter({
               border: "none",
             }}
           >
+            <FormGroup>
+              <FormLabel>POST TYPE</FormLabel>
+              {entryTypes.map((et) => (
+                <FormControlLabel
+                  key={entryTypes.EntryTypeID}
+                  label={
+                    <Typography style={{ fontSize: 12 }} color="textSecondary">
+                      {et.EntryTypeName}
+                    </Typography>
+                  }
+                  control={
+                    <Checkbox
+                      id={et.EntryTypeID.toString()}
+                      checked={
+                        entryTypesSelection[et.EntryTypeID] === undefined
+                          ? false
+                          : entryTypesSelection[et.EntryTypeID]
+                      }
+                      onChange={handleEntryTypesSelection}
+                      size="small"
+                    />
+                  }
+                />
+              ))}
+            </FormGroup>
             <FormGroup>
               <FormLabel>SUBSTANCES</FormLabel>
               {substances.map((substance) => (
@@ -173,7 +189,11 @@ export default function PostListFilter({
           </Button>
           <Button
             onClick={() =>
-              applyFilter(entryTypeID, substancesSelection, conditionsSelection)
+              applyFilter(
+                entryTypesSelection,
+                substancesSelection,
+                conditionsSelection
+              )
             }
             variant="contained"
             color="primary"
