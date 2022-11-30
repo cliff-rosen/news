@@ -1,4 +1,4 @@
-export const entryTypeList = [
+export const entryTypesList = [
   {
     EntryTypeID: 1,
     EntryTypeName: "News Article",
@@ -11,7 +11,7 @@ export const entryTypeList = [
   },
   {
     EntryTypeID: 3,
-    EntryTypeName: "Research Center",
+    EntryTypeName: "Resource",
     RequiresLink: 0,
   },
   {
@@ -96,10 +96,10 @@ export const conditionsList = [
 
 /////////////////////////////////////////////
 
-export const entryTypeMap = {
+export const entryTypesMap = {
   1: "News Article",
   2: "Research Report",
-  3: "Research Center",
+  3: "Resource",
   4: "Question",
   5: "Discussion",
   6: "Misc Link",

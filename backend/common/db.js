@@ -215,25 +215,55 @@ async function deleteEntry(entryID) {
 
 async function getEntry(userID, entryID) {
   dbQueryString = `
-                      SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore, u.UserName, v.Vote,
-                      SubstanceIDs, ConditionIDs
-                      FROM entry e
-                      JOIN user u ON e.UserID = u.UserID
-                      LEFT JOIN user_entry_vote v 
-                      ON v.UserID = ${userID} and e.EntryID = v.EntryID 
-                      LEFT JOIN (
-                        SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
-                        FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
-                        WHERE e1.EntryID = ${entryID}
-                      ) AS substances ON e.entryID = substances.entryid
-                      LEFT JOIN (
-                        SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
-                        FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
-                        WHERE e2.EntryID = ${entryID}
-                      ) AS conditions ON e.entryID = conditions.entryid
-                      WHERE e.EntryID = ${entryID}
-                      `;
+            SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore, u.UserName, v.Vote,
+            SubstanceIDs, ConditionIDs
+            FROM entry e
+            JOIN user u ON e.UserID = u.UserID
+            LEFT JOIN user_entry_vote v 
+            ON v.UserID = ${userID} and e.EntryID = v.EntryID 
+            LEFT JOIN (
+              SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
+              FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
+              GROUP BY e1.entryID
+            ) AS substances ON e.entryID = substances.entryid
+            LEFT JOIN (
+              SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
+              FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
+              GROUP BY e2.entryID              
+            ) AS conditions ON e.entryID = conditions.entryid
+            WHERE e.EntryID = ${entryID}
+            `;
 
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    throw new Error("Query did not execute");
+  }
+}
+
+async function getEntryByUrl(userID, Url) {
+  dbQueryString = `
+          SELECT e.*, e.VoteScoreActual + e.VoteScoreBias as VoteScore, u.UserName, v.Vote,
+          SubstanceIDs, ConditionIDs
+          FROM entry e
+          JOIN user u ON e.UserID = u.UserID
+          LEFT JOIN user_entry_vote v 
+          ON v.UserID = ${userID} and e.EntryID = v.EntryID 
+          LEFT JOIN (
+            SELECT e1.entryid, GROUP_CONCAT(es1.substanceid) AS substanceids
+            FROM entry e1 JOIN entry_substance es1 ON e1.entryid = es1.entryid
+            GROUP BY e1.entryID
+          ) AS substances ON e.entryID = substances.entryid
+          LEFT JOIN (
+            SELECT e2.entryid, GROUP_CONCAT(ec1.conditionid) AS conditionids
+            FROM entry e2 JOIN entry_health_condition ec1 ON e2.entryid = ec1.entryid
+            GROUP BY e2.entryID              
+          ) AS conditions ON e.entryID = conditions.entryid
+          WHERE e.EntryUrl = '${Url}'
+          `;
+  console.log(dbQueryString);
   try {
     const res = await pool.query(dbQueryString);
     return res;
@@ -779,3 +809,4 @@ module.exports.getSubstances = getSubstances;
 module.exports.getConditions = getConditions;
 module.exports.getEntryTypes = getEntryTypes;
 module.exports.getFilteredEntries = getFilteredEntries;
+module.exports.getEntryByUrl = getEntryByUrl;

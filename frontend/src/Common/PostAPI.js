@@ -1,7 +1,7 @@
 import { fetchGet, fetchPost } from "./APIUtils";
 
 export const logPostClick = async (entryID) => {
-  return fetchGet(`entries/${entryID}/logclick`);
+  return fetchPost(`entries/${entryID}/logclick`);
 };
 
 export const getPost = async (entryID) => {

@@ -17,13 +17,14 @@ import { Button, Typography } from "@mui/material";
 const POST_LIST_PAGE_SIZE = 15;
 
 function PostList({ sessionManager }) {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [more, setMore] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-
   const { order, start, entryTypeIDs, substanceIDs, conditionIDs } =
     useFilterQueryParams();
+
   const {
     dummy1,
     dummy2,
@@ -31,8 +32,6 @@ function PostList({ sessionManager }) {
     substanceIDs: sSubstanceIDs,
     conditionIDs: sConditionIDs,
   } = readFilterFromLocalStorage();
-
-  const navigate = useNavigate();
 
   const hideFilter = () => {
     setShowFilter(false);
@@ -103,8 +102,7 @@ function PostList({ sessionManager }) {
           sSubstanceIDs || substanceIDs,
           sConditionIDs || conditionIDs
         );
-        const data = res.rows;
-        setPosts(data);
+        setPosts(res.rows);
         setMore(res.more);
         setFetchError(false);
       } catch (error) {

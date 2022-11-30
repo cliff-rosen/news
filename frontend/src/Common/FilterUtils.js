@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
-import { entryTypeMap, substancesMap, conditionsMap } from "./Lookups";
+import { entryTypesMap, substancesMap, conditionsMap } from "./Lookups";
 
 export function useFilterQueryParams() {
   const { search } = useLocation();
@@ -67,7 +67,7 @@ export function getStoredFilterText() {
   if (entryTypeIDs) {
     entryTypesText = entryTypeIDs
       .split(",")
-      .map((etid) => entryTypeMap[etid])
+      .map((etid) => entryTypesMap[etid])
       .join(", ");
     entryTypesText = "POST TYPES: " + entryTypesText;
   }

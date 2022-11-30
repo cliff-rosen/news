@@ -7,7 +7,12 @@ content-type: application/json
 
 ###
 
-GET http://localhost:4000/y/1?a=1&b=2  HTTP/1.1
+GET https://api-staging.trippersalmanac.com/entries  HTTP/1.1
+content-type: application/json
+
+###
+
+GET http://localhost:4000/y?url=https%3A%2F%2Fwww.myurl.com%3A1000%2Fa%2Fb%2Fc%3F123%3D456  HTTP/1.1
 content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
@@ -17,7 +22,7 @@ POST http://localhost:4000/login  HTTP/1.1
 content-type: application/json
 
 {
-    "username": "cjohn",
+    "username": "john",
     "password": "abc"
 }
 
@@ -47,7 +52,7 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 
 ###
 
-GET http://localhost:4000/entries?order=new HTTP/1.1
+GET http://localhost:4000/entries?order=new&entrytypeid=1&substanceids=1,2&conditionids=1 HTTP/1.1
 authorization: Bearer XeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
 ###
@@ -58,6 +63,11 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 ###
 
 GET http://localhost:4000/entries/195 HTTP/1.1
+authorization: Bearer XeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
+
+###
+
+GET http://localhost:4000/entries/url/https%3A%2F%2Fstackoverflow.com%2Fquestions%2F8498592%2Fextract-hostname-name-from-string HTTP/1.1
 authorization: Bearer XeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
 ###

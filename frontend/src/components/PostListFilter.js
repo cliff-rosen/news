@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  entryTypeList as entryTypes,
+  entryTypesList as entryTypes,
   conditionsList as conditions,
   substancesList as substances,
 } from "../common/Lookups";
@@ -21,11 +21,11 @@ const makeSelectionObject = (selectionList) => {
     return {};
   }
   const selectionArr = selectionList.split(",");
-  const selObj = selectionArr.reduce((acc, cur) => {
+  const selectionObj = selectionArr.reduce((acc, cur) => {
     acc[cur] = true;
     return acc;
   }, {});
-  return selObj;
+  return selectionObj;
 };
 
 export default function PostListFilter({
@@ -38,7 +38,6 @@ export default function PostListFilter({
   const [entryTypesSelection, setEntryTypesSelection] = useState({});
 
   useEffect(() => {
-    console.log("effect", selections.entryTypeIDs);
     setSubstancesSelection(makeSelectionObject(selections.substanceIDs));
     setConditionsSelection(makeSelectionObject(selections.conditionIDs));
     setEntryTypesSelection(makeSelectionObject(selections.entryTypeIDs));

@@ -23,7 +23,8 @@ function start(req, res, next) {
 /////////////////// PLAYGROUND /////////////////
 let status = 0;
 
-app.get("/y/:x", authenticateToken, function (req, res) {
+app.get("/y", authenticateToken, function (req, res) {
+  console.log("url", req.query);
   res.json({ message: "hello" });
 });
 
@@ -123,7 +124,7 @@ app.get("/attribute/condition", (req, res) => {
 
 /////////////////////// LOGGING ////////////////////////////
 
-app.get("/entries/:entryid/logclick", checkForToken, (req, res) => {
+app.post("/entries/:entryid/logclick", checkForToken, (req, res) => {
   const { entryid } = req.params;
   console.log("logging entry click for: ", entryid);
   res.json({ result: "SUCCESS" });
@@ -139,6 +140,20 @@ app.get("/entries/:entryid", checkForToken, (req, res) => {
       res.json(rows[0]);
     } else if (rows.length === 0) {
       res.status(404).json({ error: "Entry not found" });
+    } else {
+      res.status(500);
+    }
+  });
+});
+
+app.get("/entries/url/:url", checkForToken, (req, res) => {
+  const { url } = req.params;
+  console.log("getting entry: ", url);
+  db.getEntryByUrl(req.user.userID, url).then((rows) => {
+    if (rows.length === 1) {
+      res.json(rows[0]);
+    } else if (rows.length === 0) {
+      res.json({ status: "NOT_FOUND" });
     } else {
       res.status(500);
     }

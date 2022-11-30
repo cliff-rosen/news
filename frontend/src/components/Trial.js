@@ -1,6 +1,11 @@
-import { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getEntryTypes } from "../common/LookupAPI";
+import Box from "@mui/material/Box";
 
-export default function Trial() {
-  return <div>hello</div>;
+export default function MyComponent(props) {
+  return (
+    <div>
+      <div>hello</div>
+    </div>
+  );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { addPost as apiAddPost } from "../common/PostAPI";
 import {
-  entryTypeList,
+  entryTypesList,
   conditionsList as conditions,
   substancesList as substances,
 } from "../common/Lookups";
@@ -34,14 +34,14 @@ function PostAdd({ sessionManager }) {
   const isLinkRequired = () => {
     if (entryTypeID === "") return false;
     return Boolean(
-      entryTypeList.find((e) => e.EntryTypeID === entryTypeID).RequiresLink
+      entryTypesList.find((e) => e.EntryTypeID === entryTypeID).RequiresLink
     );
   };
 
   const getURLLabel = () => {
     if (entryTypeID === 0) return "";
     const URLLabel =
-      entryTypeList.find((e) => e.EntryTypeID === entryTypeID).EntryTypeName +
+      entryTypesList.find((e) => e.EntryTypeID === entryTypeID).EntryTypeName +
       " URL";
     return URLLabel;
   };
@@ -61,6 +61,8 @@ function PostAdd({ sessionManager }) {
       return csNew;
     });
   };
+
+  const checkForDuplicateUrl = (e) => {};
 
   const formSubmit = async (e) => {
     e.preventDefault();
@@ -119,7 +121,7 @@ function PostAdd({ sessionManager }) {
                 setMessage("");
               }}
             >
-              {entryTypeList.map((et) => (
+              {entryTypesList.map((et) => (
                 <MenuItem key={et.EntryTypeID} value={et.EntryTypeID}>
                   {et.EntryTypeName}
                 </MenuItem>
@@ -147,6 +149,7 @@ function PostAdd({ sessionManager }) {
                   label={getURLLabel()}
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
+                  onBlur={(e) => checkForDuplicateUrl(e)}
                   variant="outlined"
                 />
                 <br />
