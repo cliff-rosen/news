@@ -8,6 +8,10 @@ export const getPost = async (entryID) => {
   return fetchGet(`entries/${entryID}`);
 };
 
+export const getPostByUrl = async (url) => {
+  return fetchGet(`entries/url/${encodeURIComponent(url)}`);
+};
+
 export const getPosts = async (
   order,
   start,

@@ -155,7 +155,7 @@ app.get("/entries/url/:url", checkForToken, (req, res) => {
     } else if (rows.length === 0) {
       res.json({ status: "NOT_FOUND" });
     } else {
-      res.status(500);
+      res.status(500).json({ status: "SERVER_ERROR" });
     }
   });
 });

@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { addPost as apiAddPost } from "../common/PostAPI";
+import { useState, useEffect, useRef } from "react";
+import { addPost as apiAddPost, getPostByUrl } from "../common/PostAPI";
 import {
   entryTypesList,
   conditionsList as conditions,
   substancesList as substances,
 } from "../common/Lookups";
+import PostAddDupeUrlMessage from "./PostAddDupeUrlMessage";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
@@ -24,12 +25,14 @@ function PostAdd({ sessionManager }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [message, setMessage] = useState("");
+  const [dupeUrlErrorPostID, setDupeUrlErrorPostID] = useState(0);
   const [substancesSelection, setSubstancesSelection] = useState({});
   const [conditionsSelection, setConditionsSelection] = useState({});
+  const urlRef = useRef(null);
 
   useEffect(() => {
     sessionManager.requireUser();
-  });
+  }, [sessionManager.user.userID]);
 
   const isLinkRequired = () => {
     if (entryTypeID === "") return false;
@@ -62,10 +65,30 @@ function PostAdd({ sessionManager }) {
     });
   };
 
-  const checkForDuplicateUrl = (e) => {};
+  const checkForDuplicateUrl = async (e) => {
+    if (url === "") {
+      setDupeUrlErrorPostID(0);
+      return;
+    }
+    const existingEntry = await getPostByUrl(url);
+    if (existingEntry.EntryID) {
+      setDupeUrlErrorPostID(existingEntry.EntryID);
+      urlRef.current.focus();
+    } else {
+      setDupeUrlErrorPostID(0);
+    }
+  };
 
   const formSubmit = async (e) => {
     e.preventDefault();
+
+    if (dupeUrlErrorPostID > 0) {
+      console.log(
+        "Cannot submit form with duplicate URL: ",
+        dupeUrlErrorPostID
+      );
+      return;
+    }
 
     if (entryTypeID === "") {
       setMessage("Please select a post type.");
@@ -104,6 +127,9 @@ function PostAdd({ sessionManager }) {
     <div>
       <div style={{ margin: "20px" }}></div>
       <Container maxWidth="xs">
+        {dupeUrlErrorPostID > 0 && (
+          <PostAddDupeUrlMessage postID={dupeUrlErrorPostID} />
+        )}
         {message && (
           <div>
             <Alert severity="error">{message}</Alert>
@@ -134,7 +160,7 @@ function PostAdd({ sessionManager }) {
               type="text"
               label="Title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value.trim())}
               variant="outlined"
               required
             />
@@ -145,10 +171,11 @@ function PostAdd({ sessionManager }) {
                   margin="normal"
                   fullWidth
                   id="url"
+                  inputRef={urlRef}
                   type="text"
                   label={getURLLabel()}
                   value={url}
-                  onChange={(e) => setUrl(e.target.value)}
+                  onChange={(e) => setUrl(e.target.value.trim())}
                   onBlur={(e) => checkForDuplicateUrl(e)}
                   variant="outlined"
                 />

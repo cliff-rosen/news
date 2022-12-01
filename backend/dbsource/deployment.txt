@@ -1,2 +1,11 @@
 add user_entry_vote table
 updated entry table with vote count
+
+ALTER DATABASE news
+  CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci; 
+  
+ALTER TABLE entry
+  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
+
+ALTER TABLE comment
+  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
