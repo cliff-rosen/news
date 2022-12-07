@@ -1,0 +1,39 @@
+Attributes
+
+- entry types
+- substances
+- conditions
+
+LOOKUPS
+
+substancesList = [
+  {
+    SubstanceID: 7,
+    SubstanceName: "5-MEO-DMT",
+  },
+
+substancesMap = {
+  7: "5-MEO-DMT",
+
+STATE
+
+substancesSelection = {
+  1: true,
+  2: false
+}
+
+FORM
+
+handleSubstancesSelection
+  setSubstancesSelection
+  ssNew[e.target.id] = e.target.checked;
+
+apiAddPost(
+        entryTypeID,
+        url,
+        title,
+        desc,
+        substancesSelection,
+        conditionsSelection
+      );
+

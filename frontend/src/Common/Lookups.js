@@ -6,7 +6,7 @@ export const entryTypesList = [
   },
   {
     EntryTypeID: 2,
-    EntryTypeName: "Research Report",
+    EntryTypeName: "Scientific Publication",
     RequiresLink: 1,
   },
   {
@@ -21,17 +21,7 @@ export const entryTypesList = [
   },
   {
     EntryTypeID: 5,
-    EntryTypeName: "Discussion",
-    RequiresLink: 0,
-  },
-  {
-    EntryTypeID: 6,
-    EntryTypeName: "Misc Link",
-    RequiresLink: 1,
-  },
-  {
-    EntryTypeID: 7,
-    EntryTypeName: "Misc (No Link)",
+    EntryTypeName: "Misc",
     RequiresLink: 0,
   },
 ];
@@ -98,12 +88,10 @@ export const conditionsList = [
 
 export const entryTypesMap = {
   1: "News Article",
-  2: "Research Report",
+  2: "Scientific Publication",
   3: "Resource",
   4: "Question",
-  5: "Discussion",
-  6: "Misc Link",
-  7: "Misc (No Link)",
+  5: "Misc",
 };
 
 export const substancesMap = {

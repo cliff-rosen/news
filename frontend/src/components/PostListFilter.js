@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import {
-  entryTypesList as entryTypes,
-  conditionsList as conditions,
-  substancesList as substances,
+  entryTypesList,
+  conditionsList,
+  substancesList,
 } from "../common/Lookups";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -94,9 +94,9 @@ export default function PostListFilter({
           >
             <FormGroup>
               <FormLabel>POST TYPE</FormLabel>
-              {entryTypes.map((et) => (
+              {entryTypesList.map((et) => (
                 <FormControlLabel
-                  key={entryTypes.EntryTypeID}
+                  key={entryTypesList.EntryTypeID}
                   label={
                     <Typography style={{ fontSize: 12 }} color="textSecondary">
                       {et.EntryTypeName}
@@ -119,7 +119,7 @@ export default function PostListFilter({
             </FormGroup>
             <FormGroup>
               <FormLabel>SUBSTANCES</FormLabel>
-              {substances.map((substance) => (
+              {substancesList.map((substance) => (
                 <FormControlLabel
                   key={substance.SubstanceID}
                   label={
@@ -144,7 +144,7 @@ export default function PostListFilter({
             </FormGroup>
             <FormGroup>
               <FormLabel>CONDITIONS</FormLabel>
-              {conditions.map((condition) => (
+              {conditionsList.map((condition) => (
                 <FormControlLabel
                   style={{ border: "none" }}
                   key={condition.ConditionID}

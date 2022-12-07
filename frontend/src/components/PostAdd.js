@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { addPost as apiAddPost, getPostByUrl } from "../common/PostAPI";
 import {
   entryTypesList,
-  conditionsList as conditions,
-  substancesList as substances,
+  conditionsList,
+  substancesList,
 } from "../common/Lookups";
 import PostAddDupeUrlMessage from "./PostAddDupeUrlMessage";
 import Container from "@mui/material/Container";
@@ -160,7 +160,7 @@ function PostAdd({ sessionManager }) {
               type="text"
               label="Title"
               value={title}
-              onChange={(e) => setTitle(e.target.value.trim())}
+              onChange={(e) => setTitle(e.target.value)}
               variant="outlined"
               required
             />
@@ -203,45 +203,45 @@ function PostAdd({ sessionManager }) {
             >
               <FormGroup>
                 <FormLabel>SUBSTANCES</FormLabel>
-                {substances.map((substance) => (
+                {substancesList.map((substanceItem) => (
                   <FormControlLabel
-                    key={substance.SubstanceID}
+                    key={substanceItem.SubstanceID}
                     control={
                       <Checkbox
-                        id={substance.SubstanceID.toString()}
+                        id={substanceItem.SubstanceID.toString()}
                         checked={
-                          substancesSelection[substance.SubstanceID] ===
+                          substancesSelection[substanceItem.SubstanceID] ===
                           undefined
                             ? false
-                            : substancesSelection[substance.SubstanceID]
+                            : substancesSelection[substanceItem.SubstanceID]
                         }
                         onChange={handleSubstancesSelection}
                         size="small"
                       />
                     }
-                    label={substance.SubstanceName}
+                    label={substanceItem.SubstanceName}
                   />
                 ))}
               </FormGroup>
               <FormGroup>
                 <FormLabel>CONDITIONS</FormLabel>
-                {conditions.map((condition) => (
+                {conditionsList.map((conditionItem) => (
                   <FormControlLabel
-                    key={condition.ConditionID}
+                    key={conditionItem.ConditionID}
                     control={
                       <Checkbox
-                        id={condition.ConditionID.toString()}
+                        id={conditionItem.ConditionID.toString()}
                         checked={
-                          conditionsSelection[condition.ConditionID] ===
+                          conditionsSelection[conditionItem.ConditionID] ===
                           undefined
                             ? false
-                            : conditionsSelection[condition.ConditionID]
+                            : conditionsSelection[conditionItem.ConditionID]
                         }
                         onChange={handleConditionsSelection}
                         size="small"
                       />
                     }
-                    label={condition.ConditionName}
+                    label={conditionItem.ConditionName}
                   />
                 ))}
               </FormGroup>

@@ -10,6 +10,7 @@ import PostAdd from "./components/PostAdd";
 import PostView from "./components/PostView";
 import Help from "./components/Help";
 import Trial from "./components/Trial";
+import Container from "@mui/material/Container";
 
 function App() {
   const sessionManager = useSessionManager();
@@ -20,37 +21,30 @@ function App() {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-      }}
-    >
-      <div style={{ flexGrow: 1, border: "none", maxWidth: 800 }}>
-        <SessionMessage sessionManager={sessionManager} />
-        <LoginFormModal sessionManager={sessionManager} />
-        <Nav sessionManager={sessionManager} />
-        <Routes>
-          <Route
-            path="/"
-            element={<PostList sessionManager={sessionManager} />}
-          />
-          <Route
-            path="/postlist"
-            element={<PostList sessionManager={sessionManager} />}
-          />
-          <Route
-            path="add"
-            element={<PostAdd sessionManager={sessionManager} />}
-          />
-          <Route
-            path="/post/:postid"
-            element={<PostView sessionManager={sessionManager} />}
-          />
-          <Route path="/help" element={<Help />} />
-          <Route path="/trial/*" element={<Trial />} />
-        </Routes>
-      </div>
+    <div style={{ margin: "auto", border: "none", maxWidth: 800 }}>
+      <SessionMessage sessionManager={sessionManager} />
+      <LoginFormModal sessionManager={sessionManager} />
+      <Nav sessionManager={sessionManager} />
+      <Routes>
+        <Route
+          path="/"
+          element={<PostList sessionManager={sessionManager} />}
+        />
+        <Route
+          path="/postlist"
+          element={<PostList sessionManager={sessionManager} />}
+        />
+        <Route
+          path="add"
+          element={<PostAdd sessionManager={sessionManager} />}
+        />
+        <Route
+          path="/post/:postid"
+          element={<PostView sessionManager={sessionManager} />}
+        />
+        <Route path="/help" element={<Help />} />
+        <Route path="/trial/*" element={<Trial />} />
+      </Routes>
     </div>
   );
 }

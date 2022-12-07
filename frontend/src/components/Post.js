@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { Link } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { useState, useEffect } from "react";
 import PostVote from "./PostVote";
 import { logPostClick } from "../common/PostAPI";
 import { getElapsedTime } from "../common/TimeUtils";
-import { conditionsMap, substancesMap } from "../common/Lookups";
-import { useEffect } from "react";
+import { entryTypesMap, conditionsMap, substancesMap } from "../common/Lookups";
+import { Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function Post({ sessionManager, post, updateVote, showText }) {
   const [substances, setSubstances] = useState([]);
@@ -110,7 +109,8 @@ export default function Post({ sessionManager, post, updateVote, showText }) {
             </div>
           )}
           <div style={{ fontSize: "13px", color: "gray" }}>
-            Posted by {post.UserName} {getElapsedTime(post.EntryDateTime)} ago |{" "}
+            <i>{entryTypesMap[post.EntryTypeID]}</i> posted by {post.UserName}{" "}
+            {getElapsedTime(post.EntryDateTime)} ago |{" "}
             <RouterLink
               style={{ textDecoration: "none", color: "gray" }}
               to={`/post/${post.EntryID}`}
