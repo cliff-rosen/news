@@ -117,6 +117,18 @@ export default function Post({ sessionManager, post, updateVote, showText }) {
             >
               {post.CommentCount} comments
             </RouterLink>
+            {post.UserID === sessionManager.user.userID && (
+              <span>
+                {" "}
+                |{" "}
+                <RouterLink
+                  style={{ textDecoration: "none", color: "gray" }}
+                  to={`/post/${post.EntryID}?action=edit`}
+                >
+                  edit
+                </RouterLink>
+              </span>
+            )}
           </div>
         </div>
       </div>

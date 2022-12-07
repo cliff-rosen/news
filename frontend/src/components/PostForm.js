@@ -198,7 +198,7 @@ export default function Post({ sessionManager }) {
               display: "flex",
               justifyContent: "space-between",
               border: "none",
-              maxWidth: "70%",
+              maxWidth: "500px",
             }}
           >
             <FormGroup>
