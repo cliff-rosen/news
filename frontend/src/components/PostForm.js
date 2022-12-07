@@ -29,7 +29,7 @@ export default function PostForm({ sessionManager, post = {}, isEditMode }) {
   const [entryTypeID, setEntryTypeID] = useState(post.EntryTypeID || "");
   const [url, setUrl] = useState(post.EntryUrl || "");
   const [title, setTitle] = useState(post.EntryTitle || "");
-  const [desc, setDesc] = useState(post.EntryTitle || "");
+  const [desc, setDesc] = useState(post.EntryText || "");
   const [message, setMessage] = useState("");
   const [dupeUrlErrorPostID, setDupeUrlErrorPostID] = useState(0);
   const [substancesSelection, setSubstancesSelection] = useState(
@@ -163,13 +163,15 @@ export default function PostForm({ sessionManager, post = {}, isEditMode }) {
         substancesSelection,
         conditionsSelection
       );
+      /*       
       setEntryTypeID("");
       setTitle("");
       setUrl("");
       setDesc("");
       setMessage("");
       setSubstancesSelection({});
-      setConditionsSelection({});
+      setConditionsSelection({}); */
+      navigate(`/postlist?order=new`);
       sessionManager.setSessionMessageWrapper("Entry submitted");
     } catch (e) {
       console.log("error adding post", e);

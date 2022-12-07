@@ -112,6 +112,7 @@ async function addEntry(
   conditions
 ) {
   console.log("addEntry: ", entryTitle);
+  console.log(substances);
 
   try {
     const res = await addEntryDB(
@@ -210,7 +211,7 @@ async function updateEntry(
   substances,
   conditions
 ) {
-  console.log("addEntry: ", entryTitle);
+  console.log("updateEntry: ", entryID);
 
   try {
     const res = await updateEntryDB(

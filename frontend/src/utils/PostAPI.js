@@ -32,8 +32,8 @@ export const addPost = async (
   entryUrl,
   entryTitle,
   entryText,
-  iSubstances,
-  iConditions
+  substancesSelection,
+  conditionsSelection
 ) => {
   entryUrl = entryUrl.trim();
   entryTitle = entryTitle.trim();
@@ -41,11 +41,11 @@ export const addPost = async (
   const substances = [];
   const conditions = [];
 
-  for (const [key, value] of Object.entries(iSubstances)) {
+  for (const [key, value] of Object.entries(substancesSelection)) {
     if (value) substances.push(key);
   }
 
-  for (const [key, value] of Object.entries(iConditions)) {
+  for (const [key, value] of Object.entries(conditionsSelection)) {
     if (value) conditions.push(key);
   }
 
@@ -67,8 +67,8 @@ export const editPost = async (
   entryUrl,
   entryTitle,
   entryText,
-  iSubstances,
-  iConditions
+  substancesSelection,
+  conditionsSelection
 ) => {
   entryUrl = entryUrl.trim();
   entryTitle = entryTitle.trim();
@@ -76,11 +76,11 @@ export const editPost = async (
   const substances = [];
   const conditions = [];
 
-  for (const [key, value] of Object.entries(iSubstances)) {
+  for (const [key, value] of Object.entries(substancesSelection)) {
     if (value) substances.push(key);
   }
 
-  for (const [key, value] of Object.entries(iConditions)) {
+  for (const [key, value] of Object.entries(conditionsSelection)) {
     if (value) conditions.push(key);
   }
 
