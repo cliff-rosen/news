@@ -2,6 +2,18 @@ import { useState, useEffect, useMemo } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { entryTypesMap, substancesMap, conditionsMap } from "./Lookups";
 
+export const makeSelectionObject = (selectionList) => {
+  if (!selectionList) {
+    return {};
+  }
+  const selectionArr = selectionList.split(",");
+  const selectionObj = selectionArr.reduce((acc, cur) => {
+    acc[cur] = true;
+    return acc;
+  }, {});
+  return selectionObj;
+};
+
 export function useFilterQueryParams() {
   const { search } = useLocation();
   const getQueryParams = useMemo(() => {

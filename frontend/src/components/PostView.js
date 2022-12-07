@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import { getPost } from "../utils/PostAPI";
 import { getComments, addComment } from "../utils/CommentAPI";
 import Post from "../components/Post";
+import PostEdit from "./PostEdit";
 import CommentsTree from "./CommentsTree";
 import { TextField, Button } from "@mui/material";
 
@@ -11,7 +12,15 @@ export default function PostView({ sessionManager }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
+
   const { postid: entryID } = useParams();
+
+  const { search } = useLocation();
+  const getQueryParams = useMemo(() => {
+    return new URLSearchParams(search);
+  }, [search]);
+
+  const showEditForm = getQueryParams.get("action") === "edit" ? true : false;
 
   useEffect(() => {
     console.log("Post.useEffect for:", entryID);
@@ -71,6 +80,11 @@ export default function PostView({ sessionManager }) {
 
   return (
     <div style={{ border: "none" }}>
+      <PostEdit
+        sessionManager={sessionManager}
+        post={post}
+        showForm={showEditForm}
+      />
       <Post
         sessionManager={sessionManager}
         post={post}

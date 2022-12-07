@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { addPost as apiAddPost, getPostByUrl } from "../utils/PostAPI";
 import {
   entryTypesList,
   conditionsList,
   substancesList,
 } from "../utils/Lookups";
+import { makeSelectionObject } from "../utils/FilterUtils";
 import PostAddDupeUrlMessage from "./PostAddDupeUrlMessage";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -19,16 +21,21 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 
-export default function Post({ sessionManager }) {
-  const [entryTypeID, setEntryTypeID] = useState("");
-  const [url, setUrl] = useState("");
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
+export default function PostForm({ sessionManager, post = {}, isEditMode }) {
+  const [entryTypeID, setEntryTypeID] = useState(post.EntryTypeID || "");
+  const [url, setUrl] = useState(post.EntryUrl || "");
+  const [title, setTitle] = useState(post.EntryTitle || "");
+  const [desc, setDesc] = useState(post.EntryTitle || "");
   const [message, setMessage] = useState("");
   const [dupeUrlErrorPostID, setDupeUrlErrorPostID] = useState(0);
-  const [substancesSelection, setSubstancesSelection] = useState({});
-  const [conditionsSelection, setConditionsSelection] = useState({});
+  const [substancesSelection, setSubstancesSelection] = useState(
+    makeSelectionObject(post.SubstanceIDs)
+  );
+  const [conditionsSelection, setConditionsSelection] = useState(
+    makeSelectionObject(post.ConditionIDs)
+  );
   const urlRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     sessionManager.requireUser();
@@ -81,7 +88,16 @@ export default function Post({ sessionManager }) {
 
   const formSubmit = async (e) => {
     e.preventDefault();
+    if (isEditMode) {
+      submitEdit();
+    } else {
+      submitAdd();
+    }
+  };
 
+  const submitEdit = async () => {};
+
+  const submitAdd = async () => {
     if (dupeUrlErrorPostID > 0) {
       console.log(
         "Cannot submit form with duplicate URL: ",
@@ -246,14 +262,36 @@ export default function Post({ sessionManager }) {
               ))}
             </FormGroup>
           </Container>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            style={{ marginTop: 20 }}
-          >
-            post
-          </Button>
+          {!isEditMode && (
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginTop: 20 }}
+            >
+              post
+            </Button>
+          )}
+          {isEditMode && (
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <Button
+                onClick={() => navigate(`/post/${post.EntryID}`)}
+                variant="contained"
+                color="primary"
+                style={{ marginTop: 20 }}
+              >
+                cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{ marginTop: 20 }}
+              >
+                update
+              </Button>
+            </div>
+          )}
         </FormControl>
       </Box>
     </Container>

@@ -4,6 +4,7 @@ import {
   conditionsList,
   substancesList,
 } from "../utils/Lookups";
+import { makeSelectionObject } from "../utils/FilterUtils";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { Button, Typography } from "@mui/material";
@@ -15,18 +16,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-
-const makeSelectionObject = (selectionList) => {
-  if (!selectionList) {
-    return {};
-  }
-  const selectionArr = selectionList.split(",");
-  const selectionObj = selectionArr.reduce((acc, cur) => {
-    acc[cur] = true;
-    return acc;
-  }, {});
-  return selectionObj;
-};
 
 export default function PostListFilter({
   applyFilter,
