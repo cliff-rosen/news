@@ -178,8 +178,27 @@ app.post("/entries", authenticateToken, (req, res) => {
     });
 });
 
-app.delete("/entries/:id", (req, res) => {
-  const { id } = req.params;
+app.put("/entries/:entryid", authenticateToken, (req, res) => {
+  const { entryid } = req.params;
+  console.log("updating entry", entryid);
+  db.updateEntry(
+    entryid,
+    req.body.entryTypeID,
+    req.body.entryTitle,
+    req.body.entryText,
+    req.body.entryUrl,
+    req.body.substances,
+    req.body.conditions
+  )
+    .then((dbres) => res.json({ result: "SUCCESS" }))
+    .catch((e) => {
+      console.log("error", e);
+      res.json({ error: e });
+    });
+});
+
+app.delete("/entries/:entryid", (req, res) => {
+  const { entryid } = req.params;
   console.log("deleting entry", id);
   db.deleteEntry(id).then((result) => {
     console.log("result", typeof result);

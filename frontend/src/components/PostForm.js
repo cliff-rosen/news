@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { addPost as apiAddPost, getPostByUrl } from "../utils/PostAPI";
+import {
+  addPost as apiAddPost,
+  editPost as apiEditPost,
+  getPostByUrl,
+} from "../utils/PostAPI";
 import {
   entryTypesList,
   conditionsList,
@@ -78,12 +82,21 @@ export default function PostForm({ sessionManager, post = {}, isEditMode }) {
       return;
     }
     const existingEntry = await getPostByUrl(url);
-    if (existingEntry.EntryID) {
-      setDupeUrlErrorPostID(existingEntry.EntryID);
-      urlRef.current.focus();
+
+    if (isEditMode) {
+      if (existingEntry.EntryID && existingEntry.EntryID !== post.EntryID) {
+        setDupeUrlErrorPostID(existingEntry.EntryID);
+        urlRef.current.focus();
+      }
+      return;
     } else {
-      setDupeUrlErrorPostID(0);
+      if (existingEntry.EntryID) {
+        setDupeUrlErrorPostID(existingEntry.EntryID);
+        urlRef.current.focus();
+        return;
+      }
     }
+    setDupeUrlErrorPostID(0);
   };
 
   const formSubmit = async (e) => {
@@ -95,7 +108,32 @@ export default function PostForm({ sessionManager, post = {}, isEditMode }) {
     }
   };
 
-  const submitEdit = async () => {};
+  const submitEdit = async () => {
+    if (dupeUrlErrorPostID > 0) {
+      console.log(
+        "Cannot submit form with duplicate URL: ",
+        dupeUrlErrorPostID
+      );
+      return;
+    }
+
+    try {
+      await apiEditPost(
+        post.EntryID,
+        entryTypeID,
+        url,
+        title,
+        desc,
+        substancesSelection,
+        conditionsSelection
+      );
+      navigate(`/post/${post.EntryID}`);
+      sessionManager.setSessionMessageWrapper("Entry updated");
+    } catch (e) {
+      console.log("error editing post", e);
+      setMessage("Doh! An unexpected error occurred.  Please try again.");
+    }
+  };
 
   const submitAdd = async () => {
     if (dupeUrlErrorPostID > 0) {

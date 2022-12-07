@@ -201,10 +201,90 @@ async function addEntryAttributesDB(entryID, attributeName, attributes) {
   return { status: "success" };
 }
 
+async function updateEntry(
+  entryID,
+  entryTypeID,
+  entryTitle,
+  entryText,
+  entryUrl,
+  substances,
+  conditions
+) {
+  console.log("addEntry: ", entryTitle);
+
+  try {
+    const res = await updateEntryDB(
+      entryID,
+      entryTypeID,
+      entryTitle,
+      entryText,
+      entryUrl
+    );
+    await deleteEntryAttributesDB(entryID, "substance", substances || []);
+    await deleteEntryAttributesDB(entryID, "condition", conditions || []);
+    await addEntryAttributesDB(entryID, "substance", substances || []);
+    await addEntryAttributesDB(entryID, "condition", conditions || []);
+  } catch (e) {
+    console.log("updateEntry error:", e.message);
+    throw new Error("Update entry error");
+  }
+
+  return { status: "success" };
+}
+
+async function updateEntryDB(
+  entryID,
+  entryTypeID,
+  entryTitle,
+  entryText,
+  entryUrl
+) {
+  console.log("editEntryDB: ", entryID);
+  entryTitle = entryTitle.replace(/'/g, "\\'");
+  entryText = entryText.replace(/'/g, "\\'");
+  const entryUrlDomain = getDomain(entryUrl);
+
+  dbQueryString = `
+                    UPDATE entry
+                    SET EntryTypeID = ${entryTypeID},
+                      EntryTitle = '${entryTitle}',
+                      EntryText = '${entryText}', 
+                      EntryUrl = '${entryUrl}',
+                      EntryUrlDomain = '${entryUrlDomain}'
+                    WHERE EntryID = ${entryID}
+                    `;
+
+  const res = await pool.query(dbQueryString);
+  console.log("updateEntry returned", res);
+  return res;
+}
+
 async function deleteEntry(entryID) {
   dbQueryString = `
           DELETE
           FROM entry
+          WHERE entryID = ${entryID}
+          `;
+
+  const res = await pool.query(dbQueryString);
+  console.log("returned: ", res);
+  return res;
+}
+
+async function deleteEntryAttributesDB(entryID, attributeName) {
+  var attributeTableName;
+
+  if (attributeName === "substance") {
+    attributeTableName = "entry_substance";
+  } else if (attributeName === "condition") {
+    attributeTableName = "entry_health_condition";
+  } else {
+    throw new Error("deleteEntryAttributesDB - invalid attributeName");
+  }
+
+  dbQueryString = `
+          DELETE
+          FROM ${attributeTableName}
           WHERE entryID = ${entryID}
           `;
 
@@ -263,7 +343,7 @@ async function getEntryByUrl(userID, Url) {
           ) AS conditions ON e.entryID = conditions.entryid
           WHERE e.EntryUrl = '${Url}'
           `;
-  console.log(dbQueryString);
+
   try {
     const res = await pool.query(dbQueryString);
     return res;
@@ -793,6 +873,7 @@ async function getEntryTypes() {
 }
 
 module.exports.addEntry = addEntry;
+module.exports.updateEntry = updateEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
 module.exports.getAllEntries = getAllEntries;

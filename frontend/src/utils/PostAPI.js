@@ -1,4 +1,4 @@
-import { fetchGet, fetchPost } from "./APIUtils";
+import { fetchGet, fetchPost, fetchPut } from "./APIUtils";
 
 export const logPostClick = async (entryID) => {
   return fetchPost(`entries/${entryID}/logclick`);
@@ -59,6 +59,41 @@ export const addPost = async (
   };
 
   return fetchPost("entries", body);
+};
+
+export const editPost = async (
+  entryID,
+  entryTypeID,
+  entryUrl,
+  entryTitle,
+  entryText,
+  iSubstances,
+  iConditions
+) => {
+  entryUrl = entryUrl.trim();
+  entryTitle = entryTitle.trim();
+  entryText = entryText.trim();
+  const substances = [];
+  const conditions = [];
+
+  for (const [key, value] of Object.entries(iSubstances)) {
+    if (value) substances.push(key);
+  }
+
+  for (const [key, value] of Object.entries(iConditions)) {
+    if (value) conditions.push(key);
+  }
+
+  const body = {
+    entryTypeID,
+    entryUrl,
+    entryTitle,
+    entryText,
+    substances,
+    conditions,
+  };
+
+  return fetchPut(`entries/${entryID}`, body);
 };
 
 export const setPostVote = async (entryID, vote) => {
