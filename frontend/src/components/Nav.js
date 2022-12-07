@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { useFilterQueryParams } from "../common/FilterUtils";
+import { useFilterQueryParams } from "../utils/FilterUtils";
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 

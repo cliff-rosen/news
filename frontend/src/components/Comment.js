@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CommentVote from "./CommentVote";
-import { addComment, updateComment } from "../common/CommentAPI";
-import { getElapsedTime } from "../common/TimeUtils";
+import { addComment, updateComment } from "../utils/CommentAPI";
+import { getElapsedTime } from "../utils/TimeUtils";
 import { TextField, Button } from "@mui/material";
 
 const COMMENT_INDENT_FACTOR = 25;

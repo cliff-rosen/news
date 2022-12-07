@@ -1,4 +1,4 @@
-import { setCommentVote as apiSetCommentVote } from "../common/CommentAPI";
+import { setCommentVote as apiSetCommentVote } from "../utils/CommentAPI";
 import IconButton from "@mui/material/IconButton";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";

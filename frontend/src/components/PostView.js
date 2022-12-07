@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPost } from "../common/PostAPI";
-import { getComments, addComment } from "../common/CommentAPI";
+import { getPost } from "../utils/PostAPI";
+import { getComments, addComment } from "../utils/CommentAPI";
 import Post from "../components/Post";
 import CommentsTree from "./CommentsTree";
 import { TextField, Button } from "@mui/material";

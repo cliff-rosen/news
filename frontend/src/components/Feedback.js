@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TextField, Button } from "@mui/material";
-import { addFeedback } from "../common/PostAPI";
+import { addFeedback } from "../utils/PostAPI";
 
 export default function Feedback() {
   const [feedbackText, setFeedbackText] = useState("");

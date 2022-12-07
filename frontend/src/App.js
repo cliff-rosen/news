@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useSessionManager } from "./common/Auth";
+import { useSessionManager } from "./utils/Auth";
 import Splash from "./components/Splash";
 import Nav from "./components/Nav.js";
 import SessionMessage from "./components/SessionMessage";
@@ -21,7 +21,7 @@ function App() {
   }
 
   return (
-    <div style={{ margin: "auto", border: "none", maxWidth: 800 }}>
+    <Container disableGutters style={{ maxWidth: 800 }}>
       <SessionMessage sessionManager={sessionManager} />
       <LoginFormModal sessionManager={sessionManager} />
       <Nav sessionManager={sessionManager} />
@@ -45,7 +45,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/trial/*" element={<Trial />} />
       </Routes>
-    </div>
+    </Container>
   );
 }
 
