@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { addPost as apiAddPost, getPostByUrl } from "../common/PostAPI";
+import { addPost as apiAddPost, getPostByUrl } from "../utils/PostAPI";
 import {
   entryTypesList,
   conditionsList,
   substancesList,
-} from "../common/Lookups";
+} from "../utils/Lookups";
 import PostAddDupeUrlMessage from "./PostAddDupeUrlMessage";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";

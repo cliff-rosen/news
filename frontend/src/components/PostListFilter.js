@@ -3,7 +3,7 @@ import {
   entryTypesList,
   conditionsList,
   substancesList,
-} from "../common/Lookups";
+} from "../utils/Lookups";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { Button, Typography } from "@mui/material";

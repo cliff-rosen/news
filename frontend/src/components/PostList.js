@@ -8,10 +8,10 @@ import {
   writeFilterObjectToLocalStorage,
   getStoredFilterURL,
   getStoredFilterText,
-} from "../common/FilterUtils";
+} from "../utils/FilterUtils";
 import Post from "../components/Post";
 import PostListFilter from "./PostListFilter";
-import { getPosts as apiGetPosts } from "../common/PostAPI";
+import { getPosts as apiGetPosts } from "../utils/PostAPI";
 import { Button, Typography } from "@mui/material";
 
 const POST_LIST_PAGE_SIZE = 15;

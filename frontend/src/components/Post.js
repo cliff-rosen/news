@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PostVote from "./PostVote";
-import { logPostClick } from "../common/PostAPI";
-import { getElapsedTime } from "../common/TimeUtils";
-import { entryTypesMap, conditionsMap, substancesMap } from "../common/Lookups";
+import { logPostClick } from "../utils/PostAPI";
+import { getElapsedTime } from "../utils/TimeUtils";
+import { entryTypesMap, conditionsMap, substancesMap } from "../utils/Lookups";
 import { Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
