@@ -1,0 +1,60 @@
+PostList Notes
+
+- list is driven by order, start, entryTypeID, substanceIDs, conditionIDs
+- we want url to drive these parameters, and we want filter to be remembered
+- but there are situations where this is tricky:
+  a) bookmark should override/reset filter settings
+  b) viewing "trending" with filter and then selecting "new" should leave filter in tact
+
+to accommodate both a and b, we have two options:
+OPTION 1: nav must be filter aware so that url in nav has filter settings
+  in which case postlist can always filter based on url
+OPTION 2: nav url doesn't have filter settings
+  in which case entering postlist from nav requires postlist to override url filter setting (which are essentially no filter)
+  and use filter settings that are stored (i.e. in localstorage)
+
+for options 2, how would postlist know when to use url settings vs stored settings?
+
+lets consider all postlist entry points (i.e. things that cause postlist to rerender):
+    enty points from when postlist is already mounted:
+        nav link when already viewing postlist (ie. switching from trending to new)
+        apply filter (causes nav)
+        more link (causes nav)
+        updatevote
+    entry posts that cause postlist to remount:
+        bookmark
+        nav link when not already viewing postlist (i.e. when viewing help)
+        add post (causes nav)
+        logging in
+
+
+
+input params are: order, start, entryTypeID, substanceIDs, conditionIDs
+postist always pulls filter from url and updates localstorage
+filter is always applied via applyFilter
+applyFilter will always update localstorage with params before renavigating
+renavigating will always cause nav to rerender
+nav should therefore always pull filter params from localstorage
+
+nav must know to rerender when coming in from bookmark
+here's what happens if nav doesn't do so:
+    nav pulls (old) filter params from localstorage 
+    postlist pulls new filterparams from url
+    postlist updates localstorage, but nav has already used old params
+so we create a query param called "filterupdateseq" that updates when new filter params are saved to local storage
+that causes the following sequence:
+    nav pulls (old) filter params from localstorage 
+    postlist pulls new filterparams from url
+    postlist updates localstorage
+    postlist renavigates with new filterupdateseq
+    nav now rerenders and pulls new filter params from localstorage
+note that nav effect depends on filterupdateseq, but postlist should not
+(we don't want postlist to re-retrieve postlist after renav with new filterupdateseq)
+
+- inputs to PostListFilter:
+  methods: applyFilter, hideFilter
+  props: entryTypeIDs, substanceIDs, conditionIDs (comma separated list)
+
+- effects of applying PostListFilter
+  local storage updated with filter values
+  url updated with filter values (which in turn updates PostList)

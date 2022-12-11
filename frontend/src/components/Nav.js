@@ -15,6 +15,7 @@ const sections = [
 ];
 
 const Navbar = ({ sessionManager }) => {
+  console.log("Nav render");
   const navigate = useNavigate();
   const location = useLocation();
   const { order, start, entryTypeID, substanceIDs, conditionIDs } =

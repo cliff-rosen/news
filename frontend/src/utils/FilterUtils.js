@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { entryTypesMap, substancesMap, conditionsMap } from "./Lookups";
 
+const filterDefault = { entryTypeIDs: "", substanceIDs: "", conditionIDs: "" };
+
 export const makeSelectionObject = (selectionList) => {
   if (!selectionList) {
     return {};
@@ -46,7 +48,7 @@ export function writeFilterParamsToLocalStorage(
 
 export function readFilterFromLocalStorage() {
   const filter = JSON.parse(localStorage.getItem("listFilter"));
-  return filter || {};
+  return filter || filterDefault;
 }
 
 export function isFilterStored() {

@@ -22,8 +22,8 @@ Back End Deployment
  - run create.sql
 * SSH to EC2 (Node)
   - update secrets.js
-  - git pull
-  - npm i
+  - git pull from /news
+  - npm i from news/backend
   - node app OR pm2 start app.js (if running: pm2 restart app)
 
 Running Node with PM2

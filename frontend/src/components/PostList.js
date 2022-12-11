@@ -17,14 +17,15 @@ import { Button, Typography } from "@mui/material";
 const POST_LIST_PAGE_SIZE = 15;
 
 function PostList({ sessionManager }) {
+  console.log("PostList render");
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [more, setMore] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+
   const { order, start, entryTypeIDs, substanceIDs, conditionIDs } =
     useFilterQueryParams();
-
   const {
     dummy1,
     dummy2,
