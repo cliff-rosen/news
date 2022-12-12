@@ -18,8 +18,6 @@ const Navbar = ({ sessionManager }) => {
   console.log("Nav render");
   const navigate = useNavigate();
   const location = useLocation();
-  const { order, start, entryTypeID, substanceIDs, conditionIDs } =
-    useFilterQueryParams();
 
   const isActive = (section) => {
     const s = location.search || "";

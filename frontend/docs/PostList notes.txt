@@ -10,8 +10,7 @@ to accommodate both a and b, we have two options:
 OPTION 1: nav must be filter aware so that url in nav has filter settings
   in which case postlist can always filter based on url
 OPTION 2: nav url doesn't have filter settings
-  in which case entering postlist from nav requires postlist to override url filter setting (which are essentially no filter)
-  and use filter settings that are stored (i.e. in localstorage)
+  in which postlist needs logic to know when to retrieve filter settings from localstorage
 
 for options 2, how would postlist know when to use url settings vs stored settings?
 
@@ -21,13 +20,39 @@ lets consider all postlist entry points (i.e. things that cause postlist to rere
         apply filter (causes nav)
         more link (causes nav)
         updatevote
+        logging in
+
     entry posts that cause postlist to remount:
         bookmark
         nav link when not already viewing postlist (i.e. when viewing help)
         add post (causes nav)
-        logging in
 
+solution for option 2:
+    if filter params in url, use those params (and write them to local storage)
+    if no filter params in url
+        if filter params in local storage, renav to postlist with params in url
+        if no filter params in local storage, retrieve data with no filter
 
+let's see how this works for all entry points:
+    enty points from when postlist is already mounted:
+        nav link: no url params
+        apply filter: url params present
+        more link: url params present
+        updatevote: url params present
+        logging in: url params present
+
+    entry posts that cause postlist to remount:
+        bookmark: url params present
+        nav link: no url params
+        add post: no url params
+
+so only times no url params present are:
+        nav link
+        add post
+
+in both cases, postlist will correctly check local storage and either renav or load accordingly
+
+-----------------------------
 
 input params are: order, start, entryTypeID, substanceIDs, conditionIDs
 postist always pulls filter from url and updates localstorage

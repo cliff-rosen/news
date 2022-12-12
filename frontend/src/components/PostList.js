@@ -26,13 +26,6 @@ function PostList({ sessionManager }) {
 
   const { order, start, entryTypeIDs, substanceIDs, conditionIDs } =
     useFilterQueryParams();
-  const {
-    dummy1,
-    dummy2,
-    entryTypeIDs: sEntryTypeIDs,
-    substanceIDs: sSubstanceIDs,
-    conditionIDs: sConditionIDs,
-  } = readFilterFromLocalStorage();
 
   const hideFilter = () => {
     setShowFilter(false);
@@ -93,15 +86,39 @@ function PostList({ sessionManager }) {
   };
 
   useEffect(() => {
+    if (!entryTypeIDs && !substanceIDs && !conditionIDs) {
+      const {
+        dummy1,
+        dummy2,
+        entryTypeIDs: storedEntryTypeIDs,
+        substanceIDs: storedSubstanceIDs,
+        conditionIDs: storedConditionIDs,
+      } = readFilterFromLocalStorage();
+      if (isFilterStored()) {
+        navigate(
+          `/postlist?order=${order}&start=${start}&entrytypeids=${storedEntryTypeIDs}&substanceids=${storedSubstanceIDs}&conditionids=${storedConditionIDs}`
+        );
+        return;
+      }
+    }
+
+    writeFilterParamsToLocalStorage(
+      order,
+      start,
+      entryTypeIDs,
+      substanceIDs,
+      conditionIDs
+    );
+
     const getPosts = async () => {
       try {
         const res = await apiGetPosts(
           order,
           start,
           POST_LIST_PAGE_SIZE,
-          sEntryTypeIDs || entryTypeIDs,
-          sSubstanceIDs || substanceIDs,
-          sConditionIDs || conditionIDs
+          entryTypeIDs,
+          substanceIDs,
+          conditionIDs
         );
         setPosts(res.rows);
         setMore(res.more);
@@ -120,9 +137,6 @@ function PostList({ sessionManager }) {
     entryTypeIDs,
     substanceIDs,
     conditionIDs,
-    sEntryTypeIDs,
-    sSubstanceIDs,
-    sConditionIDs,
   ]);
 
   if (fetchError) {
@@ -144,9 +158,9 @@ function PostList({ sessionManager }) {
           applyFilter={applyFilter}
           hideFilter={hideFilter}
           selections={{
-            entryTypeIDs: sEntryTypeIDs || entryTypeIDs,
-            substanceIDs: sSubstanceIDs || substanceIDs,
-            conditionIDs: sConditionIDs || conditionIDs,
+            entryTypeIDs,
+            substanceIDs,
+            conditionIDs,
           }}
         />
       )}
@@ -169,7 +183,9 @@ function PostList({ sessionManager }) {
               textDecoration: "none",
               color: "#1976D2",
             }}
-            to={getStoredFilterURL(start + POST_LIST_PAGE_SIZE)}
+            to={`/postlist?order=${order}&start=${
+              start + POST_LIST_PAGE_SIZE
+            }&${getStoredFilterURL()}`}
           >
             - more -
           </RouterLink>
@@ -183,7 +199,7 @@ function PostList({ sessionManager }) {
               textDecoration: "none",
               color: "#1976D2",
             }}
-            to={getStoredFilterURL(0)}
+            to={`/postlist?order=${order}&start=${0}&${getStoredFilterURL()}`}
           >
             - back to start -
           </RouterLink>

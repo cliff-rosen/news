@@ -27,7 +27,6 @@ export function useFilterQueryParams() {
   const entryTypeIDs = getQueryParams.get("entrytypeids") || "";
   const substanceIDs = getQueryParams.get("substanceids") || "";
   const conditionIDs = getQueryParams.get("conditionids") || "";
-
   return { order, start, entryTypeIDs, substanceIDs, conditionIDs };
 }
 
@@ -63,7 +62,7 @@ export function getStoredFilterURL(start) {
   start = start || 0;
   const { order, dummyStart, entryTypeIDs, substanceIDs, conditionIDs } =
     readFilterFromLocalStorage();
-  return `/postlist?order=${order}&start=${start}&entrytypeids=${entryTypeIDs}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`;
+  return `entrytypeids=${entryTypeIDs}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`;
 }
 
 export function getStoredFilterText() {
