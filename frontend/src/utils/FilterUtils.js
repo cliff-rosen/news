@@ -35,13 +35,11 @@ export function writeFilterObjectToLocalStorage(filter) {
 }
 
 export function writeFilterParamsToLocalStorage(
-  order,
-  start,
   entryTypeIDs,
   substanceIDs,
   conditionIDs
 ) {
-  const filter = { order, start, entryTypeIDs, substanceIDs, conditionIDs };
+  const filter = { entryTypeIDs, substanceIDs, conditionIDs };
   writeFilterObjectToLocalStorage(filter);
 }
 
@@ -58,9 +56,8 @@ export function isFilterStored() {
   return false;
 }
 
-export function getStoredFilterURL(start) {
-  start = start || 0;
-  const { order, dummyStart, entryTypeIDs, substanceIDs, conditionIDs } =
+export function getStoredFilterURLSegment() {
+  const { entryTypeIDs, substanceIDs, conditionIDs } =
     readFilterFromLocalStorage();
   return `entrytypeids=${entryTypeIDs}&substanceids=${substanceIDs}&conditionids=${conditionIDs}`;
 }
@@ -74,7 +71,7 @@ export function getStoredFilterText() {
   var substancesText = "";
   var conditionsText = "";
 
-  const { order, start, entryTypeIDs, substanceIDs, conditionIDs } =
+  const { entryTypeIDs, substanceIDs, conditionIDs } =
     readFilterFromLocalStorage();
 
   if (entryTypeIDs) {

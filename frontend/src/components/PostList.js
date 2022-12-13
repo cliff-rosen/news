@@ -6,7 +6,7 @@ import {
   readFilterFromLocalStorage,
   isFilterStored,
   writeFilterObjectToLocalStorage,
-  getStoredFilterURL,
+  getStoredFilterURLSegment,
   getStoredFilterText,
 } from "../utils/FilterUtils";
 import Post from "../components/Post";
@@ -59,15 +59,13 @@ function PostList({ sessionManager }) {
     newConditionIDs = conditions.join(",");
 
     writeFilterObjectToLocalStorage({
-      order,
-      start,
       entryTypeIDs: newEntryTypeIDs,
       substanceIDs: newSubstanceIDs,
       conditionIDs: newConditionIDs,
     });
 
     navigate(
-      `/postlist?order=${order}&start=${start}&entrytypeids=${newEntryTypeIDs}&substanceids=${newSubstanceIDs}&conditionids=${newConditionIDs}`
+      `/postlist?order=${order}&start=0&entrytypeids=${newEntryTypeIDs}&substanceids=${newSubstanceIDs}&conditionids=${newConditionIDs}`
     );
   };
 
@@ -86,29 +84,20 @@ function PostList({ sessionManager }) {
   };
 
   useEffect(() => {
-    if (!entryTypeIDs && !substanceIDs && !conditionIDs) {
+    console.log("PostList useEffect");
+    if (!entryTypeIDs && !substanceIDs && !conditionIDs && isFilterStored()) {
       const {
-        dummy1,
-        dummy2,
         entryTypeIDs: storedEntryTypeIDs,
         substanceIDs: storedSubstanceIDs,
         conditionIDs: storedConditionIDs,
       } = readFilterFromLocalStorage();
-      if (isFilterStored()) {
-        navigate(
-          `/postlist?order=${order}&start=${start}&entrytypeids=${storedEntryTypeIDs}&substanceids=${storedSubstanceIDs}&conditionids=${storedConditionIDs}`
-        );
-        return;
-      }
+      navigate(
+        `/postlist?order=${order}&start=${start}&entrytypeids=${storedEntryTypeIDs}&substanceids=${storedSubstanceIDs}&conditionids=${storedConditionIDs}`
+      );
+      return;
     }
 
-    writeFilterParamsToLocalStorage(
-      order,
-      start,
-      entryTypeIDs,
-      substanceIDs,
-      conditionIDs
-    );
+    writeFilterParamsToLocalStorage(entryTypeIDs, substanceIDs, conditionIDs);
 
     const getPosts = async () => {
       try {
@@ -185,7 +174,7 @@ function PostList({ sessionManager }) {
             }}
             to={`/postlist?order=${order}&start=${
               start + POST_LIST_PAGE_SIZE
-            }&${getStoredFilterURL()}`}
+            }&${getStoredFilterURLSegment()}`}
           >
             - more -
           </RouterLink>
@@ -199,7 +188,7 @@ function PostList({ sessionManager }) {
               textDecoration: "none",
               color: "#1976D2",
             }}
-            to={`/postlist?order=${order}&start=${0}&${getStoredFilterURL()}`}
+            to={`/postlist?order=${order}&start=${0}&${getStoredFilterURLSegment()}`}
           >
             - back to start -
           </RouterLink>

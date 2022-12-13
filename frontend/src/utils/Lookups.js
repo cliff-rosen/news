@@ -12,7 +12,7 @@ export const entryTypesList = [
   {
     EntryTypeID: 3,
     EntryTypeName: "Resource",
-    RequiresLink: 0,
+    RequiresLink: 1,
   },
   {
     EntryTypeID: 4,
