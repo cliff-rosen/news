@@ -9,15 +9,15 @@ export default function Help() {
         </div>
         <div style={{ marginBottom: 30 }}>
           Recent scientific research has ignited new interest in the use of
-          psychedelic substances for treating various mood disorders and
-          optimizing various aspects of brain function. As this research grows
-          and as efforts to legalize psychedelics gain momentum, Tripper’s
+          psychedelic substances for treating a variety of medical conditions
+          and for optimizing certain aspects of brain function. As this research
+          grows and as efforts to legalize psychedelics gain momentum, Tripper’s
           Almanac is intended to be a forum for sharing and discussing
-          information regarding their safe and legal use. The site may be of
-          interest to consumers, therapists, scientists, investors, regulators,
-          and anyone else who’s curious about the space. We hope to build a
-          community where people are engaged in learning and in meaningful
-          discussion.{" "}
+          information and resources related to their safe and legal use. The
+          site may be useful to consumers, therapists, scientists, investors,
+          regulators, and anyone else with an interest in the space. We hope to
+          build a community where people are engaged in learning and in
+          meaningful discussion.{" "}
         </div>
 
         <div style={{ textDecoration: "underline", marginBottom: 20 }}>
@@ -28,13 +28,16 @@ export default function Help() {
           site. Posts may contain links to articles or resources that are likely
           to be of interest to the community, but they can also be questions or
           commentary intended to stimulate dialogue. Anyone can view posts and
-          comments, but in order to create or vote on posts or comments, you
+          comments, but in order to create or to vote on posts or comments, you
           must register and be logged into the site.
           <br />
           <br />
           To view the most recent posts (sorted by time stamp), click on ’new’
           at the top of the page. To view trending posts (sorted by a function
-          of recency and activity), click on ’trending.’
+          of recency and activity), click on ’trending.’ Once viewing the list
+          of posts, you can click on ‘filter’ for options that limit the posts
+          you see to only those with certain attributes based on the information
+          of greatest interest to you.
           <br />
           <br />
           Clicking on the title of any post containing a link will open that
@@ -43,7 +46,7 @@ export default function Help() {
           <br />
           Clicking on the ‘comments’ of any post will allow you to view a
           description of the post (if one was included with the post) and to
-          participate in discussion about the post.
+          view or participate in discussion about the post.
         </div>
 
         <div style={{ textDecoration: "underline", marginBottom: 20 }}>
@@ -58,15 +61,17 @@ export default function Help() {
           off, “My cousin says he once did…”
           <br />
           <br />
-          When posting links (optional), please give preference to original
-          sources or to high-quality summaries of scientific sources. In the
-          ’Title’ field (required), feel free to copy the original title of the
-          source, but remove site names (which will appear automatically) and
-          anything resembling clickbait. When linking to resources or books,
-          please include ‘Resource:’ or ‘Book:’ before the title. In the
-          ‘Description’ field (optional), include anything you feel will
-          elucidate the intent of the post.
-          <br />
+          When you click ‘post’ at the top of the page, you will see a form that
+          prompts you to choose a ‘post type’ from a drop-down menu. In the
+          ’Title’ field, feel free to copy the original title of the source, but
+          remove site names (which will appear automatically) and anything
+          resembling clickbait. When creating posts containing links, please
+          give preference to original sources or to high-quality summaries of
+          scientific sources. In the ‘Description’ field, include anything you
+          feel will elucidate the intent of the post. When selecting tags from
+          the lists of Substances or Conditions provided, please choose tags
+          reflecting the primary focus of the post (as opposed to tags that are
+          mentioned incidentally by the post). <br />
           <br />
           In all posts and comments you submit, PLEASE:
           <ul>
@@ -91,8 +96,8 @@ export default function Help() {
         <br />
         <br />
         Please share any feedback you have on Tripper’s Almanac. Let us know
-        what you think and what’s missing. Your feedback will help us prioritize
-        development efforts going forward.
+        what you think and what’s missing. Your feedback will help us to improve
+        the site experience and prioritize development efforts going forward.
         <Feedback />
       </div>
     </div>

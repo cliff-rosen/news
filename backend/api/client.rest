@@ -1,6 +1,5 @@
 POST https://api-staging.trippersalmanac.com/access  HTTP/1.1
 content-type: application/json
-
 {
     "password": "letstrip"
 }
@@ -20,7 +19,6 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 
 POST http://localhost:4000/login  HTTP/1.1
 content-type: application/json
-
 {
     "username": "john",
     "password": "abc"
@@ -30,7 +28,6 @@ content-type: application/json
 
 POST http://localhost:4000/createuser  HTTP/1.1
 content-type: application/json
-
 {
     "username": "Jeff",
     "password": "abc"
@@ -41,7 +38,6 @@ content-type: application/json
 POST http://localhost:4000/entries  HTTP/1.1
 content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
-
 {
     "entryTitle": "delete me",
     "entryText": "",
@@ -67,7 +63,7 @@ authorization: Bearer XeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1
 
 ###
 
-GET http://localhost:4000/entries/url/https%3A%2F%2Fstackoverflow.com%2Fquestions%2F8498592%2Fextract-hostname-name-from-string HTTP/1.1
+GET http://localhost:4000/entries/url/https%3A%2F%2Flink.springer.com%2Farticle%2F10.1007%2Fs00213-019-05417-7 HTTP/1.1
 authorization: Bearer XeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
 
 ###
@@ -81,7 +77,6 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 POST http://localhost:4000/entries/122/comments  HTTP/1.1
 content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
-
 {
     "parentCommentID": 27,
     "commentText": "hello"
@@ -97,7 +92,6 @@ authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c
 POST http://localhost:4000/entries/comments/11/vote/1  HTTP/1.1
 content-type: application/json
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjQ3LCJ1c2VyTmFtZSI6ImpvaG4iLCJpYXQiOjE2NjY2MTUyODB9.D22vDhbeqIvRaJ19M0NEn4im4o812hVt3zMotYpxy90
-
 
 ###
 GET http://localhost:4000/entries/types  HTTP/1.1
