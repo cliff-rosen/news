@@ -43,8 +43,8 @@ app.post("/access", (req, res) => {
 });
 
 /////////////////////// LOGIN/REGISTRATION ////////////////////////////
-app.post("/createuser", (req, res) => {
-  console.log("Create user");
+app.post("/users", (req, res) => {
+  console.log("Add user");
   db.addLog(req);
 
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -68,6 +68,26 @@ app.post("/createuser", (req, res) => {
       }
     })
     .finally(console.log("Back from addUser()"));
+});
+
+app.get("/users/:userid", checkForToken, (req, res) => {
+  const { userid } = req.params;
+  console.log("getting user: ", userid);
+
+  if (userid != req.user.userID) {
+    res.status(401).json({ error: "UNAUTHORIZED ACCESS" });
+    return;
+  }
+
+  db.getUser(userid).then((rows) => {
+    if (rows.length === 1) {
+      res.json(rows[0]);
+    } else if (rows.length === 0) {
+      res.status(404).json({ error: "Entry not found" });
+    } else {
+      res.status(500);
+    }
+  });
 });
 
 /*

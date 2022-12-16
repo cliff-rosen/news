@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getAccess } from "../utils/AuthAPI";
+import { setExpiringLocalStorageItem } from "../utils/MiscUtils";
 
 export default function Splash({ setOkToTrip }) {
   const [password, setPassword] = useState("");
@@ -15,7 +16,10 @@ export default function Splash({ setOkToTrip }) {
     }
 
     getAccess(password)
-      .then((res) => setOkToTrip(true))
+      .then((res) => {
+        setExpiringLocalStorageItem("termsAccepted", true, 60 * 24);
+        setOkToTrip(true);
+      })
       .catch((err) => setMessage("Mmmm, nope."));
   };
 

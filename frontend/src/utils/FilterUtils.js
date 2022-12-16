@@ -17,6 +17,7 @@ export const makeSelectionObject = (selectionList) => {
 };
 
 export function useFilterQueryParams() {
+  console.log("useFilterQueryParams start");
   const { search } = useLocation();
   const getQueryParams = useMemo(() => {
     return new URLSearchParams(search);

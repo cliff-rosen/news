@@ -59,6 +59,22 @@ async function addUser(userName, password) {
   }
 }
 
+async function getUser(userID) {
+  dbQueryString = `
+            SELECT *
+            FROM user
+            WHERE UserID = ${userID}
+            `;
+
+  try {
+    const res = await pool.query(dbQueryString);
+    return res;
+  } catch (err) {
+    console.log("*** Query did not execute: " + err);
+    throw new Error("Query did not execute");
+  }
+}
+
 /*
   if successful, returns promise that resolves to User object
   all failures throw an exception as follows:
@@ -873,13 +889,14 @@ async function getEntryTypes() {
   }
 }
 
+module.exports.addUser = addUser;
+module.exports.getUser = getUser;
 module.exports.addEntry = addEntry;
 module.exports.updateEntry = updateEntry;
 module.exports.deleteEntry = deleteEntry;
 module.exports.getEntry = getEntry;
 module.exports.getAllEntries = getAllEntries;
 module.exports.validateUser = validateUser;
-module.exports.addUser = addUser;
 module.exports.addOrUpdateUserEntryVote = addOrUpdateUserEntryVote;
 module.exports.addComment = addComment;
 module.exports.updateComment = updateComment;

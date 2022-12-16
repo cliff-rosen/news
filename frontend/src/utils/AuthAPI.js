@@ -17,7 +17,7 @@ export const getAccess = async (password) => {
 };
 
 export const register = async (username, password) => {
-  return fetchPost("createuser", { username, password });
+  return fetchPost("users", { username, password });
 };
 
 /*

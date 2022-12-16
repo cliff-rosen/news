@@ -126,7 +126,18 @@ const Navbar = ({ sessionManager }) => {
       <Box sx={{ flexGrow: 0, fontSize: ".7em" }}>
         {sessionManager.user?.userID > 0 ? (
           <span>
-            {sessionManager.user.userName} |{" "}
+            <Link
+              style={{
+                textDecoration: "none",
+                color: location.pathname === "/profile" ? "#1976d2" : "gray",
+                fontWeight:
+                  location.pathname === "/profile" ? "bold" : "normal",
+              }}
+              to="/profile"
+            >
+              {sessionManager.user.userName}
+            </Link>{" "}
+            |{" "}
             <Link
               style={{ textDecoration: "none", color: "gray" }}
               to="#"

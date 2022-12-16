@@ -29,7 +29,7 @@ export const entryTypesList = [
 export const substancesList = [
   {
     SubstanceID: 7,
-    SubstanceName: "5-MEO-DMT",
+    SubstanceName: "5-MeO-DMT",
   },
   {
     SubstanceID: 3,
@@ -95,7 +95,7 @@ export const entryTypesMap = {
 };
 
 export const substancesMap = {
-  7: "5-MEO-DMT",
+  7: "5-MeO-DMT",
   3: "Ayahuasca",
   4: "DMT",
   5: "Ketamine",
