@@ -20,7 +20,7 @@ function App() {
     getExpiringLocalStorageItem("termsAccepted")
   );
 
-  if (process.env.NODE_ENV !== "xdevelopment" && !okToTrip) {
+  if (!okToTrip) {
     return <Splash setOkToTrip={setOkToTrip} />;
   }
 

@@ -17,7 +17,7 @@ export default function Splash({ setOkToTrip }) {
 
     getAccess(password)
       .then((res) => {
-        setExpiringLocalStorageItem("termsAccepted", true, 60 * 24);
+        setExpiringLocalStorageItem("termsAccepted", true, 60);
         setOkToTrip(true);
       })
       .catch((err) => setMessage("Mmmm, nope."));

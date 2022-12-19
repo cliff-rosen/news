@@ -64,7 +64,6 @@ export default function PostListFilter({
 
   return (
     <Container
-      maxWidth="xs"
       style={{
         backgroundColor: "#eeeeee",
         border: "none",
@@ -72,16 +71,15 @@ export default function PostListFilter({
         marginBottom: 10,
       }}
     >
-      <Box component="form" sx={{ mt: 1 }}>
+      <Box component="form">
         <FormControl fullWidth>
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
-              border: "none",
+              justifyContent: "flex-start",
             }}
           >
-            <FormGroup>
+            <FormGroup style={{ width: "33%" }}>
               <FormLabel>POST TYPE</FormLabel>
               {entryTypesList.map((et) => (
                 <FormControlLabel
@@ -106,7 +104,7 @@ export default function PostListFilter({
                 />
               ))}
             </FormGroup>
-            <FormGroup>
+            <FormGroup style={{ width: "33%" }}>
               <FormLabel>SUBSTANCES</FormLabel>
               {substancesList.map((substance) => (
                 <FormControlLabel
@@ -131,7 +129,7 @@ export default function PostListFilter({
                 />
               ))}
             </FormGroup>
-            <FormGroup>
+            <FormGroup style={{ width: "33%" }}>
               <FormLabel>CONDITIONS</FormLabel>
               {conditionsList.map((condition) => (
                 <FormControlLabel
@@ -159,15 +157,8 @@ export default function PostListFilter({
             </FormGroup>
           </div>
         </FormControl>
+
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            onClick={hideFilter}
-            variant="contained"
-            color="primary"
-            style={{ margin: 10 }}
-          >
-            cancel
-          </Button>
           <Button
             onClick={clearFilter}
             variant="contained"
@@ -196,7 +187,7 @@ export default function PostListFilter({
             color="primary"
             style={{ margin: 10 }}
           >
-            hide
+            close
           </Button>
         </div>
       </Box>
