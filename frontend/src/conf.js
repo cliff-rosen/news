@@ -1,7 +1,7 @@
 const prod = {
   url: {
-    API_URL: "https://api-staging.trippersalmanac.com",
-    //API_URL: "https://api.trippersalmanac.com",
+    //API_URL: "https://api-staging.trippersalmanac.com",
+    API_URL: "https://api.trippersalmanac.com",
   },
 };
 

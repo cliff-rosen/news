@@ -7,6 +7,7 @@ export default function Splash({ setOkToTrip }) {
   const [tou, setTou] = useState(false);
   const [message, setMessage] = useState("");
 
+  console.log("Splash tou", tou);
   const submitForm = (e) => {
     e.preventDefault();
 
@@ -48,11 +49,7 @@ export default function Splash({ setOkToTrip }) {
           whatsoever resulting from the use of the site.
           <br />
           <br />I agree to the Terms of Use.{" "}
-          <input
-            type="checkbox"
-            onChange={(e) => setTou(e.target.value)}
-            value={tou}
-          />
+          <input type="checkbox" onChange={(e) => setTou(!tou)} checked={tou} />
         </div>
 
         <div>
