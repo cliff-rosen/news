@@ -1,6 +1,12 @@
+import { useEffect } from "react";
 import Feedback from "./Feedback";
+import { fetchPost } from "../utils/APIUtils";
 
 export default function Help() {
+  useEffect(() => {
+    fetchPost("help");
+  }, []); //log visit to help
+
   return (
     <div style={{ margin: "20px", color: "gray", border: "none" }}>
       <div style={{ whiteSpace: "pre-wrap", marginBottom: 30 }}>

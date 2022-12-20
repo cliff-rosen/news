@@ -137,9 +137,22 @@ function PostList({ sessionManager }) {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Button onClick={toggleFilter}>filter</Button>
         {isFilterStored() && (
-          <Typography style={{ fontSize: 12 }}>
-            [{getStoredFilterText()}]
-          </Typography>
+          <>
+            <Typography style={{ fontSize: 12 }}>
+              [{getStoredFilterText()}]
+            </Typography>
+            <RouterLink
+              style={{
+                fontSize: "14px",
+                textDecoration: "none",
+                color: "#1976D2",
+                paddingLeft: 5,
+              }}
+              onClick={() => applyFilter({}, {}, {})}
+            >
+              [clear]
+            </RouterLink>
+          </>
         )}
       </div>
       {showFilter && (

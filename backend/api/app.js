@@ -150,6 +150,11 @@ app.post("/entries/:entryid/logclick", checkForToken, (req, res) => {
   res.json({ result: "SUCCESS" });
 });
 
+app.post("/help", checkForToken, (req, res) => {
+  console.log("logging help");
+  res.json({ result: "SUCCESS" });
+});
+
 /////////////////////// ENTRY ////////////////////////////
 
 app.get("/entries/:entryid", checkForToken, (req, res) => {
